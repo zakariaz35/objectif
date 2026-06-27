@@ -6,6 +6,7 @@ use App\Http\Controllers\ImportController;
 use App\Http\Controllers\LessonController;
 use App\Http\Controllers\ProgressController;
 use App\Http\Controllers\QuizController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 // --- Authentification ---
@@ -15,6 +16,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/auth/logout', [AuthController::class, 'logout']);
     Route::get('/auth/me', [AuthController::class, 'me']);
 });
+
+// ⚠️ DEBUG / perso uniquement — liste tous les comptes. À SUPPRIMER si le projet
+// n'est plus personnel (voir l'avertissement dans UserController).
+Route::get('/users', [UserController::class, 'index']);
 
 Route::post('/import', [ImportController::class, 'store']);
 

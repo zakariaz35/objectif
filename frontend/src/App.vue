@@ -19,6 +19,8 @@ async function logout() {
       <span class="tagline">apprends · pratique · progresse</span>
 
       <nav class="account">
+        <!-- ⚠️ DEBUG / perso uniquement — lien vers la liste des comptes. À retirer si non-perso. -->
+        <RouterLink to="/comptes" class="debug-link" title="Debug perso : liste des comptes">⚙ Comptes</RouterLink>
         <template v-if="auth.isAuthenticated.value">
           <span class="who">👤 {{ auth.state.user?.name }}</span>
           <button class="link" @click="logout">Déconnexion</button>
@@ -59,6 +61,13 @@ async function logout() {
   display: flex;
   align-items: center;
   gap: 14px;
+}
+.debug-link {
+  font-size: 13px;
+  color: var(--muted);
+}
+.debug-link:hover {
+  color: var(--warn);
 }
 .who {
   color: var(--accent2);

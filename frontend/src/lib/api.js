@@ -27,6 +27,8 @@ export default {
   register: (payload) => api.post('/auth/register', payload).then((r) => r.data),
   login: (payload) => api.post('/auth/login', payload).then((r) => r.data),
   logout: () => api.post('/auth/logout').then((r) => r.data),
+  // ⚠️ DEBUG / perso uniquement — à retirer si le projet n'est plus personnel.
+  listUsers: () => api.get('/users').then((r) => r.data.data),
   listFormations: () => api.get('/formations').then((r) => r.data.data),
   getFormation: (slug) => api.get(`/formations/${slug}`).then((r) => r.data),
   getLesson: (slug, module, lesson) =>
