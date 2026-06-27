@@ -72,6 +72,6 @@ leçon (front-matter `title`/`type`), `<!--correction-->` sépare énoncé et co
 - [x] SPA Vue (navigation, correction repliable, progression localStorage/serveur)
 - [x] Stack Docker (PostgreSQL)
 - [x] 1re formation réelle (JWT/Bearer/OAuth2/Hexagonal/DDD)
+- [x] Quiz notés en base (questions structurées, notation, tentatives, UI interactive)
 - [ ] Auth utilisateur + progression par compte
 - [ ] Exercices interactifs (éditeur de code / tests)
-- [ ] Quiz noté en base
