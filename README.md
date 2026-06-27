@@ -1,17 +1,49 @@
 # Formation — plateforme d'apprentissage
 
-Plateforme perso multi-sujets : on **dépose un ZIP de Markdown** (cours + exercices +
-corrections), l'application le parse, le range en base et l'expose sur une page web avec
-**navigation soignée, corrections repliables et suivi de progression**.
+Plateforme perso **multi-sujets** pour apprendre à partir de contenu écrit en **Markdown**.
+On rédige une formation (cours, cartes mémo, quiz, exercices) dans des fichiers `.md`, on
+**dépose le ZIP** dans l'appli : elle le parse, le range en base et l'expose sur une page
+web avec **navigation soignée, corrections repliables, quiz notés, exercices interactifs
+et suivi de progression par compte**.
 
-## Stack
+> 💡 L'appli est un **moteur générique** : elle ne contient aucun cours « en dur ». Le site
+> démarre **vide**, on importe les formations que l'on veut. Un cours d'exemple
+> (« JWT, Bearer, Hexagonal & DDD ») est fourni dans `content/` pour essayer.
 
-- **backend/** — API REST Laravel 13 (import ZIP, parsing Markdown, endpoints de lecture/progression)
-- **frontend/** — SPA Vite + Vue 3 (navigation, lecture, progression)
-- **content/** — sources Markdown des formations (voir `content/FORMAT.md`)
-- **docker-compose.yml** — PostgreSQL + backend + frontend
+---
 
-## Démarrer (Docker) — clé en main
+## Sommaire
+
+- [Architecture](#architecture)
+- [Démarrer (Docker)](#démarrer-docker)
+- [Charger une formation](#charger-une-formation)
+- [Écrire une formation (format)](#écrire-une-formation-format)
+- [Développement](#développement)
+- [API (résumé)](#api-résumé)
+- [Authentification & progression](#authentification--progression)
+- [Roadmap](#roadmap)
+
+---
+
+## Architecture
+
+```
+formation/
+├─ backend/    API REST Laravel 13 — import ZIP, parsing Markdown, lecture, quiz, auth
+├─ frontend/   SPA Vite + Vue 3 — navigation, lecture, cartes/quiz/exos, progression
+├─ content/    sources Markdown des formations (montées en lecture seule dans le conteneur)
+└─ docker-compose.yml   PostgreSQL + backend + frontend
+```
+
+Flux : **ZIP de Markdown → import (parsing front-matter + Markdown→HTML) → base de données
+→ API REST → SPA Vue**. La progression est rattachée à un compte (ou à un identifiant
+anonyme tant qu'on n'est pas connecté).
+
+---
+
+## Démarrer (Docker)
+
+Prérequis : **git** et **Docker** (avec Docker Compose).
 
 ```bash
 git clone <repo> && cd formation
@@ -20,52 +52,91 @@ docker compose up -d --build
 
 - Frontend : http://localhost:5173
 - API : http://localhost:8000/api
-- PostgreSQL : localhost:5432 (formation / secret)
+- PostgreSQL : localhost:5432 (`formation` / `secret`)
 
-Au premier démarrage, le backend **migre la base** puis **importe automatiquement les
-formations** présentes dans `content/` (monté dans le conteneur). Rien d'autre à faire :
-le cours « JWT, Bearer, Hexagonal & DDD » est directement consultable.
+Le premier `--build` prend quelques minutes (images PHP + Node). Le backend migre la base
+au démarrage. **Le site démarre vide** : la page d'accueil explique comment importer une
+formation (voir ci-dessous).
 
-> L'import de démarrage est **non destructif** : une formation déjà en base est ignorée
-> (la progression est préservée). Pour resynchroniser le contenu après modification des
-> Markdown : `docker compose exec backend php artisan formation:import-all /content --force`.
+> ⚠️ **Note technique** — `php artisan serve` ne transmet pas les variables d'environnement
+> du conteneur au serveur PHP enfant. La config DB du conteneur vient donc de
+> `backend/.env.docker` (monté sur `/app/.env`, committé car sans vrai secret), pas du bloc
+> `environment` du `docker-compose.yml`.
 
-La config DB vient de `backend/.env.docker` (committé, pas de vrai secret).
+---
 
-> ⚠️ `php artisan serve` ne transmet pas les variables d'env du conteneur au serveur PHP
-> enfant : la config DB du conteneur vient donc de `backend/.env.docker` (monté sur `/app/.env`),
-> pas du bloc `environment` du compose.
+## Charger une formation
 
-> ⚠️ `php artisan serve` ne transmet pas les variables d'env du conteneur au serveur PHP
-> enfant : la config DB du conteneur vient donc de `backend/.env.docker` (monté sur `/app/.env`),
-> pas du bloc `environment` du compose.
+**Via l'interface** (recommandé) : page d'accueil → glisser-déposer un `.zip` de formation
+dans la zone prévue (ou cliquer pour le sélectionner).
 
-## Démarrer (natif, sans Docker)
+**Via la CLI** — pratique pour le cours d'exemple fourni :
 
 ```bash
-# Backend (SQLite)
-cd backend && php artisan migrate && php artisan serve
+# Une formation (dossier ou zip)
+docker compose exec backend php artisan formation:import /content/jwt-hexagonal-ddd
 
-# Frontend
+# Toutes les formations d'un dossier (ignore celles déjà en base ; --force pour resync)
+docker compose exec backend php artisan formation:import-all /content
+docker compose exec backend php artisan formation:import-all /content --force
+```
+
+> `content/` est monté sur `/content` dans le conteneur backend, d'où le chemin `/content/…`.
+> `import-all` est **non destructif** par défaut : il saute une formation déjà importée pour
+> ne pas écraser la progression. `--force` réimporte (et **réinitialise** la progression de
+> cette formation).
+
+---
+
+## Écrire une formation (format)
+
+Une formation est un dossier : un `formation.yaml` à la racine, un **sous-dossier par
+module**, un fichier `.md` **par leçon**. L'ordre suit le préfixe numérique (`01-`, `02-`…).
+
+```
+ma-formation/
+├─ formation.yaml          # title, slug, description
+├─ 01-chapitre/
+│  ├─ 01-cours.md          # type: lesson
+│  ├─ 02-cartes.md         # type: flashcards
+│  └─ 03-quiz.md           # type: quiz
+└─ 02-chapitre/
+   └─ 01-exo.md            # type: exercise
+```
+
+Quatre **types de leçon** (champ `type` du front-matter) :
+
+| Type | Rôle |
+|---|---|
+| `lesson` | Cours : Markdown rendu en HTML (tables, code, encadrés). |
+| `flashcards` | Cartes mémo : question → révéler la réponse → auto-évaluation « su / à revoir ». |
+| `quiz` | QCM noté : questions à choix multiple, score + explications, tentatives enregistrées. |
+| `exercise` | Énoncé + correction repliable ; **ou** éditeur de code JS validé par des tests (Web Worker). |
+
+📄 **Format complet et exemples** : voir **[content/FORMAT.md](content/FORMAT.md)**.
+
+---
+
+## Développement
+
+Le code est monté en volume dans les conteneurs : modifier un fichier `backend/` ou
+`frontend/` est pris en compte sans rebuild (hot-reload Vite, rechargement PHP par requête).
+
+```bash
+docker compose logs -f backend     # logs API
+docker compose exec backend bash   # shell dans le conteneur backend
+docker compose exec backend php artisan migrate        # migrations
+docker compose exec db psql -U formation -d formation  # accès SQL
+```
+
+**Sans Docker** (dev natif, base SQLite — la config vient de `backend/.env`) :
+
+```bash
+cd backend && cp .env.example .env && php artisan key:generate && php artisan migrate && php artisan serve
 cd frontend && npm install && npm run dev
 ```
 
-## Importer une formation
-
-**Via l'UI** : page d'accueil → glisser-déposer un `.zip`.
-
-**Via la CLI** :
-```bash
-# dans le conteneur
-docker compose exec backend php artisan formation:import /chemin/vers/formation.zip
-# ou en natif, depuis un dossier
-cd backend && php artisan formation:import ../content/jwt-hexagonal-ddd
-```
-
-## Format du contenu
-
-Voir **[content/FORMAT.md](content/FORMAT.md)** : un dossier = un module, un `.md` = une
-leçon (front-matter `title`/`type`), `<!--correction-->` sépare énoncé et correction.
+---
 
 ## API (résumé)
 
@@ -74,17 +145,38 @@ leçon (front-matter `title`/`type`), `<!--correction-->` sépare énoncé et co
 | `POST` | `/api/import` | Importe un ZIP (`archive`) |
 | `GET` | `/api/formations` | Liste des formations |
 | `GET` | `/api/formations/{slug}` | Arbre modules + leçons |
-| `GET` | `/api/formations/{slug}/lessons/{module}/{lesson}` | Détail leçon (+ prev/next, correction) |
-| `GET` | `/api/formations/{slug}/progress` | Leçons complétées (client) |
-| `POST` | `/api/formations/{slug}/progress/{module}/{lesson}` | Marque terminé/non |
+| `GET` | `/api/formations/{slug}/lessons/{module}/{lesson}` | Détail leçon (+ prev/next, correction, quiz, exercice, cartes) |
+| `POST` | `/api/formations/{slug}/lessons/{module}/{lesson}/grade` | Corrige un quiz (score + feedback) |
+| `GET` `POST` | `/api/formations/{slug}/progress[...]` | Lecture / bascule de la progression |
+| `POST` | `/api/auth/register` · `/api/auth/login` | Création de compte / connexion (token) |
+| `POST` `GET` | `/api/auth/logout` · `/api/auth/me` | Déconnexion / profil (auth requise) |
+| `GET` | `/api/users` | ⚠️ Debug perso : liste des comptes — **à retirer si non-perso** |
+
+---
+
+## Authentification & progression
+
+- Auth par **token Bearer** (Laravel Sanctum) : `register` / `login` renvoient un token,
+  stocké côté SPA et envoyé en `Authorization: Bearer`.
+- La progression et les tentatives de quiz sont rattachées au **compte** si connecté, sinon
+  à un **identifiant anonyme** (`X-Client-Token`). À la connexion, la progression anonyme du
+  navigateur est **récupérée** sur le compte.
+- ⚠️ La page **/comptes** et l'endpoint `/api/users` exposent tous les comptes **sans
+  contrôle d'accès** : c'est un confort de projet **personnel**. Des commentaires `À SUPPRIMER
+  si non-perso` balisent le code à retirer avant tout usage public.
+
+---
 
 ## Roadmap
 
 - [x] Import ZIP Markdown → base
 - [x] API lecture + navigation + progression
-- [x] SPA Vue (navigation, correction repliable, progression localStorage/serveur)
+- [x] SPA Vue (navigation, correction repliable, progression)
 - [x] Stack Docker (PostgreSQL)
-- [x] 1re formation réelle (JWT/Bearer/OAuth2/Hexagonal/DDD)
-- [x] Quiz notés en base (questions structurées, notation, tentatives, UI interactive)
-- [x] Auth utilisateur (Sanctum) + progression par compte (avec reprise de la progression anonyme)
-- [x] Exercices interactifs (éditeur JS dans le navigateur + validation par tests en Web Worker)
+- [x] Cours d'exemple (JWT/Bearer/OAuth2/Hexagonal/DDD)
+- [x] Cartes mémo + quiz notés (questions structurées, tentatives)
+- [x] Auth utilisateur (Sanctum) + progression par compte
+- [x] Exercices interactifs (éditeur JS + validation par tests en Web Worker)
+- [ ] Éditeur de code riche (CodeMirror : coloration syntaxique)
+- [ ] Tests automatisés backend (Pest) des parcours auth / progression / quiz
+- [ ] Déploiement (build statique du front, image de prod)
