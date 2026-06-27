@@ -61,6 +61,37 @@ function decode(token) { /* ... */ }
 ```
 ```
 
+## Exercices interactifs (`type: exercise` + bloc `exercise`)
+
+Un exercice devient **interactif** (éditeur de code + tests dans le navigateur) s'il
+déclare un bloc `exercise` en front-matter. Sans ce bloc, il reste en mode énoncé +
+correction repliable.
+
+```markdown
+---
+title: Décoder un JWT (JS)
+type: exercise
+exercise:
+  language: js                 # seul "js" est exécuté (dans le navigateur)
+  starter: |                   # code pré-rempli dans l'éditeur
+    function decodePayload(token) {
+      return null
+    }
+  tests:                       # suite de tests ; tout doit passer pour valider
+    - name: "décode le payload"
+      code: |
+        const r = decodePayload('h.' + btoa('{"sub":"1"}') + '.s')
+        assert(r.sub === '1', 'sub doit valoir 1')
+---
+Énoncé…
+<!--correction-->
+Correction…
+```
+
+- `assert(condition, message)` est fourni par le runner ; un test échoue s'il lève.
+- Le code de l'utilisateur + chaque test sont exécutés dans un **Web Worker** isolé
+  (timeout anti-boucle-infinie). Réussir tous les tests marque la leçon comme complétée.
+
 ## Quiz notés (`type: quiz`)
 
 Un quiz est noté automatiquement. Ses questions sont décrites en **front-matter**
