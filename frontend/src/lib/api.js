@@ -23,6 +23,10 @@ export default {
   getFormation: (slug) => api.get(`/formations/${slug}`).then((r) => r.data),
   getLesson: (slug, module, lesson) =>
     api.get(`/formations/${slug}/lessons/${module}/${lesson}`).then((r) => r.data),
+  gradeQuiz: (slug, module, lesson, answers) =>
+    api
+      .post(`/formations/${slug}/lessons/${module}/${lesson}/grade`, { answers })
+      .then((r) => r.data),
   getProgress: (slug) => api.get(`/formations/${slug}/progress`).then((r) => r.data),
   toggleProgress: (slug, module, lesson, completed) =>
     api

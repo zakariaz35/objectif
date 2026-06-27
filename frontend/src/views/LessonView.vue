@@ -2,6 +2,7 @@
 import { ref, inject, watch, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import api from '../lib/api'
+import QuizPlayer from '../components/QuizPlayer.vue'
 
 const props = defineProps({ formation: String, module: String, lesson: String })
 const router = useRouter()
@@ -41,7 +42,16 @@ watch(() => [props.module, props.lesson], load, { immediate: true })
       <h1>{{ data.lesson.title }}</h1>
     </div>
 
-    <div class="prose" v-html="data.lesson.body_html"></div>
+    <div v-if="data.lesson.body_html" class="prose" v-html="data.lesson.body_html"></div>
+
+    <QuizPlayer
+      v-if="data.lesson.type === 'quiz' && data.lesson.quiz"
+      :formation="props.formation"
+      :module="props.module"
+      :lesson="props.lesson"
+      :questions="data.lesson.quiz"
+      @completed="toggle(props.module, props.lesson, true)"
+    />
 
     <details v-if="data.lesson.has_correction" class="correction">
       <summary>✅ Voir la correction</summary>
