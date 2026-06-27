@@ -1,0 +1,54 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: formation
+      POSTGRES_USER: formation
+      POSTGRES_PASSWORD: secret
+    ports:
+      - "5432:5432"
+    volumes:
+      - dbdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U formation"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  backend:
+    build: ./backend
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      APP_ENV: local
+      APP_DEBUG: "true"
+      DB_CONNECTION: pgsql
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_DATABASE: formation
+      DB_USERNAME: formation
+      DB_PASSWORD: secret
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+      # .env spécifique au conteneur (pgsql) — sans écraser le .env natif de l'hôte
+      - ./backend/.env.docker:/app/.env
+      # On garde les vendor/ du conteneur (évite d'écraser avec l'hôte)
+      - /app/vendor
+
+  frontend:
+    build: ./frontend
+    depends_on:
+      - backend
+    environment:
+      VITE_API_URL: http://localhost:8000
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+
+volumes:
+  dbdata:
