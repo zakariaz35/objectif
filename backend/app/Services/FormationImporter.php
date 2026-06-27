@@ -90,7 +90,7 @@ class FormationImporter
 
         $base = $this->stripPrefix(pathinfo($file, PATHINFO_FILENAME));
 
-        $module->lessons()->create([
+        $lesson = $module->lessons()->create([
             'slug' => $meta['slug'] ?? Str::slug($base),
             'title' => $meta['title'] ?? Str::title(str_replace('-', ' ', $base)),
             'type' => $meta['type'] ?? 'lesson',
@@ -101,6 +101,44 @@ class FormationImporter
             'correction_html' => $this->markdown->toHtml($correctionMd),
             'meta' => $meta ?: null,
         ]);
+
+        // Quiz noté : questions structurées en front-matter (clé "questions").
+        if (! empty($meta['questions']) && is_array($meta['questions'])) {
+            $this->importQuizQuestions($lesson, $meta['questions']);
+        }
+    }
+
+    /**
+     * @param  array<int,array<string,mixed>>  $questions
+     */
+    private function importQuizQuestions(Lesson $lesson, array $questions): void
+    {
+        $pos = 0;
+        foreach ($questions as $q) {
+            $pos++;
+            $options = array_map(
+                fn ($opt) => ['html' => $this->inlineHtml((string) $opt)],
+                $q['options'] ?? [],
+            );
+
+            $lesson->quizQuestions()->create([
+                'position' => $pos,
+                'prompt_html' => $this->inlineHtml((string) ($q['prompt'] ?? $q['question'] ?? '')),
+                'options' => $options,
+                'correct_index' => (int) ($q['answer'] ?? $q['correct'] ?? 0),
+                'explanation_html' => isset($q['explanation'])
+                    ? $this->markdown->toHtml((string) $q['explanation'])
+                    : null,
+            ]);
+        }
+    }
+
+    /** Markdown inline (sans le <p> englobant) pour énoncés et options courts. */
+    private function inlineHtml(string $text): string
+    {
+        $html = (string) $this->markdown->toHtml($text);
+
+        return preg_replace('/^<p>(.*)<\/p>\s*$/s', '$1', trim($html)) ?? $html;
     }
 
     // ---- Lecture des métadonnées ----

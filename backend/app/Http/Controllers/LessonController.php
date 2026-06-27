@@ -32,6 +32,17 @@ class LessonController extends Controller
         $prev = $idx > 0 ? $flat[$idx - 1] : null;
         $next = $idx < $flat->count() - 1 ? $flat[$idx + 1] : null;
 
+        // Quiz : on expose les questions SANS la bonne réponse ni l'explication.
+        $quiz = null;
+        if ($lesson->type === 'quiz') {
+            $lesson->load('quizQuestions');
+            $quiz = $lesson->quizQuestions->map(fn ($q) => [
+                'id' => $q->id,
+                'prompt_html' => $q->prompt_html,
+                'options' => collect($q->options)->map(fn ($o) => $o['html'])->values(),
+            ])->values();
+        }
+
         return response()->json([
             'formation' => ['slug' => $formation->slug, 'title' => $formation->title],
             'module' => ['slug' => $module->slug, 'title' => $module->title],
@@ -42,6 +53,7 @@ class LessonController extends Controller
                 'body_html' => $lesson->body_html,
                 'correction_html' => $lesson->correction_html,
                 'has_correction' => $lesson->correction_html !== null,
+                'quiz' => $quiz,
             ],
             'prev' => $prev ? ['module' => $prev['module'], 'lesson' => $prev['lesson'], 'title' => $prev['title']] : null,
             'next' => $next ? ['module' => $next['module'], 'lesson' => $next['lesson'], 'title' => $next['title']] : null,
