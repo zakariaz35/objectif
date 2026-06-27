@@ -74,4 +74,4 @@ leçon (front-matter `title`/`type`), `<!--correction-->` sépare énoncé et co
 - [x] 1re formation réelle (JWT/Bearer/OAuth2/Hexagonal/DDD)
 - [x] Quiz notés en base (questions structurées, notation, tentatives, UI interactive)
 - [x] Auth utilisateur (Sanctum) + progression par compte (avec reprise de la progression anonyme)
-- [ ] Exercices interactifs (éditeur de code / tests)
+- [x] Exercices interactifs (éditeur JS dans le navigateur + validation par tests en Web Worker)
