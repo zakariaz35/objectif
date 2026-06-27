@@ -15,10 +15,18 @@ function clientToken() {
 const api = axios.create({ baseURL })
 api.interceptors.request.use((config) => {
   config.headers['X-Client-Token'] = clientToken()
+  // Token Bearer si l'utilisateur est connecté (lu directement de localStorage).
+  const token = localStorage.getItem('auth_token')
+  if (token) {
+    config.headers['Authorization'] = `Bearer ${token}`
+  }
   return config
 })
 
 export default {
+  register: (payload) => api.post('/auth/register', payload).then((r) => r.data),
+  login: (payload) => api.post('/auth/login', payload).then((r) => r.data),
+  logout: () => api.post('/auth/logout').then((r) => r.data),
   listFormations: () => api.get('/formations').then((r) => r.data.data),
   getFormation: (slug) => api.get(`/formations/${slug}`).then((r) => r.data),
   getLesson: (slug, module, lesson) =>
