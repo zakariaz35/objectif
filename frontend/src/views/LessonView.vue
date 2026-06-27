@@ -3,6 +3,7 @@ import { ref, inject, watch, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import api from '../lib/api'
 import QuizPlayer from '../components/QuizPlayer.vue'
+import ExercisePlayer from '../components/ExercisePlayer.vue'
 
 const props = defineProps({ formation: String, module: String, lesson: String })
 const router = useRouter()
@@ -50,6 +51,14 @@ watch(() => [props.module, props.lesson], load, { immediate: true })
       :module="props.module"
       :lesson="props.lesson"
       :questions="data.lesson.quiz"
+      @completed="toggle(props.module, props.lesson, true)"
+    />
+
+    <ExercisePlayer
+      v-if="data.lesson.type === 'exercise' && data.lesson.exercise"
+      :starter="data.lesson.exercise.starter"
+      :tests="data.lesson.exercise.tests"
+      :language="data.lesson.exercise.language"
       @completed="toggle(props.module, props.lesson, true)"
     />
 
