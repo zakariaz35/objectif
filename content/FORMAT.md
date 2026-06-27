@@ -92,6 +92,28 @@ Correction…
 - Le code de l'utilisateur + chaque test sont exécutés dans un **Web Worker** isolé
   (timeout anti-boucle-infinie). Réussir tous les tests marque la leçon comme complétée.
 
+## Cartes mémo (`type: flashcards`)
+
+Pour des questions ouvertes/nuancées : la question s'affiche seule, on réfléchit, on
+révèle la réponse, puis on s'auto-évalue (« su / à revoir »). Les cartes sont décrites
+en front-matter (clé `cards`, avec `q` et `a` en Markdown).
+
+```markdown
+---
+title: Cartes mémo — JWT
+type: flashcards
+cards:
+  - q: |
+      Pourquoi ne pas mettre de donnée sensible dans le payload ?
+    a: |
+      Parce qu'il est **encodé** (Base64URL), pas chiffré : lisible par tous.
+---
+Texte d'intro optionnel.
+```
+
+Quand toutes les cartes sont auto-évaluées, la leçon est marquée complétée (les notes
+« su / à revoir » sont persistées localement).
+
 ## Quiz notés (`type: quiz`)
 
 Un quiz est noté automatiquement. Ses questions sont décrites en **front-matter**
