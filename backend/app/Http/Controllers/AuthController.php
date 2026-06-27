@@ -74,8 +74,18 @@ class AuthController extends Controller
             return;
         }
 
+        // Doublons : si une leçon est déjà suivie par le compte, on jette la
+        // ligne anonyme (sinon le rattachement violerait l'unicité user/leçon).
+        $ownedLessonIds = Progress::where('user_id', $user->id)->pluck('lesson_id');
+        Progress::where('client_token', $token)->whereNull('user_id')
+            ->whereIn('lesson_id', $ownedLessonIds)
+            ->delete();
+
+        // Le reste de la progression anonyme est rattaché au compte.
         Progress::where('client_token', $token)->whereNull('user_id')
             ->update(['user_id' => $user->id]);
+
+        // Les tentatives de quiz n'ont pas de contrainte unique : rattachement direct.
         QuizAttempt::where('client_token', $token)->whereNull('user_id')
             ->update(['user_id' => $user->id]);
     }
