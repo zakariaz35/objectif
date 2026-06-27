@@ -101,6 +101,7 @@ class FormationImporter
             'correction_html' => $this->markdown->toHtml($correctionMd),
             'meta' => $meta ?: null,
             'exercise' => $this->normalizeExercise($meta['exercise'] ?? null),
+            'cards' => $this->normalizeCards($meta['cards'] ?? null),
         ]);
 
         // Quiz noté : questions structurées en front-matter (clé "questions").
@@ -140,6 +141,36 @@ class FormationImporter
             'starter' => (string) ($exercise['starter'] ?? ''),
             'tests' => $tests,
         ];
+    }
+
+    /**
+     * Cartes mémo optionnelles (clé "cards" du front-matter).
+     *
+     * @return list<array{q_html:string, a_html:string}>|null
+     */
+    private function normalizeCards(mixed $cards): ?array
+    {
+        if (! is_array($cards) || empty($cards)) {
+            return null;
+        }
+
+        $out = [];
+        foreach ($cards as $c) {
+            if (! is_array($c)) {
+                continue;
+            }
+            $q = $c['q'] ?? $c['question'] ?? null;
+            $a = $c['a'] ?? $c['answer'] ?? $c['reponse'] ?? null;
+            if (! $q || ! $a) {
+                continue;
+            }
+            $out[] = [
+                'q_html' => (string) $this->markdown->toHtml((string) $q),
+                'a_html' => (string) $this->markdown->toHtml((string) $a),
+            ];
+        }
+
+        return $out ?: null;
     }
 
     /**

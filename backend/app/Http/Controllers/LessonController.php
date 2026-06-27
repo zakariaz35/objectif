@@ -55,6 +55,7 @@ class LessonController extends Controller
                 'has_correction' => $lesson->correction_html !== null,
                 'quiz' => $quiz,
                 'exercise' => $lesson->type === 'exercise' ? $lesson->exercise : null,
+                'cards' => $lesson->type === 'flashcards' ? $lesson->cards : null,
             ],
             'prev' => $prev ? ['module' => $prev['module'], 'lesson' => $prev['lesson'], 'title' => $prev['title']] : null,
             'next' => $next ? ['module' => $next['module'], 'lesson' => $next['lesson'], 'title' => $next['title']] : null,
