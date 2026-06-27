@@ -4,6 +4,7 @@ import { useRouter } from 'vue-router'
 import api from '../lib/api'
 import QuizPlayer from '../components/QuizPlayer.vue'
 import ExercisePlayer from '../components/ExercisePlayer.vue'
+import Flashcards from '../components/Flashcards.vue'
 
 const props = defineProps({ formation: String, module: String, lesson: String })
 const router = useRouter()
@@ -27,7 +28,7 @@ function go(nav) {
   if (nav) router.push(`/f/${props.formation}/${nav.module}/${nav.lesson}`)
 }
 
-const typeLabel = { lesson: 'Leçon', exercise: 'Exercice', quiz: 'Quiz' }
+const typeLabel = { lesson: 'Leçon', exercise: 'Exercice', quiz: 'Quiz', flashcards: 'Cartes mémo' }
 
 watch(() => [props.module, props.lesson], load, { immediate: true })
 </script>
@@ -59,6 +60,13 @@ watch(() => [props.module, props.lesson], load, { immediate: true })
       :starter="data.lesson.exercise.starter"
       :tests="data.lesson.exercise.tests"
       :language="data.lesson.exercise.language"
+      @completed="toggle(props.module, props.lesson, true)"
+    />
+
+    <Flashcards
+      v-if="data.lesson.type === 'flashcards' && data.lesson.cards"
+      :cards="data.lesson.cards"
+      :storage-key="`${props.formation}/${props.module}/${props.lesson}`"
       @completed="toggle(props.module, props.lesson, true)"
     />
 
@@ -119,6 +127,9 @@ watch(() => [props.module, props.lesson], load, { immediate: true })
 }
 .tag.quiz {
   color: var(--warn);
+}
+.tag.flashcards {
+  color: var(--accent);
 }
 .head h1 {
   margin: 10px 0 0;

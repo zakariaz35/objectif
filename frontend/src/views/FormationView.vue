@@ -55,7 +55,7 @@ async function load() {
   }
 }
 
-const typeIcon = { lesson: '📖', exercise: '🛠️', quiz: '🎯' }
+const typeIcon = { lesson: '📖', exercise: '🛠️', quiz: '🎯', flashcards: '🃏' }
 
 onMounted(load)
 watch(() => props.formation, load)
