@@ -11,6 +11,6 @@ type: lesson
 
 **Réponse :** Pas directement : OAuth2 est un protocole d'**autorisation déléguée** (« cette appli peut-elle accéder à mes ressources ? »), pas d'authentification (« qui es-tu ? »). Le login social fonctionne *par-dessus* OAuth2 grâce à **OpenID Connect**, une couche d'identité ajoutée. Le mot de passe ne quitte jamais l'Authorization Server.
 
-**Question :** Deux microservices Reforged doivent s'appeler sans utilisateur connecté. Quel grant type ?
+**Question :** Deux microservices doivent s'appeler sans utilisateur connecté. Quel grant type ?
 
 **Réponse :** **Client Credentials** : pas de *resource owner* humain, juste une machine qui s'authentifie auprès d'une autre via son `client_id`/`client_secret` pour obtenir un token. C'est le grant type des communications service-à-service.

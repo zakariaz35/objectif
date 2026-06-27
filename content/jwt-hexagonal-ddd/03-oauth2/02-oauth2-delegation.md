@@ -10,7 +10,7 @@ OAuth2 n'est pas « du login ». C'est un protocole de **délégation d'autorisa
 ## Les « grant types » utiles à connaître
 
 - **Authorization Code (+ PKCE)** — le standard pour SPA/mobile et « login social ». L'utilisateur s'authentifie sur le serveur d'autorisation, qui renvoie un *code* échangé contre un token. PKCE sécurise les clients publics.
-- **Client Credentials** — pas d'utilisateur : une **machine appelle une autre machine** (service ↔ service). Parfait pour tes microservices Reforged qui s'appellent entre eux.
+- **Client Credentials** — pas d'utilisateur : une **machine appelle une autre machine** (service ↔ service). Parfait pour tes microservices qui s'appellent entre eux.
 - **Password grant** — déconseillé / déprécié : l'appli manipule directement le mot de passe. À éviter sauf client 100 % de confiance.
 
 > **⬢ Repère Laravel —**

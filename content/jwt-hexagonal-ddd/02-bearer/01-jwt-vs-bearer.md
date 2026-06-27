@@ -16,7 +16,7 @@ Erreur fréquente : confondre JWT et Bearer. Ce sont deux choses à des niveaux 
 
 ```http
 GET /api/factures HTTP/1.1
-Host: api.reforged.dev
+Host: api.example.com
 Authorization: Bearer eyJhbGci….eyJzdW….SflKx…
               └─schéma─┘ └──────────── le token (souvent un JWT) ──────────┘
 ```

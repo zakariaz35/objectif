@@ -333,7 +333,7 @@ $claims = JWT::<span class="tok-fn">decode</span>($token, <span class="tok-kw">n
   <p><b>« Bearer »</b> (= « porteur ») est un <b>schéma d'authentification HTTP</b>. Le principe : <i>« quiconque porte ce jeton y a droit »</i> — comme un billet de train au porteur. On l'envoie dans l'en-tête :</p>
 
   <pre><code><span class="tok-kw">GET</span> /api/factures <span class="tok-com">HTTP/1.1</span>
-Host: api.reforged.dev
+Host: api.example.com
 <span class="tok-fn">Authorization:</span> Bearer <span class="jwt-h">eyJhbGci…</span>.<span class="jwt-p">eyJzdW…</span>.<span class="jwt-s">SflKx…</span>
               └─schéma─┘ └──────────── le token (souvent un JWT) ──────────┘</code></pre>
 
@@ -469,7 +469,7 @@ flowchart LR
   <h4>Les « grant types » utiles à connaître</h4>
   <ul>
     <li><b>Authorization Code (+ PKCE)</b> — le standard pour SPA/mobile et « login social ». L'utilisateur s'authentifie sur le serveur d'autorisation, qui renvoie un <i>code</i> échangé contre un token. PKCE sécurise les clients publics.</li>
-    <li><b>Client Credentials</b> — pas d'utilisateur : une <b>machine appelle une autre machine</b> (service ↔ service). Parfait pour tes microservices Reforged qui s'appellent entre eux.</li>
+    <li><b>Client Credentials</b> — pas d'utilisateur : une <b>machine appelle une autre machine</b> (service ↔ service). Parfait pour tes microservices qui s'appellent entre eux.</li>
     <li><b>Password grant</b> — <span style="color:var(--bad)">déconseillé / déprécié</span> : l'appli manipule directement le mot de passe. À éviter sauf client 100 % de confiance.</li>
   </ul>
 
@@ -500,7 +500,7 @@ flowchart LR
     <div class="ans"><p>Pas directement : OAuth2 est un protocole d'<b>autorisation déléguée</b> (« cette appli peut-elle accéder à mes ressources ? »), pas d'authentification (« qui es-tu ? »). Le login social fonctionne <i>par-dessus</i> OAuth2 grâce à <b>OpenID Connect</b>, une couche d'identité ajoutée. Le mot de passe ne quitte jamais l'Authorization Server.</p></div>
   </details>
   <details class="qa">
-    <summary>Deux microservices Reforged doivent s'appeler sans utilisateur connecté. Quel grant type ?</summary>
+    <summary>Deux microservices doivent s'appeler sans utilisateur connecté. Quel grant type ?</summary>
     <div class="ans"><p><b>Client Credentials</b> : pas de <i>resource owner</i> humain, juste une machine qui s'authentifie auprès d'une autre via son <code>client_id</code>/<code>client_secret</code> pour obtenir un token. C'est le grant type des communications service-à-service.</p></div>
   </details>
 </section>
