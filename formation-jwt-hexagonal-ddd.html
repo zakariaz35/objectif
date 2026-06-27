@@ -1,0 +1,1122 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Formation — JWT, Bearer, Hexagonal & DDD (pour devs Laravel)</title>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<style>
+  :root{
+    --bg:#0f1117; --panel:#171a23; --panel2:#1e2230; --border:#2a3040;
+    --txt:#e6e9ef; --muted:#9aa4b8; --accent:#7c9cff; --accent2:#5be3c0;
+    --warn:#ffcf6b; --bad:#ff8a8a; --good:#6be39a; --code:#0c0e14;
+    --laravel:#ff6b6b;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0; background:var(--bg); color:var(--txt);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.65; font-size:16px;
+  }
+  .layout{display:flex; max-width:1280px; margin:0 auto;}
+  /* Sidebar nav */
+  nav.toc{
+    position:sticky; top:0; align-self:flex-start; height:100vh; overflow-y:auto;
+    width:260px; flex:0 0 260px; padding:24px 18px; border-right:1px solid var(--border);
+    background:var(--panel); font-size:14px;
+  }
+  nav.toc h2{font-size:13px; text-transform:uppercase; letter-spacing:1px; color:var(--muted); margin:18px 0 8px;}
+  nav.toc a{display:block; color:var(--muted); text-decoration:none; padding:5px 10px; border-radius:6px; margin:2px 0;}
+  nav.toc a:hover{background:var(--panel2); color:var(--txt);}
+  nav.toc a.sub{padding-left:22px; font-size:13px;}
+  .brand{font-weight:700; font-size:18px; color:var(--txt); margin-bottom:4px;}
+  .brand span{color:var(--accent);}
+  .progress-wrap{height:4px; background:var(--panel2); border-radius:3px; margin:10px 0 18px; overflow:hidden;}
+  .progress-bar{height:100%; width:0%; background:linear-gradient(90deg,var(--accent),var(--accent2)); transition:width .15s;}
+
+  main{flex:1 1 auto; padding:40px 48px 120px; max-width:920px; min-width:0;}
+  header.hero{padding:18px 0 28px; border-bottom:1px solid var(--border); margin-bottom:32px;}
+  header.hero h1{font-size:30px; margin:0 0 8px; line-height:1.25;}
+  header.hero p{color:var(--muted); margin:0; font-size:16px;}
+
+  section{margin:0 0 56px; scroll-margin-top:20px;}
+  h2.title{font-size:25px; border-left:4px solid var(--accent); padding-left:14px; margin:48px 0 18px;}
+  h3{font-size:19px; margin:30px 0 10px; color:#cdd6ec;}
+  h4{font-size:16px; margin:22px 0 8px; color:var(--accent2);}
+  p{margin:10px 0;}
+  ul,ol{margin:10px 0 10px 4px; padding-left:22px;}
+  li{margin:5px 0;}
+  code{background:var(--code); padding:2px 6px; border-radius:5px; font-family:"SF Mono",Menlo,Consolas,monospace; font-size:13.5px; color:#aee0ff;}
+  pre{background:var(--code); border:1px solid var(--border); border-radius:10px; padding:16px 18px; overflow-x:auto; font-size:13.5px; line-height:1.55;}
+  pre code{background:none; padding:0; color:#d7e0f0;}
+  .tok-kw{color:#ff9d8a} .tok-fn{color:#8fd6ff} .tok-str{color:#a8e6a0} .tok-com{color:#6a7488; font-style:italic} .tok-cls{color:#ffd479}
+
+  /* Callouts */
+  .box{border-radius:10px; padding:14px 18px; margin:18px 0; border:1px solid var(--border); background:var(--panel);}
+  .box .lbl{font-weight:700; font-size:13px; text-transform:uppercase; letter-spacing:.5px; margin-bottom:4px;}
+  .box.note{border-left:4px solid var(--accent);} .box.note .lbl{color:var(--accent);}
+  .box.warn{border-left:4px solid var(--warn);} .box.warn .lbl{color:var(--warn);}
+  .box.bad{border-left:4px solid var(--bad);} .box.bad .lbl{color:var(--bad);}
+  .box.good{border-left:4px solid var(--good);} .box.good .lbl{color:var(--good);}
+  .box.laravel{border-left:4px solid var(--laravel); background:#1d1518;} .box.laravel .lbl{color:var(--laravel);}
+  .box.laravel .lbl::before{content:"⬢ "; }
+
+  /* Diagram */
+  .diagram{background:var(--panel); border:1px solid var(--border); border-radius:12px; padding:22px; margin:22px 0; text-align:center; overflow-x:auto;}
+  .diagram .cap{color:var(--muted); font-size:13px; margin-top:10px;}
+  .mermaid{display:flex; justify-content:center;}
+
+  /* JWT visual */
+  .jwt-line{font-family:Menlo,monospace; font-size:14px; word-break:break-all; background:var(--code); padding:16px; border-radius:10px; border:1px solid var(--border); line-height:1.9;}
+  .jwt-h{color:#ff6b9d; background:#3a1f2b; padding:2px 4px; border-radius:4px;}
+  .jwt-p{color:#9d7bff; background:#241f3a; padding:2px 4px; border-radius:4px;}
+  .jwt-s{color:#5be3c0; background:#16332e; padding:2px 4px; border-radius:4px;}
+  .legend{display:flex; gap:18px; flex-wrap:wrap; margin-top:12px; font-size:13px; color:var(--muted);}
+  .legend span b{padding:2px 6px; border-radius:4px;}
+
+  /* Table */
+  table{width:100%; border-collapse:collapse; margin:18px 0; font-size:14px;}
+  th,td{border:1px solid var(--border); padding:10px 12px; text-align:left; vertical-align:top;}
+  th{background:var(--panel2); color:var(--accent2);}
+  tr:nth-child(even) td{background:var(--panel);}
+
+  /* Q&A reveal */
+  .qa{border:1px solid var(--border); border-radius:10px; margin:14px 0; overflow:hidden; background:var(--panel);}
+  .qa>summary{cursor:pointer; padding:14px 18px; font-weight:600; list-style:none; display:flex; gap:10px; align-items:flex-start;}
+  .qa>summary::-webkit-details-marker{display:none;}
+  .qa>summary::before{content:"?"; flex:0 0 22px; height:22px; width:22px; border-radius:50%; background:var(--accent); color:#0b0d13; font-weight:800; text-align:center; line-height:22px; font-size:13px;}
+  .qa[open]>summary::before{content:"✓"; background:var(--accent2);}
+  .qa .ans{padding:0 18px 16px 50px; color:#d2dae8; border-top:1px solid var(--border); padding-top:14px;}
+  .qa .ans p:first-child{margin-top:0;}
+
+  /* Exercises */
+  .exo{border:1px solid var(--border); border-left:4px solid var(--accent2); border-radius:10px; margin:18px 0; background:var(--panel); padding:16px 18px;}
+  .exo .extag{font-size:12px; text-transform:uppercase; letter-spacing:.5px; color:var(--accent2); font-weight:700; margin-bottom:6px;}
+  .exo .task{font-weight:600; margin:0 0 10px;}
+  .exo .hint{font-size:13px; color:var(--muted); margin:8px 0;}
+  .exo .blank{color:var(--warn); background:#2a2410; padding:1px 6px; border-radius:4px; font-style:italic;}
+  .exo details{margin-top:10px;}
+  .exo details>summary{cursor:pointer; color:var(--accent); font-weight:600; font-size:14px; list-style:none;}
+  .exo details>summary::-webkit-details-marker{display:none;}
+  .exo details>summary::before{content:"▶ "; font-size:11px;}
+  .exo details[open]>summary::before{content:"▼ "; }
+  .exo details[open]>summary{color:var(--accent2);}
+  .exo .sol{margin-top:10px; border-top:1px dashed var(--border); padding-top:12px;}
+
+  /* Quiz */
+  .quiz{background:var(--panel); border:1px solid var(--border); border-radius:12px; padding:22px; margin:26px 0;}
+  .quiz h4{margin-top:0;}
+  .q{margin:18px 0; padding-bottom:14px; border-bottom:1px dashed var(--border);}
+  .q:last-of-type{border-bottom:none;}
+  .q .stem{font-weight:600; margin-bottom:10px;}
+  .opt{display:block; padding:9px 14px; margin:6px 0; border:1px solid var(--border); border-radius:8px; cursor:pointer; transition:.12s; background:var(--panel2);}
+  .opt:hover{border-color:var(--accent);}
+  .opt.correct{border-color:var(--good); background:#163022;}
+  .opt.wrong{border-color:var(--bad); background:#33181b;}
+  .opt.disabled{cursor:default; opacity:.85;}
+  .feedback{margin-top:8px; font-size:14px; min-height:1px;}
+  .feedback.ok{color:var(--good);} .feedback.no{color:var(--bad);}
+  .score{margin-top:16px; font-weight:700; font-size:16px;}
+
+  .pill{display:inline-block; font-size:12px; padding:2px 9px; border-radius:20px; background:var(--panel2); border:1px solid var(--border); color:var(--muted); margin-left:8px; vertical-align:middle;}
+  .twocol{display:grid; grid-template-columns:1fr 1fr; gap:16px;}
+  @media(max-width:900px){
+    nav.toc{display:none;} main{padding:24px 18px 80px;} .twocol{grid-template-columns:1fr;}
+  }
+  hr{border:none; border-top:1px solid var(--border); margin:40px 0;}
+  .kbd{font-size:12px; background:var(--panel2); border:1px solid var(--border); border-bottom-width:2px; border-radius:5px; padding:1px 6px;}
+</style>
+</head>
+<body>
+<div class="layout">
+
+<nav class="toc">
+  <div class="brand">Form<span>·</span>action</div>
+  <div style="font-size:12px;color:var(--muted)">Pour développeur Laravel</div>
+  <div class="progress-wrap"><div class="progress-bar" id="pbar"></div></div>
+
+  <h2>Sommaire</h2>
+  <a href="#intro">Introduction</a>
+  <h2>Partie A — Auth</h2>
+  <a href="#jwt">1. JWT</a>
+  <a class="sub" href="#jwt-struct">Structure d'un token</a>
+  <a class="sub" href="#jwt-sign">La signature</a>
+  <a class="sub" href="#jwt-laravel">Côté Laravel</a>
+  <a href="#bearer">2. Bearer</a>
+  <a class="sub" href="#bearer-flow">Le flux complet</a>
+  <a href="#oauth">2bis. OAuth2 & refresh</a>
+  <a class="sub" href="#oauth-refresh">Refresh tokens</a>
+  <h2>Partie B — Architecture</h2>
+  <a href="#hexa">3. Hexagonal (sans DDD)</a>
+  <a class="sub" href="#hexa-why">Le problème</a>
+  <a class="sub" href="#hexa-ports">Ports & Adapters</a>
+  <a class="sub" href="#hexa-code">En pratique</a>
+  <a href="#ddd">4. DDD</a>
+  <a class="sub" href="#ddd-blocks">Les briques</a>
+  <a class="sub" href="#ddd-hexa">DDD + Hexagonal</a>
+  <h2>Validation</h2>
+  <a href="#exos">Exercices de code</a>
+  <a href="#quiz">Quiz final</a>
+  <a href="#recap">Récapitulatif</a>
+</nav>
+
+<main>
+<header class="hero">
+  <h1>JWT, Bearer, Architecture Hexagonale & DDD</h1>
+  <p>Une formation pensée pour un développeur Laravel : chaque concept est relié à ce que tu connais déjà (Sanctum, middleware, contrôleurs, Eloquent…).</p>
+</header>
+
+<!-- ============ INTRO ============ -->
+<section id="intro">
+  <h2 class="title">Introduction — comment lire ce document</h2>
+  <p>Ce tutoriel couvre deux grands thèmes souvent confondus mais indépendants :</p>
+  <ul>
+    <li><b>L'authentification</b> (JWT + Bearer) → <i>« qui es-tu et comment le prouves-tu à chaque requête ? »</i></li>
+    <li><b>L'architecture du code</b> (Hexagonal puis DDD) → <i>« comment organiser le code pour qu'il vieillisse bien ? »</i></li>
+  </ul>
+  <div class="box note">
+    <div class="lbl">Mode d'emploi</div>
+    <p>À la fin de chaque concept, des blocs <b>« ? »</b> sont repliés : <b>réponds mentalement d'abord</b>, puis clique pour vérifier. À la toute fin, un <b>quiz noté</b> te donne ton score. La barre en haut à gauche suit ta progression de lecture.</p>
+  </div>
+  <div class="box laravel">
+    <div class="lbl">Repère Laravel</div>
+    <p>Les encadrés rouges comme celui-ci font le pont avec Laravel. Si tu vois un concept abstrait, cherche l'encadré rouge : il te dit <i>« ça, dans Laravel, c'est X »</i>.</p>
+  </div>
+</section>
+
+<!-- ============ JWT ============ -->
+<section id="jwt">
+  <h2 class="title">1. JWT — JSON Web Token <span class="pill">authentification</span></h2>
+
+  <p>Un <b>JWT</b> est une <b>carte d'identité numérique signée</b>. Le serveur la fabrique une fois (au login), la donne au client, et le client la présente à chaque requête. Le point clé :</p>
+
+  <div class="box good">
+    <div class="lbl">L'idée centrale</div>
+    <p>Le serveur n'a <b>rien à stocker</b>. Toute l'information (qui tu es, ton rôle, l'expiration) est <b>dans le token</b>, et la <b>signature</b> garantit que personne ne l'a modifié. On dit que c'est <b>stateless</b> (sans état serveur).</p>
+  </div>
+
+  <h3>Analogie : le billet de concert</h3>
+  <p>Compare deux façons de gérer une entrée :</p>
+  <ul>
+    <li><b>Session classique (stateful)</b> = un bracelet numéroté. À l'entrée, le videur vérifie le numéro <i>dans son registre</i>. Sans registre, le bracelet ne vaut rien. → Laravel : table <code>sessions</code> + cookie.</li>
+    <li><b>JWT (stateless)</b> = un billet <i>avec un sceau holographique infalsifiable</i>. Le videur vérifie le sceau, pas un registre. Tout est écrit sur le billet. → pas de table, pas de lookup DB.</li>
+  </ul>
+
+  <h3 id="jwt-struct">Structure : 3 morceaux séparés par des points</h3>
+  <p>Un JWT, c'est littéralement <code>xxxxx.yyyyy.zzzzz</code> :</p>
+
+  <div class="diagram">
+    <div class="jwt-line">
+      <span class="jwt-h">eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9</span>.<span class="jwt-p">eyJzdWIiOiI0MiIsIm5hbWUiOiJIYXNzYW5lIiwicm9sZSI6ImFkbWluIiwiZXhwIjoxNzE3NX0</span>.<span class="jwt-s">SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c</span>
+    </div>
+    <div class="legend">
+      <span><b class="jwt-h">HEADER</b> &nbsp;algo de signature</span>
+      <span><b class="jwt-p">PAYLOAD</b> &nbsp;les données (claims)</span>
+      <span><b class="jwt-s">SIGNATURE</b> &nbsp;le sceau</span>
+    </div>
+    <div class="cap">Les 2 premières parties sont juste du JSON encodé en Base64URL — <b>lisible par tous</b>.</div>
+  </div>
+
+  <div class="twocol">
+    <div>
+      <h4>1 · Header (décodé)</h4>
+      <pre><code>{
+  <span class="tok-str">"alg"</span>: <span class="tok-str">"HS256"</span>,  <span class="tok-com">// algo</span>
+  <span class="tok-str">"typ"</span>: <span class="tok-str">"JWT"</span>
+}</code></pre>
+    </div>
+    <div>
+      <h4>2 · Payload (décodé)</h4>
+      <pre><code>{
+  <span class="tok-str">"sub"</span>: <span class="tok-str">"42"</span>,      <span class="tok-com">// user id</span>
+  <span class="tok-str">"name"</span>: <span class="tok-str">"Hassane"</span>,
+  <span class="tok-str">"role"</span>: <span class="tok-str">"admin"</span>,
+  <span class="tok-str">"exp"</span>: <span class="tok-str">1717500000</span> <span class="tok-com">// expire</span>
+}</code></pre>
+    </div>
+  </div>
+
+  <div class="box warn">
+    <div class="lbl">Piège n°1 — le plus important</div>
+    <p>Le payload n'est <b>PAS chiffré</b>, juste encodé en Base64. <b>N'importe qui peut le lire</b> (teste sur <code>jwt.io</code>). Donc : <b>jamais de mot de passe, de numéro de carte ou de secret dans un JWT.</b> La signature empêche de le <i>modifier</i>, pas de le <i>lire</i>.</p>
+  </div>
+
+  <h3 id="jwt-sign">Comment marche la signature ?</h3>
+  <p>C'est le cœur du système. Le serveur calcule :</p>
+  <pre><code><span class="tok-cls">signature</span> = HMAC_SHA256(
+    base64url(header) + <span class="tok-str">"."</span> + base64url(payload),
+    <span class="tok-cls">SECRET</span>   <span class="tok-com">// connu du serveur UNIQUEMENT</span>
+)</code></pre>
+  <p>À la réception, le serveur <b>recalcule</b> la signature à partir du header+payload reçus et de <i>son</i> secret, puis compare :</p>
+  <ul>
+    <li>Signatures <b>identiques</b> → le token est authentique et intact. ✅</li>
+    <li>Signatures <b>différentes</b> → quelqu'un a bidouillé le payload (ou le secret est faux). ❌ Rejeté.</li>
+  </ul>
+  <p>Un attaquant qui change <code>"role":"admin"</code> ne peut <b>pas</b> recalculer une signature valide : il n'a pas le secret. C'est ce qui rend le « tout sur le billet » sûr.</p>
+
+  <div class="diagram">
+    <div class="mermaid">
+flowchart LR
+    A["Header + Payload<br/>(modifiables, lisibles)"] -->|"HMAC + SECRET"| B{"Signature<br/>recalculée"}
+    C["Signature reçue"] --> D{"="}
+    B --> D
+    D -->|"oui"| E["✅ Token valide"]
+    D -->|"non"| F["❌ Rejeté"]
+    style E fill:#163022,stroke:#6be39a,color:#fff
+    style F fill:#33181b,stroke:#ff8a8a,color:#fff
+    </div>
+    <div class="cap">Vérification d'un JWT : on ne fait jamais confiance au token, on revérifie la signature.</div>
+  </div>
+
+  <div class="box note">
+    <div class="lbl">HS256 vs RS256 (en une phrase)</div>
+    <p><b>HS256</b> = <i>secret partagé</i> (même clé pour signer et vérifier) — simple, parfait si c'est la même appli qui émet et vérifie. <b>RS256</b> = <i>paire clé privée/publique</i> — l'émetteur signe avec la privée, n'importe qui vérifie avec la publique. Utile quand plusieurs services doivent vérifier sans pouvoir émettre (microservices, SSO).</p>
+  </div>
+
+  <h3 id="jwt-laravel">Côté Laravel concrètement</h3>
+  <div class="box laravel">
+    <div class="lbl">Repère Laravel</div>
+    <p>Tu as 3 options selon le besoin :</p>
+    <ul>
+      <li><b>Sanctum</b> — le défaut moderne. Pour SPA/mobile. Émet des <i>tokens opaques</i> stockés en DB (table <code>personal_access_tokens</code>). ⚠️ <b>Ce ne sont PAS des JWT</b> : ce sont de simples chaînes aléatoires vérifiées en base — donc <i>stateful</i>.</li>
+      <li><b>Passport</b> — serveur OAuth2 complet, émet de <b>vrais JWT (RS256)</b>. Plus lourd, pour de l'API publique / délégation.</li>
+      <li><b>tymon/jwt-auth</b> ou <b>firebase/php-jwt</b> — pour du JWT « pur », stateless, fait main.</li>
+    </ul>
+    <p>Décoder/vérifier à la main avec <code>firebase/php-jwt</code> :</p>
+    <pre><code><span class="tok-kw">use</span> Firebase\JWT\JWT;
+<span class="tok-kw">use</span> Firebase\JWT\Key;
+
+<span class="tok-com">// Émission (au login)</span>
+$token = JWT::<span class="tok-fn">encode</span>(
+    [<span class="tok-str">'sub'</span> => $user->id, <span class="tok-str">'role'</span> => $user->role, <span class="tok-str">'exp'</span> => time()+3600],
+    config(<span class="tok-str">'app.jwt_secret'</span>), <span class="tok-str">'HS256'</span>
+);
+
+<span class="tok-com">// Vérification (à chaque requête) — lève une exception si invalide/expiré</span>
+$claims = JWT::<span class="tok-fn">decode</span>($token, <span class="tok-kw">new</span> <span class="tok-cls">Key</span>(config(<span class="tok-str">'app.jwt_secret'</span>), <span class="tok-str">'HS256'</span>));</code></pre>
+  </div>
+
+  <div class="box bad">
+    <div class="lbl">La grande contrepartie du JWT</div>
+    <p>Comme le serveur ne stocke rien, il ne peut pas « invalider » un token avant son <code>exp</code>. <b>Déconnexion immédiate, ban, changement de rôle = compliqués.</b> Solutions : tokens à durée courte (5–15 min) + <i>refresh token</i>, ou une <i>blocklist</i>… qui réintroduit un état serveur. C'est tout le paradoxe : le stateless coûte sur la révocation.</p>
+  </div>
+
+  <!-- QA JWT -->
+  <h3>Questions de compréhension — JWT</h3>
+  <details class="qa">
+    <summary>Pourquoi ne faut-il jamais mettre de donnée sensible dans le payload d'un JWT ?</summary>
+    <div class="ans"><p>Parce que le payload est seulement <b>encodé en Base64URL, pas chiffré</b>. Toute personne qui intercepte le token peut le décoder et lire son contenu en clair. La signature protège l'<b>intégrité</b> (on ne peut pas le modifier), pas la <b>confidentialité</b>.</p></div>
+  </details>
+  <details class="qa">
+    <summary>Un attaquant change <code>"role":"user"</code> en <code>"role":"admin"</code> dans le payload. Pourquoi ça échoue ?</summary>
+    <div class="ans"><p>Parce qu'en modifiant le payload, la signature d'origine ne correspond plus. Pour produire une signature valide, il lui faudrait le <b>SECRET du serveur</b>, qu'il ne possède pas. Le serveur recalcule la signature, voit qu'elle diffère, et <b>rejette le token</b>.</p></div>
+  </details>
+  <details class="qa">
+    <summary>Sanctum émet-il des JWT ? Quelle est la conséquence ?</summary>
+    <div class="ans"><p><b>Non.</b> Sanctum (mode token) émet des chaînes aléatoires <i>opaques</i> stockées dans <code>personal_access_tokens</code> et vérifiées en base. C'est <b>stateful</b>. Conséquence : on peut révoquer instantanément un token (suppression en DB), mais chaque requête fait un <b>lookup base de données</b> — l'inverse du compromis JWT.</p></div>
+  </details>
+</section>
+
+<hr>
+
+<!-- ============ BEARER ============ -->
+<section id="bearer">
+  <h2 class="title">2. Bearer — comment le token voyage <span class="pill">authentification</span></h2>
+
+  <p>Erreur fréquente : confondre JWT et Bearer. Ce sont deux choses à des niveaux différents :</p>
+  <table>
+    <tr><th>Concept</th><th>Répond à la question</th><th>Exemple</th></tr>
+    <tr><td><b>JWT</b></td><td>Quel est le <i>format / contenu</i> du jeton ?</td><td>un token signé en 3 parties</td></tr>
+    <tr><td><b>Bearer</b></td><td>Comment je <i>transporte</i> le jeton dans la requête HTTP ?</td><td>un en-tête <code>Authorization</code></td></tr>
+  </table>
+  <p><b>« Bearer »</b> (= « porteur ») est un <b>schéma d'authentification HTTP</b>. Le principe : <i>« quiconque porte ce jeton y a droit »</i> — comme un billet de train au porteur. On l'envoie dans l'en-tête :</p>
+
+  <pre><code><span class="tok-kw">GET</span> /api/factures <span class="tok-com">HTTP/1.1</span>
+Host: api.reforged.dev
+<span class="tok-fn">Authorization:</span> Bearer <span class="jwt-h">eyJhbGci…</span>.<span class="jwt-p">eyJzdW…</span>.<span class="jwt-s">SflKx…</span>
+              └─schéma─┘ └──────────── le token (souvent un JWT) ──────────┘</code></pre>
+
+  <div class="box note">
+    <div class="lbl">Le mot-clé compte</div>
+    <p>Le préfixe <code>Bearer </code> (avec l'espace) dit au serveur <i>comment</i> interpréter ce qui suit. Autres schémas : <code>Basic</code> (login:password en base64), <code>Digest</code>, <code>Negotiate</code>… Bearer est celui des tokens/API modernes.</p>
+  </div>
+
+  <h3>Bearer ≠ JWT obligatoirement</h3>
+  <p>Un token Bearer <b>peut</b> être un JWT, mais pas forcément. Un token Sanctum opaque voyage aussi en <code>Authorization: Bearer xxx</code>. Bearer décrit l'<b>enveloppe</b>, JWT décrit le <b>contenu de la lettre</b>.</p>
+
+  <h3 id="bearer-flow">Le flux complet : login → requêtes protégées</h3>
+  <div class="diagram">
+    <div class="mermaid">
+sequenceDiagram
+    participant C as Client (SPA/Mobile)
+    participant S as API Laravel
+    Note over C,S: 1 · Authentification (une seule fois)
+    C->>S: POST /login {email, password}
+    S->>S: Vérifie en DB + génère le JWT signé
+    S-->>C: 200 { token: "eyJ..." }
+    Note over C: stocke le token
+
+    Note over C,S: 2 · Chaque requête protégée
+    C->>S: GET /api/factures<br/>Authorization: Bearer eyJ...
+    S->>S: Lit l'en-tête, vérifie la signature + exp
+    alt token valide
+        S-->>C: 200 [ ...données... ]
+    else invalide / expiré / absent
+        S-->>C: 401 Unauthorized
+    end
+    </div>
+    <div class="cap">Le login se fait une fois ; ensuite chaque appel re-présente le token. C'est sans session.</div>
+  </div>
+
+  <div class="box laravel">
+    <div class="lbl">Repère Laravel</div>
+    <p>Tu n'extrais quasiment jamais le header à la main. Laravel le fait :</p>
+    <ul>
+      <li><code>$request-&gt;bearerToken()</code> récupère la valeur après <code>Bearer </code>.</li>
+      <li>Le <b>middleware</b> <code>auth:sanctum</code> ou <code>auth:api</code> sur une route fait toute la vérification et peuple <code>$request-&gt;user()</code>. Une route protégée, c'est juste :</li>
+    </ul>
+    <pre><code><span class="tok-cls">Route</span>::<span class="tok-fn">middleware</span>(<span class="tok-str">'auth:sanctum'</span>)-&gt;<span class="tok-fn">get</span>(<span class="tok-str">'/factures'</span>, [<span class="tok-cls">FactureController</span>::<span class="tok-kw">class</span>, <span class="tok-str">'index'</span>]);</code></pre>
+    <p>Le middleware = exactement la place où vit la logique « lire le Bearer, vérifier, autoriser ou renvoyer 401 ».</p>
+  </div>
+
+  <h3>Questions de compréhension — Bearer</h3>
+  <details class="qa">
+    <summary>Quelle est la différence de niveau entre « JWT » et « Bearer » ?</summary>
+    <div class="ans"><p><b>JWT</b> = le <i>format/contenu</i> du jeton (3 parties signées). <b>Bearer</b> = le <i>mécanisme de transport</i> HTTP via l'en-tête <code>Authorization: Bearer &lt;token&gt;</code>. On peut transporter un JWT <i>ou</i> un token opaque en Bearer ; Bearer est l'enveloppe, JWT est le contenu.</p></div>
+  </details>
+  <details class="qa">
+    <summary>Pourquoi appelle-t-on ça « au porteur » et quel risque de sécurité ça implique ?</summary>
+    <div class="ans"><p>Parce que le serveur fait confiance à <b>quiconque présente le token</b>, sans autre preuve d'identité. Risque : si le token est <b>volé</b> (XSS, log, proxy non-HTTPS), le voleur a tous les droits jusqu'à l'expiration. D'où : <b>toujours HTTPS</b>, durée de vie courte, et stockage prudent côté client.</p></div>
+  </details>
+  <details class="qa">
+    <summary>Une requête arrive sans en-tête <code>Authorization</code> sur une route <code>auth:sanctum</code>. Que renvoie Laravel ?</summary>
+    <div class="ans"><p>Une réponse <b>401 Unauthorized</b> (le middleware bloque avant d'atteindre le contrôleur). Pas 403 — 403 voudrait dire « authentifié mais pas le droit » ; 401 = « pas authentifié du tout ».</p></div>
+  </details>
+</section>
+
+<hr>
+
+<!-- ============ OAUTH2 / REFRESH ============ -->
+<section id="oauth">
+  <h2 class="title">2bis. OAuth2 & Refresh Tokens <span class="pill">authentification</span></h2>
+
+  <p>On a vu qu'un JWT court a un défaut : <b>impossible à révoquer</b>, et s'il dure longtemps, un vol est catastrophique. La réponse moderne combine <b>deux tokens</b> et, pour la délégation entre applications, le protocole <b>OAuth2</b>.</p>
+
+  <h3 id="oauth-refresh">Le duo access token + refresh token</h3>
+  <div class="box good">
+    <div class="lbl">L'idée en une phrase</div>
+    <p>Un <b>access token</b> court (5–15 min) sert à chaque requête. Quand il expire, on présente un <b>refresh token</b> long (jours/semaines), stocké en base et révocable, pour en obtenir un nouveau — <b>sans redemander le mot de passe</b>.</p>
+  </div>
+
+  <table>
+    <tr><th></th><th>Access token</th><th>Refresh token</th></tr>
+    <tr><td>Durée de vie</td><td>Très courte (5–15 min)</td><td>Longue (jours / semaines)</td></tr>
+    <tr><td>Usage</td><td>Envoyé à <b>chaque</b> requête (Bearer)</td><td>Uniquement pour renouveler l'access token</td></tr>
+    <tr><td>Forme typique</td><td>JWT autoporteur (stateless)</td><td>Chaîne opaque stockée en base</td></tr>
+    <tr><td>Révocable ?</td><td>Non (il expire vite, c'est sa sécurité)</td><td><b>Oui</b> — on le supprime en base</td></tr>
+  </table>
+
+  <p>C'est le meilleur des deux mondes : la <b>performance stateless</b> du JWT au quotidien (pas de lookup DB à chaque appel), et la <b>révocation</b> via le refresh token (déconnexion, ban = on tue le refresh, et l'access mourra tout seul en quelques minutes).</p>
+
+  <div class="diagram">
+    <div class="mermaid">
+sequenceDiagram
+    participant C as Client
+    participant S as API
+    C->>S: POST /login {email, password}
+    S-->>C: { access (15min), refresh (30j) }
+    Note over C,S: usage normal pendant 15 min
+    C->>S: GET /api/data + Bearer access
+    S-->>C: 200 OK
+    Note over C,S: ...15 min plus tard, access expiré
+    C->>S: GET /api/data + Bearer access
+    S-->>C: 401 (expiré)
+    C->>S: POST /refresh { refresh }
+    S->>S: refresh valide en base ?
+    alt oui
+        S-->>C: { nouvel access, (nouveau refresh) }
+        Note over C: rejoue la requête
+    else révoqué / expiré
+        S-->>C: 401 → reconnexion
+    end
+    </div>
+    <div class="cap">Cycle access/refresh : le client renouvelle silencieusement, l'utilisateur ne voit rien.</div>
+  </div>
+
+  <div class="box warn">
+    <div class="lbl">Bonne pratique — rotation</div>
+    <p>À chaque refresh, on émet aussi un <b>nouveau</b> refresh token et on invalide l'ancien (<i>refresh token rotation</i>). Si un ancien refresh réapparaît, c'est le signe d'un vol → on révoque toute la famille de tokens. Sans rotation, un refresh volé reste exploitable des semaines.</p>
+  </div>
+
+  <h3>OAuth2 : quand un tiers agit en ton nom</h3>
+  <p>OAuth2 n'est pas « du login ». C'est un protocole de <b>délégation d'autorisation</b> : il permet à une appli tierce d'accéder à tes ressources <b>sans connaître ton mot de passe</b>. C'est le « Se connecter avec Google » : tu autorises l'appli, Google émet un token, l'appli l'utilise.</p>
+
+  <div class="diagram">
+    <div class="mermaid">
+flowchart LR
+    U["👤 Resource Owner<br/>(toi)"] --> APP["Client<br/>(l'appli tierce)"]
+    APP -->|"1 · redirige"| AUTH["Authorization Server<br/>(Google / ton Passport)"]
+    U -->|"2 · j'autorise"| AUTH
+    AUTH -->|"3 · code → token"| APP
+    APP -->|"4 · Bearer token"| RES["Resource Server<br/>(l'API protégée)"]
+    style AUTH fill:#2a2410,stroke:#ffcf6b,color:#fff
+    style U fill:#13261c,stroke:#6be39a,color:#fff
+    </div>
+    <div class="cap">Les 4 rôles d'OAuth2. Le mot de passe ne quitte jamais l'Authorization Server.</div>
+  </div>
+
+  <h4>Les « grant types » utiles à connaître</h4>
+  <ul>
+    <li><b>Authorization Code (+ PKCE)</b> — le standard pour SPA/mobile et « login social ». L'utilisateur s'authentifie sur le serveur d'autorisation, qui renvoie un <i>code</i> échangé contre un token. PKCE sécurise les clients publics.</li>
+    <li><b>Client Credentials</b> — pas d'utilisateur : une <b>machine appelle une autre machine</b> (service ↔ service). Parfait pour tes microservices Reforged qui s'appellent entre eux.</li>
+    <li><b>Password grant</b> — <span style="color:var(--bad)">déconseillé / déprécié</span> : l'appli manipule directement le mot de passe. À éviter sauf client 100 % de confiance.</li>
+  </ul>
+
+  <div class="box laravel">
+    <div class="lbl">Repère Laravel</div>
+    <ul>
+      <li><b>Laravel Passport</b> = un serveur OAuth2 complet clé en main : il gère les grant types, émet des <b>JWT (access)</b> + <b>refresh tokens</b>, et expose <code>/oauth/token</code>. C'est l'outil quand tu es l'<i>Authorization Server</i>.</li>
+      <li><b>Laravel Socialite</b> = le côté <i>client</i> : « se connecter avec Google/GitHub », gère le flux Authorization Code pour toi.</li>
+      <li><b>Sanctum</b> n'a pas de refresh token natif : on lui donne des tokens à expiration et on régénère via login. Pour du vrai OAuth2 (tiers, délégation), c'est Passport.</li>
+    </ul>
+    <p>Renouveler avec Passport, c'est un simple POST :</p>
+    <pre><code><span class="tok-cls">POST</span> /oauth/token
+{
+  <span class="tok-str">"grant_type"</span>: <span class="tok-str">"refresh_token"</span>,
+  <span class="tok-str">"refresh_token"</span>: <span class="tok-str">"def502..."</span>,
+  <span class="tok-str">"client_id"</span>: <span class="tok-str">"3"</span>, <span class="tok-str">"client_secret"</span>: <span class="tok-str">"..."</span>
+}
+<span class="tok-com">// → { access_token, refresh_token, expires_in }</span></code></pre>
+  </div>
+
+  <h3>Questions de compréhension — OAuth2 & refresh</h3>
+  <details class="qa">
+    <summary>Pourquoi utiliser un access token court + un refresh token long plutôt qu'un seul JWT à longue durée ?</summary>
+    <div class="ans"><p>Pour combiner <b>performance</b> et <b>sécurité</b>. L'access token JWT court reste <i>stateless</i> (pas de lookup DB à chaque requête) et, comme il expire vite, un vol a un impact limité. Le refresh token, lui, est stocké en base et <b>révocable</b> : on peut couper l'accès (déconnexion, ban) sans renoncer au stateless au quotidien. Un seul JWT long serait soit non-révocable, soit dangereux en cas de vol.</p></div>
+  </details>
+  <details class="qa">
+    <summary>OAuth2 sert-il à « se connecter » (authentification) ?</summary>
+    <div class="ans"><p>Pas directement : OAuth2 est un protocole d'<b>autorisation déléguée</b> (« cette appli peut-elle accéder à mes ressources ? »), pas d'authentification (« qui es-tu ? »). Le login social fonctionne <i>par-dessus</i> OAuth2 grâce à <b>OpenID Connect</b>, une couche d'identité ajoutée. Le mot de passe ne quitte jamais l'Authorization Server.</p></div>
+  </details>
+  <details class="qa">
+    <summary>Deux microservices Reforged doivent s'appeler sans utilisateur connecté. Quel grant type ?</summary>
+    <div class="ans"><p><b>Client Credentials</b> : pas de <i>resource owner</i> humain, juste une machine qui s'authentifie auprès d'une autre via son <code>client_id</code>/<code>client_secret</code> pour obtenir un token. C'est le grant type des communications service-à-service.</p></div>
+  </details>
+</section>
+
+<hr>
+
+<!-- ============ HEXAGONAL ============ -->
+<section id="hexa">
+  <h2 class="title">3. Architecture Hexagonale (sans DDD) <span class="pill">structure du code</span></h2>
+
+  <p>On change complètement de sujet : plus d'auth, on parle d'<b>organisation du code</b>. L'architecture hexagonale (aussi appelée <b>Ports &amp; Adapters</b>, par Alistair Cockburn) répond à une seule obsession :</p>
+
+  <div class="box good">
+    <div class="lbl">La règle d'or</div>
+    <p><b>Ta logique métier ne doit dépendre de RIEN d'externe.</b> Ni de Laravel, ni d'Eloquent, ni de MySQL, ni de HTTP. Le métier est au centre ; tout le reste (framework, DB, API) se branche <b>autour</b> et peut être remplacé sans toucher au centre.</p>
+  </div>
+
+  <h3 id="hexa-why">Le problème qu'on cherche à éviter</h3>
+  <p>Dans un Laravel « classique », le contrôleur fait souvent tout :</p>
+  <pre><code><span class="tok-com">// ❌ Tout est mélangé : HTTP + métier + DB dans le même endroit</span>
+<span class="tok-kw">public function</span> <span class="tok-fn">store</span>(<span class="tok-cls">Request</span> $request) {
+    $request-&gt;<span class="tok-fn">validate</span>([<span class="tok-str">'montant'</span> =&gt; <span class="tok-str">'required|numeric'</span>]);
+    $facture = <span class="tok-cls">Facture</span>::<span class="tok-fn">create</span>($request-&gt;all());   <span class="tok-com">// Eloquent direct</span>
+    <span class="tok-cls">Mail</span>::<span class="tok-fn">to</span>($request-&gt;email)-&gt;<span class="tok-fn">send</span>(...);     <span class="tok-com">// IO direct</span>
+    <span class="tok-kw">if</span> ($facture-&gt;montant &gt; <span class="tok-cls">10000</span>) { <span class="tok-com">/* règle métier noyée ici */</span> }
+    <span class="tok-kw">return</span> <span class="tok-fn">response</span>()-&gt;<span class="tok-fn">json</span>($facture);
+}</code></pre>
+  <p>Problèmes : la <b>règle métier</b> (« au-dessus de 10000€ il faut une validation ») est noyée dans du HTTP et de l'Eloquent. Pour la <b>tester</b>, il faut une vraie DB et une fausse requête. Pour <b>changer de DB</b> ou exposer la même logique en CLI, tout casse.</p>
+
+  <h3 id="hexa-ports">Ports & Adapters : l'image de l'hexagone</h3>
+  <div class="diagram">
+    <div class="mermaid">
+flowchart TB
+    subgraph EXT_IN["Adapters côté entrée (driving)"]
+        HTTP["Contrôleur HTTP"]
+        CLI["Commande CLI"]
+        QUEUE["Job de queue"]
+    end
+
+    subgraph CORE["🟡 CŒUR — logique métier (zéro dépendance externe)"]
+        direction TB
+        PIN["Port d'entrée<br/>(interface UseCase)"]
+        APP["Service applicatif<br/>CreerFacture"]
+        POUT["Port de sortie<br/>(interface FactureRepository)"]
+        PIN --> APP --> POUT
+    end
+
+    subgraph EXT_OUT["Adapters côté sortie (driven)"]
+        ELO["EloquentFactureRepository"]
+        MAILER["Adapter Mailgun"]
+    end
+
+    HTTP --> PIN
+    CLI --> PIN
+    QUEUE --> PIN
+    POUT --> ELO
+    POUT --> MAILER
+
+    style CORE fill:#2a2410,stroke:#ffcf6b,color:#fff
+    style PIN fill:#1e2230,stroke:#7c9cff,color:#fff
+    style POUT fill:#1e2230,stroke:#7c9cff,color:#fff
+    </div>
+    <div class="cap">Le cœur expose des <b>ports</b> (interfaces). Les <b>adapters</b> concrets se branchent dessus. Les flèches pointent toujours <b>vers le centre</b>.</div>
+  </div>
+
+  <ul>
+    <li><b>Port</b> = une <b>interface</b> (un contrat). « Voici ce dont j'ai besoin / ce que j'offre. »</li>
+    <li><b>Adapter</b> = une <b>implémentation concrète</b> de ce contrat (Eloquent, HTTP, Mailgun…).</li>
+    <li><b>Port d'entrée (driving)</b> : ce qui <i>déclenche</i> le métier (HTTP, CLI, queue).</li>
+    <li><b>Port de sortie (driven)</b> : ce dont le métier <i>a besoin</i> (DB, mail, API tierce).</li>
+  </ul>
+
+  <div class="box note">
+    <div class="lbl">L'inversion de dépendance, le vrai secret</div>
+    <p>Normalement « métier → utilise MySQL ». Ici on <b>inverse</b> : le métier définit l'interface <code>FactureRepository</code>, et c'est l'adapter Eloquent qui <b>dépend de cette interface</b>. La flèche de dépendance pointe vers le centre. Résultat : le centre ignore totalement Eloquent.</p>
+  </div>
+
+  <h3 id="hexa-code">En pratique avec Laravel (sans DDD)</h3>
+  <p>Note : <b>hexagonal n'impose pas DDD</b>. Ici, pas de Value Objects ni d'Aggregates — juste des classes simples, des interfaces, et de l'injection de dépendances. Laravel a déjà tout (le <i>Service Container</i> = la machine à brancher adapters sur ports).</p>
+
+  <pre><code><span class="tok-com">// 1 · PORT DE SORTIE — défini par le métier, dans le cœur</span>
+<span class="tok-kw">interface</span> <span class="tok-cls">FactureRepository</span> {
+    <span class="tok-kw">public function</span> <span class="tok-fn">save</span>(<span class="tok-cls">Facture</span> $f): <span class="tok-kw">void</span>;
+}
+
+<span class="tok-com">// 2 · SERVICE APPLICATIF — la logique pure, ne connaît QUE l'interface</span>
+<span class="tok-kw">class</span> <span class="tok-cls">CreerFacture</span> {
+    <span class="tok-kw">public function</span> <span class="tok-fn">__construct</span>(<span class="tok-kw">private</span> <span class="tok-cls">FactureRepository</span> $repo) {}
+
+    <span class="tok-kw">public function</span> <span class="tok-fn">execute</span>(<span class="tok-kw">int</span> $clientId, <span class="tok-kw">float</span> $montant): <span class="tok-cls">Facture</span> {
+        <span class="tok-kw">if</span> ($montant &lt;= <span class="tok-cls">0</span>) <span class="tok-kw">throw new</span> <span class="tok-cls">MontantInvalide</span>();
+        $facture = <span class="tok-kw">new</span> <span class="tok-cls">Facture</span>($clientId, $montant); <span class="tok-com">// règle métier ici</span>
+        $this-&gt;repo-&gt;<span class="tok-fn">save</span>($facture);
+        <span class="tok-kw">return</span> $facture;
+    }
+}
+
+<span class="tok-com">// 3 · ADAPTER DE SORTIE — l'implémentation Eloquent, hors du cœur</span>
+<span class="tok-kw">class</span> <span class="tok-cls">EloquentFactureRepository</span> <span class="tok-kw">implements</span> <span class="tok-cls">FactureRepository</span> {
+    <span class="tok-kw">public function</span> <span class="tok-fn">save</span>(<span class="tok-cls">Facture</span> $f): <span class="tok-kw">void</span> {
+        <span class="tok-cls">FactureModel</span>::<span class="tok-fn">create</span>([<span class="tok-str">'client_id'</span> =&gt; $f-&gt;clientId, <span class="tok-str">'montant'</span> =&gt; $f-&gt;montant]);
+    }
+}
+
+<span class="tok-com">// 4 · ADAPTER D'ENTRÉE — le contrôleur, mince, ne fait que traduire HTTP</span>
+<span class="tok-kw">class</span> <span class="tok-cls">FactureController</span> {
+    <span class="tok-kw">public function</span> <span class="tok-fn">store</span>(<span class="tok-cls">Request</span> $r, <span class="tok-cls">CreerFacture</span> $useCase) {
+        $f = $useCase-&gt;<span class="tok-fn">execute</span>($r-&gt;client_id, $r-&gt;montant);
+        <span class="tok-kw">return</span> <span class="tok-fn">response</span>()-&gt;<span class="tok-fn">json</span>($f);
+    }
+}</code></pre>
+
+  <div class="box laravel">
+    <div class="lbl">Repère Laravel — le branchement</div>
+    <p>On relie le port à l'adapter dans un <b>Service Provider</b> :</p>
+    <pre><code><span class="tok-com">// AppServiceProvider::register()</span>
+$this-&gt;app-&gt;<span class="tok-fn">bind</span>(<span class="tok-cls">FactureRepository</span>::<span class="tok-kw">class</span>, <span class="tok-cls">EloquentFactureRepository</span>::<span class="tok-kw">class</span>);</code></pre>
+    <p>Pour les tests, tu bind un <code>InMemoryFactureRepository</code> (un simple tableau PHP). Le <b>service métier ne change pas d'une ligne</b> et tu testes sans DB. C'est tout le bénéfice.</p>
+  </div>
+
+  <table>
+    <tr><th>Bénéfice</th><th>Pourquoi</th></tr>
+    <tr><td>Testable sans infra</td><td>On remplace les adapters par des faux (in-memory).</td></tr>
+    <tr><td>Framework remplaçable</td><td>Le cœur ne référence pas Laravel ; on pourrait changer de framework.</td></tr>
+    <tr><td>Plusieurs entrées</td><td>HTTP, CLI, queue appellent le même use case.</td></tr>
+    <tr><td>Métier lisible</td><td>Les règles sont au centre, pas noyées dans du HTTP/SQL.</td></tr>
+  </table>
+
+  <div class="box warn">
+    <div class="lbl">Quand NE pas en faire</div>
+    <p>Pour un CRUD simple, c'est de la <b>sur-ingénierie</b> : plus de fichiers, plus d'indirection, pour zéro logique métier. Réserve l'hexagonal aux <b>parties à vraie complexité métier</b> ou à fort besoin de testabilité/durabilité. Un CRUD reste très bien en Eloquent direct.</p>
+  </div>
+
+  <h3>Questions de compréhension — Hexagonal</h3>
+  <details class="qa">
+    <summary>Dans quel sens pointent les dépendances, et pourquoi est-ce contre-intuitif ?</summary>
+    <div class="ans"><p>Toujours <b>vers le centre (le métier)</b>. C'est contre-intuitif parce que naturellement on dirait « mon service utilise MySQL, donc il dépend de MySQL ». L'hexagonal <b>inverse</b> : le métier définit une <i>interface</i> (port), et c'est l'adapter base de données qui dépend de cette interface. Le métier ne connaît jamais l'infra.</p></div>
+  </details>
+  <details class="qa">
+    <summary>Quelle est la différence entre un <i>port</i> et un <i>adapter</i> ?</summary>
+    <div class="ans"><p>Un <b>port</b> est un <b>contrat (interface)</b> défini par le cœur — « j'ai besoin de pouvoir sauvegarder une facture ». Un <b>adapter</b> est une <b>implémentation concrète</b> de ce contrat — <code>EloquentFactureRepository</code>, <code>InMemoryFactureRepository</code>, etc. Un port peut avoir plusieurs adapters.</p></div>
+  </details>
+  <details class="qa">
+    <summary>Quel outil de Laravel joue le rôle de « machine à brancher » les adapters sur les ports ?</summary>
+    <div class="ans"><p>Le <b>Service Container</b> (IoC container), configuré dans les <b>Service Providers</b> via <code>$this-&gt;app-&gt;bind(Interface::class, Implementation::class)</code>. C'est lui qui injecte le bon adapter quand le cœur demande l'interface.</p></div>
+  </details>
+</section>
+
+<hr>
+
+<!-- ============ DDD ============ -->
+<section id="ddd">
+  <h2 class="title">4. DDD — Domain-Driven Design <span class="pill">structure du code</span></h2>
+
+  <div class="box note">
+    <div class="lbl">D'abord, lever la confusion</div>
+    <p><b>Hexagonal ≠ DDD.</b> L'hexagonal organise le code en <i>couches</i> (centre vs périphérie). Le DDD s'intéresse à <b>comment modéliser le métier lui-même</b>. On les combine souvent, mais on peut faire l'un sans l'autre. La section 3 était de l'hexagonal <i>sans</i> DDD.</p>
+  </div>
+
+  <p>Le DDD (Eric Evans) part d'un constat : sur un domaine <b>complexe</b>, le plus dur n'est pas la technique, c'est de <b>bien modéliser la réalité métier</b> et de parler le même langage que les experts métier.</p>
+
+  <div class="box good">
+    <div class="lbl">Les 2 piliers du DDD</div>
+    <ul style="margin-bottom:0">
+      <li><b>Langage ubiquitaire</b> : développeurs et métier utilisent <b>exactement les mêmes mots</b>, et ces mots se retrouvent <b>dans le code</b>. Si le métier dit « clôturer une facture », il y a une méthode <code>$facture-&gt;cloturer()</code>, pas un <code>update(['status' =&gt; 3])</code>.</li>
+      <li><b>Bounded Contexts</b> : on découpe le grand système en <b>contextes délimités</b>, chacun avec son propre modèle. Le mot « Client » ne veut pas dire la même chose en <i>Facturation</i> et en <i>Support</i> — donc deux modèles distincts.</li>
+    </ul>
+  </div>
+
+  <h3 id="ddd-blocks">Les briques tactiques (building blocks)</h3>
+  <table>
+    <tr><th>Brique</th><th>C'est quoi</th><th>Exemple</th></tr>
+    <tr><td><b>Entity</b></td><td>Objet avec une <b>identité</b> qui persiste dans le temps, même si ses attributs changent.</td><td>Une <code>Facture</code> (identifiée par son id).</td></tr>
+    <tr><td><b>Value Object</b></td><td>Objet <b>sans identité</b>, défini par sa valeur, <b>immuable</b>. Deux VO égaux si mêmes valeurs.</td><td><code>Montant(100, 'EUR')</code>, <code>Email</code>, <code>Adresse</code>.</td></tr>
+    <tr><td><b>Aggregate</b></td><td>Grappe d'objets traitée comme un tout, avec une <b>racine</b> (Aggregate Root) seule porte d'entrée, garante des invariants.</td><td><code>Commande</code> + ses <code>LignesCommande</code>.</td></tr>
+    <tr><td><b>Repository</b></td><td>Abstraction de persistance <b>par agrégat</b> (collection en mémoire fictive).</td><td><code>CommandeRepository</code>.</td></tr>
+    <tr><td><b>Domain Service</b></td><td>Logique métier qui n'appartient à <b>aucune</b> entité en particulier.</td><td><code>CalculTaxe</code> entre pays.</td></tr>
+    <tr><td><b>Domain Event</b></td><td>Fait métier <b>passé</b> qui intéresse le reste du système.</td><td><code>FactureCloturee</code>.</td></tr>
+  </table>
+
+  <h4>Entity vs Value Object — l'exemple qui débloque</h4>
+  <div class="twocol">
+    <div class="box bad" style="margin-top:0">
+      <div class="lbl">Sans DDD (primitif)</div>
+      <pre><code><span class="tok-com">// montant = float anonyme</span>
+$facture-&gt;montant = <span class="tok-cls">-50.0</span>;
+<span class="tok-com">// devise ? négatif permis ?</span>
+<span class="tok-com">// validations éparpillées partout</span></code></pre>
+    </div>
+    <div class="box good" style="margin-top:0">
+      <div class="lbl">Avec un Value Object</div>
+      <pre><code><span class="tok-kw">final class</span> <span class="tok-cls">Montant</span> {
+  <span class="tok-kw">public function</span> <span class="tok-fn">__construct</span>(
+    <span class="tok-kw">public readonly int</span> $cents,
+    <span class="tok-kw">public readonly string</span> $devise
+  ) {
+    <span class="tok-kw">if</span>($cents &lt; <span class="tok-cls">0</span>)
+      <span class="tok-kw">throw new</span> <span class="tok-cls">MontantNegatif</span>();
+  }
+}</code></pre>
+    </div>
+  </div>
+  <p>Le VO <b>concentre la règle</b> (« un montant ne peut pas être négatif ») en un seul endroit, et la rend <b>impossible à violer</b> : tu ne peux pas construire un <code>Montant</code> invalide. Plus de validation dispersée.</p>
+
+  <h4>L'agrégat protège les invariants</h4>
+  <pre><code><span class="tok-kw">class</span> <span class="tok-cls">Commande</span> {              <span class="tok-com">// Aggregate Root</span>
+    <span class="tok-kw">private array</span> $lignes = [];
+    <span class="tok-kw">private</span> <span class="tok-cls">Statut</span> $statut;
+
+    <span class="tok-com">// On passe TOUJOURS par la racine — jamais $ligne directement</span>
+    <span class="tok-kw">public function</span> <span class="tok-fn">ajouterLigne</span>(<span class="tok-cls">Produit</span> $p, <span class="tok-kw">int</span> $qte): <span class="tok-kw">void</span> {
+        <span class="tok-kw">if</span> ($this-&gt;statut-&gt;<span class="tok-fn">estValidee</span>())
+            <span class="tok-kw">throw new</span> <span class="tok-cls">CommandeDejaValidee</span>(); <span class="tok-com">// invariant garanti</span>
+        $this-&gt;lignes[] = <span class="tok-kw">new</span> <span class="tok-cls">LigneCommande</span>($p, $qte);
+    }
+}</code></pre>
+  <p>La règle « on ne modifie pas une commande validée » est <b>impossible à contourner</b> : on n'accède aux lignes que via la racine, qui vérifie. C'est ça « protéger les invariants ».</p>
+
+  <h3 id="ddd-hexa">DDD + Hexagonal : ils s'emboîtent</h3>
+  <p>En pratique on superpose les deux : l'hexagonal donne les <b>couches</b>, le DDD remplit le <b>cœur</b> avec un modèle riche.</p>
+  <div class="diagram">
+    <div class="mermaid">
+flowchart TB
+    subgraph L4["🔵 Infrastructure (adapters)"]
+        DB["EloquentRepository"]
+        API["Clients API tiers"]
+    end
+    subgraph L3["🟢 Application (use cases / orchestration)"]
+        UC["ValiderCommande<br/>(coordonne, transactions)"]
+    end
+    subgraph L2["🟡 Domain (le cœur DDD)"]
+        AGG["Aggregates · Entities<br/>Value Objects · Domain Services<br/>+ interfaces Repository"]
+    end
+    L4 --> L3 --> L2
+    DB -. implémente .-> AGG
+    style L2 fill:#2a2410,stroke:#ffcf6b,color:#fff
+    style L3 fill:#13261c,stroke:#6be39a,color:#fff
+    style L4 fill:#101d2e,stroke:#7c9cff,color:#fff
+    </div>
+    <div class="cap">Couches typiques : <b>Domain</b> (DDD pur, zéro dépendance) ← <b>Application</b> (use cases) ← <b>Infrastructure</b> (Laravel/Eloquent). Dépendances vers le centre = règle hexagonale.</div>
+  </div>
+
+  <table>
+    <tr><th></th><th>Hexagonal</th><th>DDD</th></tr>
+    <tr><td>Répond à</td><td><i>Où</i> mettre le code ?</td><td><i>Comment</i> modéliser le métier ?</td></tr>
+    <tr><td>Apporte</td><td>Ports, Adapters, inversion de dépendance</td><td>Entities, VO, Aggregates, langage ubiquitaire, bounded contexts</td></tr>
+    <tr><td>Niveau</td><td>Structurel / technique</td><td>Conceptuel / métier</td></tr>
+    <tr><td>Sans l'autre ?</td><td>Oui (section 3)</td><td>Oui (mais souvent combiné)</td></tr>
+  </table>
+
+  <div class="box warn">
+    <div class="lbl">Le vrai coût du DDD</div>
+    <p>Le DDD est <b>cher</b> : beaucoup de classes, mapping entre objets domaine et modèles Eloquent, courbe d'apprentissage de l'équipe. Il ne se justifie que si le <b>domaine est réellement complexe</b> (assurance, logistique, finance…). Pour un blog ou un CRUD, c'est de l'over-engineering : Eloquent + contrôleurs suffisent largement. <b>Le DDD se mérite par la complexité métier.</b></p>
+  </div>
+
+  <h3>Questions de compréhension — DDD</h3>
+  <details class="qa">
+    <summary>Quelle est la différence fondamentale entre une <i>Entity</i> et un <i>Value Object</i> ?</summary>
+    <div class="ans"><p>L'<b>Entity</b> a une <b>identité</b> : deux factures avec les mêmes montants restent deux factures différentes (id distincts), et son état peut évoluer dans le temps. Le <b>Value Object</b> n'a <b>pas d'identité</b> : il est défini uniquement par ses valeurs, est <b>immuable</b>, et deux VO de mêmes valeurs sont interchangeables (deux <code>Montant(100,'EUR')</code> sont « égaux »).</p></div>
+  </details>
+  <details class="qa">
+    <summary>Pourquoi force-t-on à passer par la racine d'un agrégat (Aggregate Root) ?</summary>
+    <div class="ans"><p>Pour <b>garantir les invariants</b> (les règles qui doivent toujours rester vraies). La racine est la seule porte d'entrée : elle peut vérifier les conditions avant toute modification (ex. interdire d'ajouter une ligne à une commande validée). Si on pouvait modifier les objets internes directement, n'importe qui pourrait violer une règle métier sans contrôle.</p></div>
+  </details>
+  <details class="qa">
+    <summary>Hexagonal et DDD : lequel dit « où mettre le code » et lequel dit « comment modéliser le métier » ?</summary>
+    <div class="ans"><p><b>Hexagonal</b> dit <b>où</b> (couches, ports/adapters, sens des dépendances). <b>DDD</b> dit <b>comment modéliser</b> (entities, value objects, aggregates, langage ubiquitaire). On combine souvent les deux : DDD remplit le cœur que l'hexagonal isole.</p></div>
+  </details>
+  <details class="qa">
+    <summary>Pourquoi le DDD serait-il une mauvaise idée pour un simple CRUD ?</summary>
+    <div class="ans"><p>Parce que le DDD a un <b>coût élevé</b> (multiplication des classes, mapping domaine↔persistance, apprentissage) qui ne se rentabilise que face à une <b>vraie complexité métier</b>. Sur un CRUD sans règles riches, il n'y a rien à protéger ni à modéliser : Eloquent + contrôleurs font le travail. Appliquer DDD ici = sur-ingénierie pure.</p></div>
+  </details>
+</section>
+
+<hr>
+
+<!-- ============ EXERCICES ============ -->
+<section id="exos">
+  <h2 class="title">🛠️ Exercices de code à compléter</h2>
+  <p>Pour chaque exercice : essaie de compléter mentalement (ou dans ton éditeur) les <span class="blank">parties surlignées</span>, puis déplie la solution. L'ordre suit la formation.</p>
+
+  <!-- Exo 1 : JWT -->
+  <div class="exo">
+    <div class="extag">Exercice 1 — JWT</div>
+    <p class="task">Complète l'émission d'un JWT qui expire dans 1 heure et contient l'id + le rôle de l'utilisateur, puis sa vérification.</p>
+    <pre><code><span class="tok-kw">use</span> Firebase\JWT\JWT;
+<span class="tok-kw">use</span> Firebase\JWT\Key;
+
+<span class="tok-com">// Émission</span>
+$payload = [
+    <span class="tok-str">'sub'</span>  => $user->id,
+    <span class="tok-str">'role'</span> => $user->role,
+    <span class="tok-str">'exp'</span>  => <span class="blank">/* (1) expire dans 1h */</span>,
+];
+$token = JWT::<span class="tok-fn">encode</span>($payload, $secret, <span class="blank">/* (2) algo */</span>);
+
+<span class="tok-com">// Vérification</span>
+<span class="tok-kw">try</span> {
+    $claims = JWT::<span class="tok-fn">decode</span>($token, <span class="blank">/* (3) ? */</span>);
+} <span class="tok-kw">catch</span> (\Exception $e) {
+    <span class="tok-kw">return</span> <span class="tok-fn">response</span>()-><span class="tok-fn">json</span>([<span class="tok-str">'error'</span> => <span class="tok-str">'invalid'</span>], <span class="blank">/* (4) code HTTP */</span>);
+}</code></pre>
+    <p class="hint">Indices : (1) une fonction de temps Unix + 3600. (2) la formation utilise du HMAC. (3) il faut envelopper le secret + l'algo. (4) « pas authentifié ».</p>
+    <details>
+      <summary>Voir la solution</summary>
+      <div class="sol">
+      <pre><code><span class="tok-com">// (1)</span> <span class="tok-str">'exp'</span> => time() + <span class="tok-cls">3600</span>,
+<span class="tok-com">// (2)</span> $token = JWT::<span class="tok-fn">encode</span>($payload, $secret, <span class="tok-str">'HS256'</span>);
+<span class="tok-com">// (3)</span> $claims = JWT::<span class="tok-fn">decode</span>($token, <span class="tok-kw">new</span> <span class="tok-cls">Key</span>($secret, <span class="tok-str">'HS256'</span>));
+<span class="tok-com">// (4)</span> <span class="tok-cls">401</span>  // Unauthorized — pas authentifié</code></pre>
+      <p class="hint" style="margin-bottom:0"><code>JWT::decode()</code> vérifie la signature <b>et</b> l'<code>exp</code> : un token expiré lève une <code>ExpiredException</code>, attrapée par le <code>catch</code>.</p>
+      </div>
+    </details>
+  </div>
+
+  <!-- Exo 2 : Bearer / middleware -->
+  <div class="exo">
+    <div class="extag">Exercice 2 — Bearer & middleware</div>
+    <p class="task">Écris un middleware Laravel minimal qui lit le token Bearer, le vérifie, et bloque sinon. Complète les trous.</p>
+    <pre><code><span class="tok-kw">class</span> <span class="tok-cls">JwtMiddleware</span> {
+    <span class="tok-kw">public function</span> <span class="tok-fn">handle</span>(<span class="tok-cls">Request</span> $request, <span class="tok-cls">Closure</span> $next) {
+        $token = $request-><span class="blank">/* (1) récupérer le Bearer */</span>;
+        <span class="tok-kw">if</span> (! $token) {
+            <span class="tok-kw">return</span> <span class="tok-fn">response</span>()-><span class="tok-fn">json</span>([<span class="tok-str">'error'</span> => <span class="tok-str">'no token'</span>], <span class="blank">/* (2) */</span>);
+        }
+        <span class="tok-kw">try</span> {
+            $claims = JWT::<span class="tok-fn">decode</span>($token, <span class="tok-kw">new</span> <span class="tok-cls">Key</span>($secret, <span class="tok-str">'HS256'</span>));
+            $request-><span class="tok-fn">attributes</span>-><span class="tok-fn">set</span>(<span class="tok-str">'userId'</span>, $claims->sub);
+        } <span class="tok-kw">catch</span> (\Exception $e) {
+            <span class="tok-kw">return</span> <span class="tok-fn">response</span>()-><span class="tok-fn">json</span>([<span class="tok-str">'error'</span> => <span class="tok-str">'invalid'</span>], <span class="tok-cls">401</span>);
+        }
+        <span class="tok-kw">return</span> <span class="blank">/* (3) laisser passer la requête */</span>;
+    }
+}</code></pre>
+    <p class="hint">Indices : (1) Laravel a un helper dédié sur la Request. (2) même code que « non authentifié ». (3) que fait un middleware quand tout va bien ?</p>
+    <details>
+      <summary>Voir la solution</summary>
+      <div class="sol">
+      <pre><code><span class="tok-com">// (1)</span> $token = $request-><span class="tok-fn">bearerToken</span>();
+<span class="tok-com">// (2)</span> <span class="tok-cls">401</span>
+<span class="tok-com">// (3)</span> <span class="tok-kw">return</span> $next($request);</code></pre>
+      <p class="hint" style="margin-bottom:0"><code>bearerToken()</code> extrait automatiquement la valeur après <code>Bearer </code> dans l'en-tête <code>Authorization</code>. <code>$next($request)</code> passe la main au reste de la pile (contrôleur). C'est exactement ce que fait <code>auth:sanctum</code> en interne.</p>
+      </div>
+    </details>
+  </div>
+
+  <!-- Exo 3 : Hexagonal -->
+  <div class="exo">
+    <div class="extag">Exercice 3 — Hexagonal</div>
+    <p class="task">On veut tester <code>CreerFacture</code> <b>sans base de données</b>. Implémente l'adapter de test <code>InMemoryFactureRepository</code> qui respecte le port, et indique comment le brancher.</p>
+    <pre><code><span class="tok-kw">interface</span> <span class="tok-cls">FactureRepository</span> {
+    <span class="tok-kw">public function</span> <span class="tok-fn">save</span>(<span class="tok-cls">Facture</span> $f): <span class="tok-kw">void</span>;
+}
+
+<span class="tok-com">// À compléter : un adapter qui stocke en mémoire</span>
+<span class="tok-kw">class</span> <span class="tok-cls">InMemoryFactureRepository</span> <span class="blank">/* (1) ? */</span> {
+    <span class="blank">/* (2) un stockage interne */</span>
+
+    <span class="tok-kw">public function</span> <span class="tok-fn">save</span>(<span class="tok-cls">Facture</span> $f): <span class="tok-kw">void</span> {
+        <span class="blank">/* (3) stocker $f */</span>
+    }
+}</code></pre>
+    <p class="hint">Indices : (1) il doit honorer le contrat. (2)(3) un simple tableau PHP suffit, pas besoin d'Eloquent.</p>
+    <details>
+      <summary>Voir la solution</summary>
+      <div class="sol">
+      <pre><code><span class="tok-kw">class</span> <span class="tok-cls">InMemoryFactureRepository</span> <span class="tok-kw">implements</span> <span class="tok-cls">FactureRepository</span> {
+    <span class="tok-kw">public array</span> $factures = [];          <span class="tok-com">// (2)</span>
+
+    <span class="tok-kw">public function</span> <span class="tok-fn">save</span>(<span class="tok-cls">Facture</span> $f): <span class="tok-kw">void</span> {
+        $this->factures[] = $f;             <span class="tok-com">// (3)</span>
+    }
+}
+
+<span class="tok-com">// Branchement dans un test — le service métier ne change pas :</span>
+$repo = <span class="tok-kw">new</span> <span class="tok-cls">InMemoryFactureRepository</span>();
+$useCase = <span class="tok-kw">new</span> <span class="tok-cls">CreerFacture</span>($repo);
+$useCase-><span class="tok-fn">execute</span>(clientId: <span class="tok-cls">1</span>, montant: <span class="tok-cls">99.0</span>);
+
+<span class="tok-cls">assertCount</span>(<span class="tok-cls">1</span>, $repo->factures);     <span class="tok-com">// vérifié sans aucune DB</span></code></pre>
+      <p class="hint" style="margin-bottom:0">C'est tout le bénéfice de l'hexagonal : le cœur dépend de l'<b>interface</b>, donc on substitue librement Eloquent par un tableau en mémoire. Aucun changement dans <code>CreerFacture</code>.</p>
+      </div>
+    </details>
+  </div>
+
+  <!-- Exo 4 : DDD Value Object -->
+  <div class="exo">
+    <div class="extag">Exercice 4 — DDD (Value Object)</div>
+    <p class="task">Crée un Value Object <code>Email</code> : immuable, qui refuse une adresse invalide à la construction, et qui sait dire s'il est égal à un autre Email.</p>
+    <pre><code><span class="tok-kw">final class</span> <span class="tok-cls">Email</span> {
+    <span class="tok-kw">public function</span> <span class="tok-fn">__construct</span>(
+        <span class="blank">/* (1) propriété immuable */</span> $valeur
+    ) {
+        <span class="tok-kw">if</span> (<span class="blank">/* (2) format invalide */</span>) {
+            <span class="tok-kw">throw new</span> \<span class="tok-cls">InvalidArgumentException</span>(<span class="tok-str">'Email invalide'</span>);
+        }
+    }
+
+    <span class="tok-kw">public function</span> <span class="tok-fn">equals</span>(<span class="tok-cls">Email</span> $autre): <span class="tok-kw">bool</span> {
+        <span class="tok-kw">return</span> <span class="blank">/* (3) égalité par valeur */</span>;
+    }
+}</code></pre>
+    <p class="hint">Indices : (1) PHP 8 a un mot-clé pour rendre une propriété non modifiable. (2) une fonction native de validation. (3) deux VO sont égaux si leurs valeurs le sont.</p>
+    <details>
+      <summary>Voir la solution</summary>
+      <div class="sol">
+      <pre><code><span class="tok-kw">final class</span> <span class="tok-cls">Email</span> {
+    <span class="tok-kw">public function</span> <span class="tok-fn">__construct</span>(
+        <span class="tok-kw">public readonly string</span> $valeur          <span class="tok-com">// (1) immuable</span>
+    ) {
+        <span class="tok-kw">if</span> (! <span class="tok-fn">filter_var</span>($valeur, <span class="tok-cls">FILTER_VALIDATE_EMAIL</span>)) {  <span class="tok-com">// (2)</span>
+            <span class="tok-kw">throw new</span> \<span class="tok-cls">InvalidArgumentException</span>(<span class="tok-str">'Email invalide'</span>);
+        }
+    }
+
+    <span class="tok-kw">public function</span> <span class="tok-fn">equals</span>(<span class="tok-cls">Email</span> $autre): <span class="tok-kw">bool</span> {
+        <span class="tok-kw">return</span> $this->valeur === $autre->valeur;     <span class="tok-com">// (3)</span>
+    }
+}</code></pre>
+      <p class="hint" style="margin-bottom:0">Les 3 traits d'un Value Object sont là : <b>immuable</b> (<code>readonly</code>), <b>auto-validant</b> (impossible de construire un Email invalide → la règle est garantie partout), et <b>comparé par valeur</b> (pas par identité). Une fois ce VO créé, plus aucun <code>if (!filter_var(...))</code> dispersé dans le code.</p>
+      </div>
+    </details>
+  </div>
+
+  <div class="box note">
+    <div class="lbl">Pour t'entraîner pour de vrai</div>
+    <p>Ouvre un projet Laravel, installe <code>firebase/php-jwt</code> et rejoue les exercices 1 et 2 dans une vraie route. Pour les exos 3 et 4, écris un test PHPUnit qui les exécute : tu verras qu'ils passent <b>sans toucher à la base</b>.</p>
+  </div>
+</section>
+
+<hr>
+
+<!-- ============ QUIZ ============ -->
+<section id="quiz">
+  <h2 class="title">🎯 Quiz final — teste-toi</h2>
+  <p>Une seule bonne réponse par question. Le score s'affiche en bas en temps réel.</p>
+  <div class="quiz" id="quizBox">
+    <div class="score" id="scoreLine">Score : 0 / 8</div>
+
+    <div class="q" data-correct="1">
+      <div class="stem">1. Le payload d'un JWT est…</div>
+      <span class="opt">chiffré, donc illisible sans le secret</span>
+      <span class="opt">seulement encodé en Base64, donc lisible par tous</span>
+      <span class="opt">compressé puis hashé</span>
+      <div class="feedback"></div>
+    </div>
+
+    <div class="q" data-correct="2">
+      <div class="stem">2. « Bearer » désigne…</div>
+      <span class="opt">le format du token (3 parties signées)</span>
+      <span class="opt">l'algorithme de signature</span>
+      <span class="opt">le schéma de transport HTTP dans l'en-tête Authorization</span>
+      <div class="feedback"></div>
+    </div>
+
+    <div class="q" data-correct="0">
+      <div class="stem">3. Sanctum (mode token) émet par défaut…</div>
+      <span class="opt">des tokens opaques stockés en base (stateful)</span>
+      <span class="opt">de vrais JWT signés en RS256</span>
+      <span class="opt">des cookies de session uniquement</span>
+      <div class="feedback"></div>
+    </div>
+
+    <div class="q" data-correct="2">
+      <div class="stem">4. En architecture hexagonale, les dépendances pointent…</div>
+      <span class="opt">du métier vers la base de données</span>
+      <span class="opt">dans tous les sens, peu importe</span>
+      <span class="opt">vers le centre (le métier), via des interfaces/ports</span>
+      <div class="feedback"></div>
+    </div>
+
+    <div class="q" data-correct="1">
+      <div class="stem">5. Un Value Object se caractérise par…</div>
+      <span class="opt">une identité stable dans le temps</span>
+      <span class="opt">l'absence d'identité + l'immuabilité (défini par sa valeur)</span>
+      <span class="opt">le fait d'être toujours persisté en base</span>
+      <div class="feedback"></div>
+    </div>
+
+    <div class="q" data-correct="0">
+      <div class="stem">6. Hexagonal et DDD, c'est…</div>
+      <span class="opt">deux choses distinctes (couches vs modélisation) souvent combinées</span>
+      <span class="opt">exactement la même chose sous deux noms</span>
+      <span class="opt">DDD est une version de Sanctum</span>
+      <div class="feedback"></div>
+    </div>
+
+    <div class="q" data-correct="1">
+      <div class="stem">7. Le refresh token sert à…</div>
+      <span class="opt">être envoyé à chaque requête à la place de l'access token</span>
+      <span class="opt">obtenir un nouvel access token sans redemander le mot de passe</span>
+      <span class="opt">chiffrer le payload du JWT</span>
+      <div class="feedback"></div>
+    </div>
+
+    <div class="q" data-correct="2">
+      <div class="stem">8. OAuth2 est fondamentalement un protocole de…</div>
+      <span class="opt">chiffrement de bout en bout</span>
+      <span class="opt">stockage de mots de passe</span>
+      <span class="opt">délégation d'autorisation (un tiers agit en ton nom)</span>
+      <div class="feedback"></div>
+    </div>
+
+    <div class="score" id="finalLine"></div>
+  </div>
+</section>
+
+<!-- ============ RECAP ============ -->
+<section id="recap">
+  <h2 class="title">Récapitulatif en une image</h2>
+  <div class="diagram">
+    <div class="mermaid">
+mindmap
+  root((Formation))
+    Auth
+      JWT
+        3 parties: header.payload.signature
+        Stateless / signé / lisible
+        Jamais de secret dans le payload
+      Bearer
+        Schéma HTTP Authorization
+        Transporte le token (JWT ou opaque)
+        401 si absent/invalide
+    Architecture
+      Hexagonal
+        Ports = interfaces
+        Adapters = implémentations
+        Dépendances vers le centre
+        Sans DDD = classes simples
+      DDD
+        Langage ubiquitaire
+        Bounded contexts
+        Entity / Value Object / Aggregate
+        Se mérite par la complexité
+    </div>
+  </div>
+
+  <div class="box note">
+    <div class="lbl">Les 6 phrases à retenir</div>
+    <ol style="margin-bottom:0">
+      <li><b>JWT</b> = carte d'identité signée et autoporteuse ; lisible mais infalsifiable.</li>
+      <li><b>Bearer</b> = l'enveloppe HTTP qui transporte le token, pas le token lui-même.</li>
+      <li><b>Sanctum ≠ JWT</b> : tokens opaques en base (stateful), révocables mais avec lookup DB.</li>
+      <li><b>Hexagonal</b> = le métier au centre, ne dépend de rien ; ports/adapters branchés autour.</li>
+      <li><b>DDD</b> = modéliser le métier (entities, VO, aggregates) avec le langage des experts.</li>
+      <li>Les deux architectures <b>se méritent</b> : pas de sur-ingénierie sur un CRUD.</li>
+    </ol>
+  </div>
+
+  <div class="box laravel">
+    <div class="lbl">Pour aller plus loin côté Laravel</div>
+    <ul style="margin-bottom:0">
+      <li>Émettre un vrai JWT à la main : <code>firebase/php-jwt</code>.</li>
+      <li>Voir le Service Container comme la « colle » ports↔adapters : <code>bind()</code> / <code>singleton()</code>.</li>
+      <li>Tester un use case sans DB en bindant un repository in-memory.</li>
+      <li>Décoder n'importe quel JWT pour comprendre : <code>jwt.io</code>.</li>
+    </ul>
+  </div>
+</section>
+
+<p style="text-align:center;color:var(--muted);font-size:13px;margin-top:60px;">
+  Fin de la formation — relis les blocs <b>« ? »</b> que tu as ratés. 💪
+</p>
+
+</main>
+</div>
+
+<script>
+  mermaid.initialize({ startOnLoad:true, theme:'dark', themeVariables:{ fontSize:'14px' }, securityLevel:'loose' });
+
+  // Progress bar
+  const pbar = document.getElementById('pbar');
+  window.addEventListener('scroll', ()=>{
+    const h = document.documentElement;
+    const pct = (h.scrollTop) / (h.scrollHeight - h.clientHeight) * 100;
+    pbar.style.width = Math.min(100, pct) + '%';
+  });
+
+  // Quiz logic
+  const qs = document.querySelectorAll('#quizBox .q');
+  const answered = new Set();
+  let good = 0;
+  const total = qs.length;
+  const scoreLine = document.getElementById('scoreLine');
+  const finalLine = document.getElementById('finalLine');
+
+  qs.forEach((q, qi)=>{
+    const correct = parseInt(q.dataset.correct, 10);
+    const opts = q.querySelectorAll('.opt');
+    const fb = q.querySelector('.feedback');
+    opts.forEach((opt, oi)=>{
+      opt.addEventListener('click', ()=>{
+        if(answered.has(qi)) return;
+        answered.add(qi);
+        opts.forEach(o=>o.classList.add('disabled'));
+        opts[correct].classList.add('correct');
+        if(oi === correct){
+          good++;
+          fb.textContent = '✓ Correct !';
+          fb.className = 'feedback ok';
+        } else {
+          opt.classList.add('wrong');
+          fb.textContent = '✗ Raté — la bonne réponse est surlignée en vert.';
+          fb.className = 'feedback no';
+        }
+        scoreLine.textContent = `Score : ${good} / ${total}`;
+        if(answered.size === total){
+          let msg = good === total ? ' 🏆 Parfait, tu maîtrises !'
+                  : good >= total*0.7 ? ' 👍 Solide, revois les ratés.'
+                  : ' 📚 À retravailler — relis les sections concernées.';
+          finalLine.textContent = `Résultat final : ${good}/${total}.` + msg;
+          finalLine.style.color = good >= total*0.7 ? 'var(--good)' : 'var(--warn)';
+        }
+      });
+    });
+  });
+</script>
+</body>
+</html>

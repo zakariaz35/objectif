@@ -1,0 +1,21 @@
+# Dépendances
+backend/vendor/
+frontend/node_modules/
+frontend/dist/
+
+# Environnement / secrets
+backend/.env
+# .env.docker est versionné (pas de secret réel, dev local)
+
+# Base de données locale (SQLite)
+backend/database/*.sqlite
+
+# Logs & cache
+backend/storage/logs/*
+backend/storage/framework/cache/*
+
+# Archives de contenu générées
+content/*.zip
+
+# Divers
+.DS_Store
