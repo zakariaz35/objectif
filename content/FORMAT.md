@@ -61,6 +61,31 @@ function decode(token) { /* ... */ }
 ```
 ```
 
+## Quiz notés (`type: quiz`)
+
+Un quiz est noté automatiquement. Ses questions sont décrites en **front-matter**
+(clé `questions`), pas dans le corps. Chaque question : `prompt`, `options` (liste),
+`answer` (index 0-indexé de la bonne option), `explanation` (Markdown, affichée après
+correction).
+
+```markdown
+---
+title: Quiz final
+type: quiz
+questions:
+  - prompt: "Le payload d'un JWT est…"
+    options:
+      - "chiffré, illisible sans le secret"
+      - "encodé en Base64, lisible par tous"
+    answer: 1
+    explanation: "Le payload est encodé, pas chiffré…"
+---
+Texte d'intro optionnel (corps Markdown).
+```
+
+L'API sert les questions **sans la réponse** ; la note et les explications ne sont
+renvoyées qu'après soumission (`POST …/grade`). Les tentatives sont enregistrées en base.
+
 ## Rendu
 Le Markdown est converti en HTML côté serveur (CommonMark + GitHub Flavored :
 tables, listes de tâches, autoliens). Le HTML inline est autorisé (callouts, etc.).
