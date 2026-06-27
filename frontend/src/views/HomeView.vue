@@ -78,8 +78,28 @@ onMounted(load)
 
     <div v-if="loading" class="muted">Chargement…</div>
     <div v-else-if="error" class="err">{{ error }}</div>
-    <div v-else-if="formations.length === 0" class="muted">
-      Aucune formation pour l'instant — importe ton premier ZIP ci-dessus.
+    <div v-else-if="formations.length === 0" class="onboarding">
+      <h2>👋 Bienvenue — aucune formation pour l'instant</h2>
+      <p>Cette plateforme lit des formations écrites en <b>Markdown</b>. Pour commencer :</p>
+      <ol>
+        <li>
+          <b>Structure</b> un dossier : un <code>formation.yaml</code> à la racine, un
+          sous-dossier par module, un <code>.md</code> par leçon. Types de leçon :
+          <code>lesson</code>, <code>flashcards</code>, <code>quiz</code>, <code>exercise</code>.
+        </li>
+        <li><b>Zippe</b> ce dossier.</li>
+        <li><b>Dépose</b> le <code>.zip</code> dans la zone ci-dessus (ou clique pour le choisir).</li>
+      </ol>
+      <p class="hint">
+        Format détaillé : voir <code>content/FORMAT.md</code> dans le dépôt.
+      </p>
+      <div class="example">
+        <b>Juste essayer ?</b> Une formation d'exemple (« JWT, Bearer, Hexagonal &amp; DDD »)
+        est fournie. Charge-la en une commande :
+        <pre><code>docker compose exec backend \
+  php artisan formation:import /content/jwt-hexagonal-ddd</code></pre>
+        puis recharge cette page.
+      </div>
     </div>
     <div v-else class="grid">
       <article
@@ -132,6 +152,57 @@ h1 {
 .muted {
   color: var(--muted);
   margin-top: 24px;
+}
+.onboarding {
+  margin-top: 28px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--panel);
+  padding: 22px 24px;
+}
+.onboarding h2 {
+  margin: 0 0 12px;
+  font-size: 20px;
+}
+.onboarding ol {
+  margin: 12px 0;
+  padding-left: 22px;
+}
+.onboarding li {
+  margin: 8px 0;
+}
+.onboarding code {
+  background: var(--code);
+  padding: 2px 6px;
+  border-radius: 5px;
+  font-size: 13px;
+  color: #aee0ff;
+}
+.onboarding .hint {
+  color: var(--muted);
+  font-size: 14px;
+}
+.onboarding .example {
+  margin-top: 16px;
+  border-left: 3px solid var(--accent2);
+  background: var(--panel2);
+  border-radius: 8px;
+  padding: 12px 16px;
+  font-size: 14px;
+}
+.onboarding pre {
+  background: var(--code);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px 14px;
+  overflow-x: auto;
+  margin: 10px 0;
+}
+.onboarding pre code {
+  background: none;
+  padding: 0;
+  color: #d7e0f0;
+  font-size: 13px;
 }
 .grid {
   display: grid;
