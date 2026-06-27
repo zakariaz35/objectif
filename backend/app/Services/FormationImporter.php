@@ -100,12 +100,46 @@ class FormationImporter
             'correction_md' => $correctionMd ? trim($correctionMd) : null,
             'correction_html' => $this->markdown->toHtml($correctionMd),
             'meta' => $meta ?: null,
+            'exercise' => $this->normalizeExercise($meta['exercise'] ?? null),
         ]);
 
         // Quiz noté : questions structurées en front-matter (clé "questions").
         if (! empty($meta['questions']) && is_array($meta['questions'])) {
             $this->importQuizQuestions($lesson, $meta['questions']);
         }
+    }
+
+    /**
+     * Exercice interactif optionnel (clé "exercise" du front-matter).
+     *
+     * @return array{language:string, starter:string, tests:list<array{name:string, code:string}>}|null
+     */
+    private function normalizeExercise(mixed $exercise): ?array
+    {
+        if (! is_array($exercise) || empty($exercise['tests'])) {
+            return null;
+        }
+
+        $tests = [];
+        foreach ($exercise['tests'] as $i => $t) {
+            if (! is_array($t) || empty($t['code'])) {
+                continue;
+            }
+            $tests[] = [
+                'name' => (string) ($t['name'] ?? 'Test '.($i + 1)),
+                'code' => (string) $t['code'],
+            ];
+        }
+
+        if (! $tests) {
+            return null;
+        }
+
+        return [
+            'language' => (string) ($exercise['language'] ?? 'js'),
+            'starter' => (string) ($exercise['starter'] ?? ''),
+            'tests' => $tests,
+        ];
     }
 
     /**

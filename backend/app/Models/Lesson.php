@@ -10,11 +10,12 @@ class Lesson extends Model
 {
     protected $fillable = [
         'module_id', 'slug', 'title', 'type', 'position',
-        'body_md', 'body_html', 'correction_md', 'correction_html', 'meta',
+        'body_md', 'body_html', 'correction_md', 'correction_html', 'meta', 'exercise',
     ];
 
     protected $casts = [
         'meta' => 'array',
+        'exercise' => 'array',
     ];
 
     public function module(): BelongsTo
