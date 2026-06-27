@@ -11,9 +11,10 @@ corrections), l'application le parse, le range en base et l'expose sur une page 
 - **content/** — sources Markdown des formations (voir `content/FORMAT.md`)
 - **docker-compose.yml** — PostgreSQL + backend + frontend
 
-## Démarrer (Docker)
+## Démarrer (Docker) — clé en main
 
 ```bash
+git clone <repo> && cd formation
 docker compose up -d --build
 ```
 
@@ -21,7 +22,19 @@ docker compose up -d --build
 - API : http://localhost:8000/api
 - PostgreSQL : localhost:5432 (formation / secret)
 
-Le backend migre automatiquement au démarrage. Config DB via `backend/.env.docker` (pgsql).
+Au premier démarrage, le backend **migre la base** puis **importe automatiquement les
+formations** présentes dans `content/` (monté dans le conteneur). Rien d'autre à faire :
+le cours « JWT, Bearer, Hexagonal & DDD » est directement consultable.
+
+> L'import de démarrage est **non destructif** : une formation déjà en base est ignorée
+> (la progression est préservée). Pour resynchroniser le contenu après modification des
+> Markdown : `docker compose exec backend php artisan formation:import-all /content --force`.
+
+La config DB vient de `backend/.env.docker` (committé, pas de vrai secret).
+
+> ⚠️ `php artisan serve` ne transmet pas les variables d'env du conteneur au serveur PHP
+> enfant : la config DB du conteneur vient donc de `backend/.env.docker` (monté sur `/app/.env`),
+> pas du bloc `environment` du compose.
 
 > ⚠️ `php artisan serve` ne transmet pas les variables d'env du conteneur au serveur PHP
 > enfant : la config DB du conteneur vient donc de `backend/.env.docker` (monté sur `/app/.env`),

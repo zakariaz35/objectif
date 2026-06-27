@@ -22,5 +22,5 @@ RUN composer dump-autoload --optimize
 
 EXPOSE 8000
 
-# Migre puis sert l'API (host 0.0.0.0 pour être joignable hors du conteneur)
-CMD ["sh", "-c", "php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=8000"]
+# Migre, importe les formations fournies (/content, idempotent), puis sert l'API
+CMD ["sh", "-c", "php artisan migrate --force && php artisan formation:import-all /content && php artisan serve --host=0.0.0.0 --port=8000"]

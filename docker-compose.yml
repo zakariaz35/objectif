@@ -35,6 +35,8 @@ services:
       - ./backend:/app
       # .env spécifique au conteneur (pgsql) — sans écraser le .env natif de l'hôte
       - ./backend/.env.docker:/app/.env
+      # Le contenu des formations (Markdown) — importé au démarrage
+      - ./content:/content:ro
       # On garde les vendor/ du conteneur (évite d'écraser avec l'hôte)
       - /app/vendor
 
