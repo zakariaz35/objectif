@@ -9,7 +9,7 @@ class Progress extends Model
 {
     protected $table = 'progress';
 
-    protected $fillable = ['client_token', 'lesson_id', 'completed'];
+    protected $fillable = ['user_id', 'client_token', 'lesson_id', 'completed'];
 
     protected $casts = [
         'completed' => 'boolean',

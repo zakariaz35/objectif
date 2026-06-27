@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Concerns\ResolvesOwner;
 use App\Models\Formation;
 use App\Models\Lesson;
 use App\Models\Progress;
@@ -10,17 +11,16 @@ use Illuminate\Http\Request;
 
 class ProgressController extends Controller
 {
-    /** Slugs des leçons complétées pour une formation et un client donné. */
+    use ResolvesOwner;
+
+    /** Slugs des leçons complétées pour une formation et le propriétaire courant. */
     public function index(Request $request, Formation $formation): JsonResponse
     {
-        $token = $this->token($request);
-
         $lessonIds = Lesson::query()
             ->whereHas('module', fn ($q) => $q->where('formation_id', $formation->id))
             ->pluck('id');
 
-        $completed = Progress::query()
-            ->where('client_token', $token)
+        $completed = $this->scopeToOwner(Progress::query(), $request)
             ->whereIn('lesson_id', $lessonIds)
             ->where('completed', true)
             ->pluck('lesson_id');
@@ -39,8 +39,6 @@ class ProgressController extends Controller
     /** Marque/démarque une leçon comme complétée. */
     public function toggle(Request $request, Formation $formation, string $moduleSlug, string $lessonSlug): JsonResponse
     {
-        $token = $this->token($request);
-
         $lesson = Lesson::query()
             ->whereHas('module', fn ($q) => $q->where('formation_id', $formation->id)->where('slug', $moduleSlug))
             ->where('slug', $lessonSlug)
@@ -49,15 +47,10 @@ class ProgressController extends Controller
         $completed = (bool) $request->boolean('completed', true);
 
         Progress::updateOrCreate(
-            ['client_token' => $token, 'lesson_id' => $lesson->id],
+            array_merge($this->ownerKeys($request), ['lesson_id' => $lesson->id]),
             ['completed' => $completed],
         );
 
         return response()->json(['completed' => $completed]);
-    }
-
-    private function token(Request $request): string
-    {
-        return (string) ($request->header('X-Client-Token') ?: $request->input('client_token') ?: 'anonymous');
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Concerns\ResolvesOwner;
 use App\Models\Formation;
 use App\Models\Lesson;
 use App\Models\Progress;
@@ -11,6 +12,8 @@ use Illuminate\Http\Request;
 
 class QuizController extends Controller
 {
+    use ResolvesOwner;
+
     /**
      * Corrige un quiz : calcule le score, persiste la tentative, renvoie le
      * feedback par question (bonne réponse + explication).
@@ -50,19 +53,18 @@ class QuizController extends Controller
         }
 
         $total = $lesson->quizQuestions->count();
-        $token = (string) ($request->header('X-Client-Token') ?: 'anonymous');
+        $owner = $this->ownerKeys($request);
 
-        QuizAttempt::create([
-            'client_token' => $token,
+        QuizAttempt::create(array_merge($owner, [
             'lesson_id' => $lesson->id,
             'score' => $score,
             'total' => $total,
             'answers' => $answers,
-        ]);
+        ]));
 
         // Un quiz tenté compte comme leçon « complétée » dans la progression.
         Progress::updateOrCreate(
-            ['client_token' => $token, 'lesson_id' => $lesson->id],
+            array_merge($owner, ['lesson_id' => $lesson->id]),
             ['completed' => true],
         );
 
