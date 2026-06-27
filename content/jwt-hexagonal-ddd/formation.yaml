@@ -1,0 +1,4 @@
+title: "JWT, Bearer, Architecture Hexagonale & DDD"
+slug: jwt-hexagonal-ddd
+description: Formation pour devs Laravel — authentification (JWT, Bearer, OAuth2) et architecture du code (Hexagonal, DDD).
+order: 0
