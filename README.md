@@ -73,5 +73,5 @@ leçon (front-matter `title`/`type`), `<!--correction-->` sépare énoncé et co
 - [x] Stack Docker (PostgreSQL)
 - [x] 1re formation réelle (JWT/Bearer/OAuth2/Hexagonal/DDD)
 - [x] Quiz notés en base (questions structurées, notation, tentatives, UI interactive)
-- [ ] Auth utilisateur + progression par compte
+- [x] Auth utilisateur (Sanctum) + progression par compte (avec reprise de la progression anonyme)
 - [ ] Exercices interactifs (éditeur de code / tests)
