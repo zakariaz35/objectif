@@ -1,9 +1,14 @@
 <script setup>
+import { defineAsyncComponent } from 'vue'
 import { RouterView, RouterLink, useRouter } from 'vue-router'
 import { auth } from './lib/auth'
 import { theme } from './lib/theme'
 import { openScratch } from './lib/scratch'
+import { vuePlay, openVuePlayground } from './lib/vuePlayground'
 import ScratchPad from './components/ScratchPad.vue'
+
+// Heavy (Vue SFC compiler) → loaded only when the playground is opened.
+const VuePlayground = defineAsyncComponent(() => import('./components/VuePlayground.vue'))
 
 const router = useRouter()
 
@@ -47,8 +52,10 @@ async function logout() {
     </header>
     <RouterView />
 
+    <button class="fab fab-vue" type="button" title="Playground Vue (SFC)" @click="openVuePlayground()">Vue</button>
     <button class="fab" type="button" title="Bac à sable JS / TS" @click="openScratch('')">⌗</button>
     <ScratchPad />
+    <VuePlayground v-if="vuePlay.open" />
   </div>
 </template>
 
@@ -164,5 +171,10 @@ async function logout() {
 }
 .fab:hover {
   filter: brightness(1.05);
+}
+.fab-vue {
+  bottom: 84px;
+  background: var(--accent2);
+  font-size: 15px;
 }
 </style>
