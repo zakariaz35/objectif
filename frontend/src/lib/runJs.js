@@ -24,10 +24,19 @@ self.onmessage = function (e) {
 };
 `
 
+// The sandbox runs code with `new Function` (no ES modules), so module syntax
+// can't work: drop `import` lines and unwrap `export` so pasted snippets still run.
+function stripModuleSyntax(code) {
+  return code
+    .replace(/^[ \t]*import\b[^\n]*\n?/gm, '')
+    .replace(/^[ \t]*export\s+default\s+/gm, '')
+    .replace(/^[ \t]*export\s+/gm, '')
+}
+
 export async function runCode(code, timeoutMs = 2000) {
   let js
   try {
-    js = await toJs(code)
+    js = await toJs(stripModuleSyntax(code))
   } catch (e) {
     return { logs: [], error: 'Erreur de syntaxe : ' + (e.message || e) }
   }

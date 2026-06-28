@@ -41,6 +41,9 @@ function decorateCodeBlocks() {
     const open = playgroundFor(lang)
     if (!open) return // language not runnable → no button
     const codeText = (codeEl || pre).innerText
+    // JS/TS sandbox can't resolve ES module imports → skip illustrative snippets.
+    const jsLangs = ['js', 'javascript', 'ts', 'typescript']
+    if ((!lang || jsLangs.includes(lang)) && /^\s*(import|export)\b/m.test(codeText)) return
     const btn = document.createElement('button')
     btn.type = 'button'
     btn.className = 'scratch-btn'
