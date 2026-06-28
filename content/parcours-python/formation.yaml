@@ -1,4 +1,6 @@
 title: Parcours Python (vers la data)
 slug: parcours-python
-description: Les bases de Python, pas à pas, orientées vers l'analyse de données (BI / Data-Analyst).
-stack: Python / Data
+description: Refresher Python appliqué, des bases jusqu'à pandas, pour devenir Data-Analyst (BI). Pratique orientée données, projet d'analyse en fil rouge.
+stack: Python / pandas
+track: Data-Analyst
+order: 1
