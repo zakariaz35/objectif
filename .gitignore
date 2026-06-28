@@ -18,5 +18,8 @@ backend/storage/framework/cache/*
 # l'import) ; seul le zip de démo (jetable) est ignoré.
 content/demo.zip
 
+# Captures d'écran / galeries de tests (artefacts générés par Playwright)
+screenshots/
+
 # Divers
 .DS_Store
