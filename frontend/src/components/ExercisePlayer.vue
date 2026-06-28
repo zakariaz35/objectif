@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed, watch } from 'vue'
 import BaseCallout from './BaseCallout.vue'
+import { toJs } from '../lib/transpile'
 
 const props = defineProps({
   starter: { type: String, default: '' },
@@ -132,8 +133,20 @@ async function run() {
   globalError.value = null
   emitted = allPass.value // avoid re-emitting if already passed
   // Plain copy: a reactive proxy can't be structured-cloned by postMessage.
-  const tests = props.tests.map((t) => ({ name: t.name, code: t.code }))
-  const out = await runInWorker(code.value, tests)
+  let userCode = code.value
+  let tests = props.tests.map((t) => ({ name: t.name, code: t.code }))
+  // TypeScript exercises: transpile user code + tests to JS before running.
+  if (props.language === 'ts') {
+    try {
+      userCode = await toJs(userCode)
+      tests = await Promise.all(tests.map(async (t) => ({ name: t.name, code: await toJs(t.code) })))
+    } catch (e) {
+      running.value = false
+      globalError.value = 'Erreur de syntaxe : ' + (e.message || e)
+      return
+    }
+  }
+  const out = await runInWorker(userCode, tests)
   running.value = false
   if (out.timeout) {
     globalError.value = 'Temps dépassé (boucle infinie ?). Exécution interrompue.'
