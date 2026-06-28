@@ -7,6 +7,8 @@ type: lesson
 
 Un rapport n'est pas une collection de graphiques : c'est un **propos**. Le lecteur doit, en quelques secondes, savoir *de quoi on parle*, *ce qui va bien ou mal*, et *où regarder ensuite*. C'est le travail de restitution — souvent ce qui distingue un analyste d'un « fabricant de graphiques ».
 
+![Maquette de dashboard](assets/dashboard-wireframe.svg)
+
 ## La pyramide : du général au détail
 
 On organise l'information du haut (lecture rapide) vers le bas (détail pour qui creuse).

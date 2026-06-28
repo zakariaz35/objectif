@@ -13,13 +13,26 @@ Données nettoyées, modèle en étoile, mesures DAX prêtes : on construit enfi
 
 Dans la **vue Rapport**, on choisit un visuel, on y glisse des **champs** (dimensions sur l'axe, mesures dans les valeurs). Les essentiels :
 
-| Visuel | Pour |
-|---|---|
-| Carte (Card) / KPI | un chiffre clé (CA total, marge %) |
-| Graphique en barres | comparer des catégories |
-| Graphique en courbes | l'évolution dans le temps |
-| Tableau / Matrice | le détail ventilé, le croisement de dimensions |
-| Carte géographique (Map) | une dimension `region` |
+| Visuel | Pour | Champ type |
+|---|---|---|
+| Carte (Card) / KPI | un chiffre clé (CA total, marge %) | `[Total Sales]`, `[Gross Margin %]` |
+| Graphique en barres | comparer des catégories | Axe : `Products[category]`, Valeur : `[Total Sales]` |
+| Graphique en courbes | l'évolution dans le temps | Axe : `Date[month_name]`, Valeur : `[Total Sales]`, `[Sales LY]` |
+| Tableau / Matrice | le détail ventilé, le croisement de dimensions | Lignes : `Customers[region]`, Colonnes : `Products[category]` |
+| Carte géographique (Map) | une dimension `region` | Emplacement : `Customers[region]`, Taille : `[Total Sales]` |
+
+```mermaid
+flowchart TD
+    M["Mesures DAX<br/>[Total Sales], [MoM %], [YTD]…"] --> V1["Cartes KPI<br/>(haut de page)"]
+    M --> V2["Courbe temporelle<br/>(axe Date)"]
+    M --> V3["Barres catégories<br/>(axe Products)"]
+    M --> V4["Matrice région × catégorie"]
+    DIM["Dimensions<br/>Date, Products, Customers"] --> S["Slicers<br/>(filtres interactifs)"]
+    S -->|filtre| V1
+    S -->|filtre| V2
+    S -->|filtre| V3
+    S -->|filtre| V4
+```
 
 ## Les slicers : filtrer toute la page
 

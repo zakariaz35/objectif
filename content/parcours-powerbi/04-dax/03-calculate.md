@@ -53,4 +53,58 @@ flowchart LR
 
 `CALCULATE` part du contexte courant, applique ses filtres (qui ajoutent ou remplacent), puis évalue l'expression dans ce **nouveau** contexte.
 
-> **À retenir —** `CALCULATE(expr, filtres…)` = évaluer `expr` en **changeant le contexte de filtre**. C'est l'outil de base des % du total (`ALL`), des sous-ensembles (`category = "…"`) et de la time intelligence. Et pour les ratios : `DIVIDE`.
+## Aller plus loin : `ALLEXCEPT`, `ALLSELECTED`, `KEEPFILTERS`
+
+Ces modificateurs étendent le vocabulaire de `CALCULATE` :
+
+```text
+// % du total par région — ignore le filtre catégorie mais GARDE le filtre région
+Category Share In Region % =
+DIVIDE (
+    [Total Sales],
+    CALCULATE ( [Total Sales], ALLEXCEPT ( Products, Customers[region] ) )
+)
+```
+
+- **`ALLEXCEPT(table, col1, col2…)`** : retire tous les filtres de la table sauf ceux des colonnes listées. Utile pour des % "dans le contexte de la région" par exemple.
+- **`ALLSELECTED()`** : calcule le total en tenant compte uniquement des slicers et filtres de page (pas du découpage interne du visuel). Parfait pour des parts relatives à la sélection courante.
+- **`KEEPFILTERS()`** : au lieu de **remplacer** le filtre courant, l'**intersecte** avec le nouveau.
+
+```text
+// With KEEPFILTERS: only Electronics if Electronics is already visible in context
+Electronics Kept =
+CALCULATE (
+    [Total Sales],
+    KEEPFILTERS ( Products[category] = "Electronics" )
+)
+```
+
+Sans `KEEPFILTERS`, un tableau filtré sur `Furniture` afficherait quand même les ventes Electronics. Avec, la mesure respecte le filtre existant.
+
+## Cas complet : tableau de bord vente
+
+```text
+// Building a typical sales dashboard measure by measure
+
+// 1. Atomic base
+Total Sales     = SUM ( Sales[amount] )
+Total Qty       = SUM ( Sales[quantity] )
+Order Count     = COUNTROWS ( Sales )
+Distinct Cust   = DISTINCTCOUNT ( Sales[customer_id] )
+
+// 2. Derived
+Avg Basket      = DIVIDE ( [Total Sales], [Order Count] )
+
+// 3. Ratio vs total
+Category Share % =
+DIVIDE (
+    [Total Sales],
+    CALCULATE ( [Total Sales], ALL ( Products[category] ) )
+)
+
+// 4. Conditional
+Top Category Sales =
+CALCULATE ( [Total Sales], Products[category] = "Electronics" )
+```
+
+> **À retenir —** `CALCULATE(expr, filtres…)` = évaluer `expr` en **changeant le contexte de filtre**. C'est l'outil de base des % du total (`ALL`, `ALLEXCEPT`), des sous-ensembles (`category = "…"`) et de la time intelligence. Utilise `DIVIDE` pour tous les ratios. Compose les mesures en couches (atomique → dérivée → ratio).

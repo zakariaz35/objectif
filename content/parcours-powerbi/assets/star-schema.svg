@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 520" width="760" height="520" font-family="'Segoe UI', Arial, sans-serif">
+  <!-- Background -->
+  <rect width="760" height="520" fill="#f8fafc" rx="12"/>
+
+  <!-- Title -->
+  <text x="380" y="36" text-anchor="middle" font-size="17" font-weight="700" fill="#1e293b">Modèle en étoile — Sales au centre</text>
+
+  <!-- ── RELATIONS (lines drawn first, behind boxes) ── -->
+  <!-- Sales → Products (top-left) -->
+  <line x1="310" y1="255" x2="190" y2="170" stroke="#94a3b8" stroke-width="2" stroke-dasharray="5,3"/>
+  <!-- cardinality labels -->
+  <text x="310" y="248" text-anchor="middle" font-size="11" fill="#64748b">*</text>
+  <text x="192" y="163" text-anchor="middle" font-size="11" fill="#64748b">1</text>
+
+  <!-- Sales → Customers (top-right) -->
+  <line x1="450" y1="255" x2="570" y2="170" stroke="#94a3b8" stroke-width="2" stroke-dasharray="5,3"/>
+  <text x="450" y="248" text-anchor="middle" font-size="11" fill="#64748b">*</text>
+  <text x="570" y="163" text-anchor="middle" font-size="11" fill="#64748b">1</text>
+
+  <!-- Sales → Date (bottom-left) -->
+  <line x1="310" y1="315" x2="150" y2="390" stroke="#94a3b8" stroke-width="2" stroke-dasharray="5,3"/>
+  <text x="308" y="328" text-anchor="middle" font-size="11" fill="#64748b">*</text>
+  <text x="152" y="383" text-anchor="middle" font-size="11" fill="#64748b">1</text>
+
+  <!-- Sales → Geography (bottom-right) -->
+  <line x1="450" y1="315" x2="600" y2="390" stroke="#94a3b8" stroke-width="2" stroke-dasharray="5,3"/>
+  <text x="452" y="328" text-anchor="middle" font-size="11" fill="#64748b">*</text>
+  <text x="600" y="383" text-anchor="middle" font-size="11" fill="#64748b">1</text>
+
+  <!-- ── SALES (fact, centre) ── -->
+  <rect x="290" y="218" width="180" height="158" rx="10" fill="#1e40af" stroke="#1e3a8a" stroke-width="2"/>
+  <rect x="290" y="218" width="180" height="32" rx="10" fill="#1d4ed8"/>
+  <rect x="290" y="238" width="180" height="12" fill="#1d4ed8"/>
+  <text x="380" y="240" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">Sales</text>
+  <text x="380" y="258" text-anchor="middle" font-size="10" fill="#bfdbfe">(table de faits)</text>
+  <line x1="295" y1="264" x2="465" y2="264" stroke="#3b82f6" stroke-width="1"/>
+  <text x="302" y="280" font-size="11" fill="#e0f2fe">order_id</text>
+  <text x="302" y="296" font-size="11" fill="#e0f2fe">order_date</text>
+  <text x="302" y="312" font-size="11" fill="#93c5fd">product_id  <tspan font-style="italic" fill="#7dd3fc">FK</tspan></text>
+  <text x="302" y="328" font-size="11" fill="#93c5fd">customer_id  <tspan font-style="italic" fill="#7dd3fc">FK</tspan></text>
+  <text x="302" y="344" font-size="11" fill="#fde68a">amount</text>
+  <text x="302" y="360" font-size="11" fill="#fde68a">quantity</text>
+
+  <!-- ── PRODUCTS (top-left) ── -->
+  <rect x="70" y="98" width="164" height="132" rx="10" fill="#ffffff" stroke="#0ea5e9" stroke-width="2"/>
+  <rect x="70" y="98" width="164" height="30" rx="10" fill="#0ea5e9"/>
+  <rect x="70" y="116" width="164" height="12" fill="#0ea5e9"/>
+  <text x="152" y="118" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">Products</text>
+  <text x="152" y="133" text-anchor="middle" font-size="10" fill="#e0f2fe">(dimension)</text>
+  <line x1="75" y1="138" x2="229" y2="138" stroke="#bae6fd" stroke-width="1"/>
+  <text x="82" y="154" font-size="11" fill="#0c4a6e">product_id  <tspan font-weight="700">PK</tspan></text>
+  <text x="82" y="170" font-size="11" fill="#0c4a6e">product_name</text>
+  <text x="82" y="186" font-size="11" fill="#0c4a6e">category</text>
+  <text x="82" y="202" font-size="11" fill="#0c4a6e">unit_price</text>
+  <text x="82" y="218" font-size="11" fill="#0c4a6e">brand</text>
+
+  <!-- ── CUSTOMERS (top-right) ── -->
+  <rect x="526" y="98" width="164" height="132" rx="10" fill="#ffffff" stroke="#8b5cf6" stroke-width="2"/>
+  <rect x="526" y="98" width="164" height="30" rx="10" fill="#8b5cf6"/>
+  <rect x="526" y="116" width="164" height="12" fill="#8b5cf6"/>
+  <text x="608" y="118" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">Customers</text>
+  <text x="608" y="133" text-anchor="middle" font-size="10" fill="#ede9fe">(dimension)</text>
+  <line x1="531" y1="138" x2="685" y2="138" stroke="#ddd6fe" stroke-width="1"/>
+  <text x="538" y="154" font-size="11" fill="#4c1d95">customer_id  <tspan font-weight="700">PK</tspan></text>
+  <text x="538" y="170" font-size="11" fill="#4c1d95">full_name</text>
+  <text x="538" y="186" font-size="11" fill="#4c1d95">email</text>
+  <text x="538" y="202" font-size="11" fill="#4c1d95">segment</text>
+  <text x="538" y="218" font-size="11" fill="#4c1d95">region</text>
+
+  <!-- ── DATE (bottom-left) ── -->
+  <rect x="30" y="354" width="164" height="132" rx="10" fill="#ffffff" stroke="#10b981" stroke-width="2"/>
+  <rect x="30" y="354" width="164" height="30" rx="10" fill="#10b981"/>
+  <rect x="30" y="372" width="164" height="12" fill="#10b981"/>
+  <text x="112" y="374" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">Date</text>
+  <text x="112" y="389" text-anchor="middle" font-size="10" fill="#d1fae5">(dimension)</text>
+  <line x1="35" y1="394" x2="189" y2="394" stroke="#a7f3d0" stroke-width="1"/>
+  <text x="42" y="410" font-size="11" fill="#064e3b">date  <tspan font-weight="700">PK</tspan></text>
+  <text x="42" y="426" font-size="11" fill="#064e3b">year</text>
+  <text x="42" y="442" font-size="11" fill="#064e3b">quarter</text>
+  <text x="42" y="458" font-size="11" fill="#064e3b">month_name</text>
+  <text x="42" y="474" font-size="11" fill="#064e3b">is_weekend</text>
+
+  <!-- ── GEOGRAPHY (bottom-right) ── -->
+  <rect x="566" y="354" width="164" height="132" rx="10" fill="#ffffff" stroke="#f59e0b" stroke-width="2"/>
+  <rect x="566" y="354" width="164" height="30" rx="10" fill="#f59e0b"/>
+  <rect x="566" y="372" width="164" height="12" fill="#f59e0b"/>
+  <text x="648" y="374" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">Geography</text>
+  <text x="648" y="389" text-anchor="middle" font-size="10" fill="#fef3c7">(dimension)</text>
+  <line x1="571" y1="394" x2="725" y2="394" stroke="#fde68a" stroke-width="1"/>
+  <text x="578" y="410" font-size="11" fill="#78350f">region_id  <tspan font-weight="700">PK</tspan></text>
+  <text x="578" y="426" font-size="11" fill="#78350f">region</text>
+  <text x="578" y="442" font-size="11" fill="#78350f">country</text>
+  <text x="578" y="458" font-size="11" fill="#78350f">zone</text>
+  <text x="578" y="474" font-size="11" fill="#78350f">city</text>
+
+  <!-- Legend -->
+  <rect x="270" y="492" width="12" height="12" rx="2" fill="#1d4ed8"/>
+  <text x="288" y="503" font-size="11" fill="#475569">Table de faits (mesures + clés étrangères)</text>
+  <rect x="490" y="492" width="12" height="12" rx="2" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+  <text x="508" y="503" font-size="11" fill="#475569">Dimension (clé primaire PK)</text>
+</svg>

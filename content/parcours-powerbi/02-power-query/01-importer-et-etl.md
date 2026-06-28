@@ -47,4 +47,8 @@ Dans Power BI Desktop, le bouton **Obtenir les données** (Get Data) ouvre la li
 
 Toutes les transformations sont **non destructives** : la source d'origine n'est jamais modifiée. Power Query enregistre la **suite des étapes** appliquées (le volet *Étapes appliquées*) et les **rejoue** à chaque rafraîchissement. Tu nettoies une fois ; le travail se répète tout seul sur les données mises à jour.
 
+## Vue d'ensemble du flux ETL
+
+![Flux ETL dans Power BI](assets/etl-flux.svg)
+
 > **À retenir —** Toute donnée entre par Power Query (Extract → **Transform** → Load). Tu décris une recette d'étapes ; Power BI la rejoue à chaque rafraîchissement. La source n'est jamais touchée.

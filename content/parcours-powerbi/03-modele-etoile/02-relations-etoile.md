@@ -7,6 +7,8 @@ type: lesson
 
 Dans la **vue Modèle** de Power BI, on relie la table de faits aux dimensions par des **relations**. Le résultat ressemble à une étoile : le fait au centre, les dimensions autour.
 
+![Modèle en étoile — Sales au centre](assets/star-schema.svg)
+
 ## Le schéma en étoile
 
 ```mermaid
@@ -71,4 +73,27 @@ flowchart TB
 
 En Power BI, on **dénormalise volontairement** vers l'étoile : on fait remonter `category` dans `Products` (souvent via un *Merge* en Power Query). Le moteur est optimisé pour ça.
 
-> **À retenir —** Fait au centre, dimensions autour, relations **1-\*** (dimension → fait). Filtrer une dimension filtre le fait. Vise l'**étoile**, pas le flocon : c'est plus simple et c'est ce que DAX attend.
+## Pièges de relations courants
+
+### La relation inactive
+
+Power BI n'autorise qu'**une seule relation active** entre deux tables. Si `Sales` contient à la fois `order_date` et `delivery_date`, et que `Date` est reliée aux deux, **une seule** sera active (celle que Power BI choisit ou que tu définis). Pour utiliser la relation inactive dans une mesure, on emploie `USERELATIONSHIP` :
+
+```text
+// Sales measured on delivery date instead of order date
+Sales by Delivery =
+CALCULATE (
+    [Total Sales],
+    USERELATIONSHIP ( Sales[delivery_date], 'Date'[date] )
+)
+```
+
+### La relation dans le mauvais sens
+
+Le filtre se propage du côté **un** vers le côté **plusieurs**. Si tu relies `Sales → Products` (au lieu de `Products → Sales`), filtrer `Products[category]` ne propagera pas vers `Sales`. Vérifie toujours la flèche dans la vue Modèle : elle doit aller de la dimension vers le fait.
+
+### Le piège du filtre bidirectionnel
+
+Il est possible d'activer la **bidirectionnalité** (filtre dans les deux sens), mais c'est à éviter par défaut : ça complique les calculs DAX, crée des ambiguïtés et peut ralentir le modèle. On le réserve à des cas très précis (ex. sécurité au niveau ligne).
+
+> **À retenir —** Fait au centre, dimensions autour, relations **1-\*** (dimension → fait). Filtrer une dimension filtre le fait. Vise l'**étoile**, pas le flocon. Attention aux relations inactives (`USERELATIONSHIP`) et au sens du filtre.

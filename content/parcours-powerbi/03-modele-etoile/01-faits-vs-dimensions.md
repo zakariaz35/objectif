@@ -49,4 +49,45 @@ On pourrait tout mettre dans une grosse table plate. Mauvaise idée :
 
 Séparer faits et dimensions = chaque information à **un seul endroit**, relié par des clés. C'est la base de l'étoile.
 
-> **À retenir —** Fait = événements à mesurer (long, peu de colonnes, plein de clés). Dimension = contexte descriptif (court, large, clé unique). On agrège la mesure, on découpe par la dimension.
+## Cas concrets vente/achat
+
+**Contexte vente** :
+
+```text
+Sales (fait)
+| order_id | order_date | product_id | customer_id | store_id | amount | quantity |
+
+Products (dimension)     Customers (dimension)       Store (dimension)
+| product_id PK          | customer_id PK             | store_id PK
+| name                   | full_name                  | store_name
+| category               | email                      | city
+| subcategory            | segment (B2B/B2C)          | region
+| brand                  | region                     | country
+| unit_cost              |                            |
+| unit_price             |
+```
+
+**Contexte achat** :
+
+```text
+Purchases (fait)
+| purchase_id | purchase_date | supplier_id | product_id | qty_ordered | unit_cost |
+
+Suppliers (dimension)
+| supplier_id PK
+| supplier_name
+| country_code
+| lead_time_days
+| payment_terms
+```
+
+## Le test pratique
+
+Pour chaque colonne, pose-toi la question :
+
+- « Est-ce que je vais **sommer ou moyenner** cette valeur ? » → **mesure**, dans le fait.
+- « Est-ce que je vais **grouper ou filtrer** par cette valeur ? » → **dimension**.
+
+`amount` → je le somme → fait. `category` → je filtre par elle → dimension. `order_date` → je filtre et je groupe par elle → clé dans le fait, mais aussi dans la **table de dates** (dimension).
+
+> **À retenir —** Fait = événements à mesurer (long, peu de colonnes, plein de clés). Dimension = contexte descriptif (court, large, clé unique). On **agrège** la mesure, on **découpe** par la dimension. En cas de doute : « sommer ou grouper ? »

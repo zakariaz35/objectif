@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 300" width="800" height="300" font-family="'Segoe UI', Arial, sans-serif">
+  <!-- Background -->
+  <rect width="800" height="300" fill="#f8fafc" rx="12"/>
+
+  <!-- Title -->
+  <text x="400" y="32" text-anchor="middle" font-size="16" font-weight="700" fill="#1e293b">Flux ETL dans Power BI</text>
+
+  <!-- ── PHASE labels ── -->
+  <text x="112" y="60" text-anchor="middle" font-size="12" font-weight="600" fill="#0369a1">EXTRACT</text>
+  <text x="380" y="60" text-anchor="middle" font-size="12" font-weight="600" fill="#047857">TRANSFORM</text>
+  <text x="590" y="60" text-anchor="middle" font-size="12" font-weight="600" fill="#6d28d9">LOAD</text>
+  <text x="715" y="60" text-anchor="middle" font-size="12" font-weight="600" fill="#b45309">REPORT</text>
+
+  <!-- ══ SOURCES BOX ══ -->
+  <rect x="20" y="74" width="182" height="172" rx="10" fill="#e0f2fe" stroke="#0284c7" stroke-width="1.5"/>
+  <text x="111" y="95" text-anchor="middle" font-size="12" font-weight="700" fill="#075985">Sources</text>
+
+  <!-- CSV -->
+  <rect x="34" y="104" width="154" height="32" rx="6" fill="#ffffff" stroke="#bae6fd" stroke-width="1"/>
+  <text x="56" y="118" font-size="18" fill="#0284c7">📄</text>
+  <text x="80" y="124" font-size="11" fill="#0c4a6e">CSV / Excel</text>
+
+  <!-- SQL -->
+  <rect x="34" y="142" width="154" height="32" rx="6" fill="#ffffff" stroke="#bae6fd" stroke-width="1"/>
+  <text x="56" y="156" font-size="18" fill="#0284c7">🗄</text>
+  <text x="80" y="162" font-size="11" fill="#0c4a6e">Base SQL</text>
+
+  <!-- API -->
+  <rect x="34" y="180" width="154" height="32" rx="6" fill="#ffffff" stroke="#bae6fd" stroke-width="1"/>
+  <text x="56" y="194" font-size="18" fill="#0284c7">🌐</text>
+  <text x="80" y="200" font-size="11" fill="#0c4a6e">API / Web / Dossier</text>
+
+  <!-- Connector dots -->
+  <text x="34" y="228" font-size="10" fill="#0369a1">Connecteurs Power BI</text>
+
+  <!-- Arrow E→T -->
+  <line x1="202" y1="160" x2="238" y2="160" stroke="#94a3b8" stroke-width="2"/>
+  <polygon points="238,155 248,160 238,165" fill="#94a3b8"/>
+
+  <!-- ══ POWER QUERY BOX ══ -->
+  <rect x="248" y="74" width="264" height="172" rx="10" fill="#dcfce7" stroke="#16a34a" stroke-width="1.5"/>
+  <text x="380" y="95" text-anchor="middle" font-size="12" font-weight="700" fill="#14532d">Power Query (Éditeur)</text>
+
+  <!-- Steps -->
+  <rect x="262" y="104" width="236" height="24" rx="5" fill="#ffffff" stroke="#bbf7d0" stroke-width="1"/>
+  <text x="274" y="120" font-size="11" fill="#14532d">① Typer les colonnes (Date, Décimal…)</text>
+
+  <rect x="262" y="132" width="236" height="24" rx="5" fill="#ffffff" stroke="#bbf7d0" stroke-width="1"/>
+  <text x="274" y="148" font-size="11" fill="#14532d">② Supprimer doublons, lignes vides</text>
+
+  <rect x="262" y="160" width="236" height="24" rx="5" fill="#ffffff" stroke="#bbf7d0" stroke-width="1"/>
+  <text x="274" y="176" font-size="11" fill="#14532d">③ Normaliser texte (Trim, casse)</text>
+
+  <rect x="262" y="188" width="236" height="24" rx="5" fill="#ffffff" stroke="#bbf7d0" stroke-width="1"/>
+  <text x="274" y="204" font-size="11" fill="#14532d">④ Merge / Append / Unpivot</text>
+
+  <text x="262" y="234" font-size="10" fill="#166534">Étapes rejouées à chaque rafraîchissement</text>
+
+  <!-- Arrow T→L -->
+  <line x1="512" y1="160" x2="546" y2="160" stroke="#94a3b8" stroke-width="2"/>
+  <polygon points="546,155 556,160 546,165" fill="#94a3b8"/>
+
+  <!-- ══ MODEL BOX ══ -->
+  <rect x="556" y="74" width="130" height="124" rx="10" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+  <text x="621" y="95" text-anchor="middle" font-size="12" font-weight="700" fill="#3b0764">Modèle</text>
+  <text x="621" y="112" text-anchor="middle" font-size="11" fill="#4c1d95">Étoile</text>
+  <text x="621" y="128" text-anchor="middle" font-size="11" fill="#4c1d95">Relations</text>
+  <text x="621" y="144" text-anchor="middle" font-size="11" fill="#4c1d95">Table Date</text>
+  <text x="621" y="160" text-anchor="middle" font-size="11" fill="#4c1d95">Mesures DAX</text>
+  <text x="621" y="176" text-anchor="middle" font-size="11" fill="#4c1d95">Colonnes calc.</text>
+
+  <!-- Arrow L→R -->
+  <line x1="686" y1="136" x2="678" y2="136" stroke="#94a3b8" stroke-width="0"/>
+  <line x1="686" y1="136" x2="710" y2="136" stroke="#94a3b8" stroke-width="2"/>
+  <polygon points="710,131 720,136 710,141" fill="#94a3b8"/>
+
+  <!-- ══ REPORT BOX ══ -->
+  <rect x="720" y="74" width="62" height="124" rx="10" fill="#fef3c7" stroke="#d97706" stroke-width="1.5"/>
+  <text x="751" y="98" text-anchor="middle" font-size="11" font-weight="700" fill="#78350f">Rapport</text>
+  <text x="751" y="115" text-anchor="middle" font-size="10" fill="#92400e">Visuels</text>
+  <text x="751" y="131" text-anchor="middle" font-size="10" fill="#92400e">Slicers</text>
+  <text x="751" y="147" text-anchor="middle" font-size="10" fill="#92400e">Drill</text>
+  <text x="751" y="163" text-anchor="middle" font-size="10" fill="#92400e">KPIs</text>
+
+  <!-- Refresh arrow (bottom loop) -->
+  <path d="M 751 198 Q 751 260 380 260 Q 112 260 112 246" fill="none" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="6,3"/>
+  <polygon points="107,246 112,234 117,246" fill="#94a3b8"/>
+  <text x="400" y="278" text-anchor="middle" font-size="10" fill="#64748b">Rafraîchissement planifié → Source mise à jour → ETL rejoué automatiquement</text>
+
+  <!-- Fermer &amp; appliquer label -->
+  <rect x="248" y="202" width="0" height="0"/>
+  <text x="556" y="214" font-size="10" fill="#5b21b6" text-anchor="middle">« Fermer &amp; appliquer »</text>
+</svg>

@@ -58,4 +58,61 @@ Revenue = SUMX ( Sales, Sales[quantity] * Sales[unit_price] )
 
 `SUMX` ouvre un contexte de ligne sur `Sales`, évalue l'expression pour chaque ligne, puis somme le tout.
 
-> **À retenir —** Une mesure se lit **toujours dans son contexte de filtre** : c'est lui qui décide quelles lignes sont sommées. Agrégats de base : `SUM`, `AVERAGE`, `COUNTROWS`, `DISTINCTCOUNT`. Pour agréger un calcul ligne à ligne : les itérateurs `…X` (`SUMX`).
+## Pièges du contexte de filtre
+
+### Le total faux avec une mesure divisée
+
+Ce piège arrive souvent avec les ratios. Imagine :
+
+```text
+// BAD: this computes a ratio per row, then sums the ratios — WRONG
+Avg Margin BAD = AVERAGE ( Sales[amount] ) / AVERAGE ( Sales[quantity] )
+```
+
+Dans un tableau par `category`, chaque cellule donne le ratio moyen de la catégorie — mais la **ligne Total** calcule le ratio sur l'ensemble de la table, pas la moyenne des ratios par catégorie. C'est cohérent mathématiquement mais souvent inattendu.
+
+**Solution** : décomposer en mesures atomiques et combiner :
+
+```text
+// GOOD: atomic measures, then combine
+Total Revenue = SUMX ( Sales, Sales[quantity] * Sales[unit_price] )
+Total Qty     = SUM ( Sales[quantity] )
+Revenue per Unit = DIVIDE ( [Total Revenue], [Total Qty] )
+```
+
+### `COUNTROWS` vs `COUNT`
+
+- `COUNTROWS(Sales)` — compte les **lignes** de la table (même si la colonne est null).
+- `COUNT(Sales[amount])` — compte les valeurs **non null** de la colonne.
+
+Pour « nombre de commandes », `COUNTROWS(Sales)` est presque toujours le bon choix.
+
+### Filtrer plusieurs colonnes dans `CALCULATE`
+
+On peut passer plusieurs filtres séparés par des virgules — ils s'appliquent comme un `AND` :
+
+```text
+// Electronics in Paris only
+Electronics Paris =
+CALCULATE (
+    [Total Sales],
+    Products[category] = "Electronics",
+    Customers[region]  = "Paris"
+)
+```
+
+Pour un `OR`, on utilise `FILTER` avec une table :
+
+```text
+// Electronics OR Furniture
+Electronics Or Furniture =
+CALCULATE (
+    [Total Sales],
+    FILTER (
+        Products,
+        Products[category] = "Electronics" || Products[category] = "Furniture"
+    )
+)
+```
+
+> **À retenir —** Une mesure se lit **toujours dans son contexte de filtre**. Agrégats de base : `SUM`, `AVERAGE`, `COUNTROWS`, `DISTINCTCOUNT`. Itérateurs `…X` pour agréger une expression ligne à ligne. Attention aux totaux faux avec les ratios : préfère des mesures atomiques combinées.

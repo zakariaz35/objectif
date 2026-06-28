@@ -54,6 +54,39 @@ questions:
     explanation: >
       Principe de la pyramide : KPI clés en haut pour une lecture en 3 secondes, tendances
       au milieu, détail en bas pour qui veut creuser.
+  - prompt: |
+      Le responsable achat veut voir la **relation entre le budget fournisseur dépensé et
+      les délais de livraison** obtenus. Quel visuel ?
+    options:
+      - "Barres horizontales triées par budget"
+      - "Nuage de points (scatter) — budget en X, délai en Y"
+      - "Treemap avec les noms de fournisseurs"
+    answer: 1
+    explanation: >
+      Le scatter est le seul visuel qui encode une relation entre deux mesures continues.
+      Chaque fournisseur est une bulle, et la tendance est visible au premier coup d'œil.
+  - prompt: |
+      Un KPI de CA affiché seul (ex. « 2,4 M€ ») est moins utile que le même KPI avec…
+    options:
+      - "Un fond coloré agressif"
+      - "Une variation vs la période précédente (ex. +12 % vs N-1)"
+      - "Un second KPI identique sur la même carte"
+    answer: 1
+    explanation: >
+      Un nombre seul ne dit pas s'il est bon ou mauvais. La variation vs objectif, vs
+      période précédente ou vs moyenne donne le **contexte** qui rend le chiffre parlant.
+      C'est ce qu'on calcule en DAX avec les mesures MoM, YoY…
+  - prompt: |
+      Quelle est la règle principale pour l'usage de la **couleur** dans un dashboard ?
+    options:
+      - "Utiliser un arc-en-ciel pour distinguer chaque catégorie"
+      - "Une couleur d'accent forte pour l'essentiel, le reste en gris ou neutre"
+      - "Toujours utiliser les couleurs de l'entreprise, même si elles se ressemblent"
+    answer: 1
+    explanation: >
+      Chaque couleur ajoutée coûte de l'attention. On réserve la couleur forte au point
+      important (ex. la région qui sous-performe), tout le reste reste neutre : l'accent
+      guide l'œil sans surcharger.
 ---
 
 Vérifie tes réflexes de choix de visuel.

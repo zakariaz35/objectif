@@ -74,6 +74,52 @@ questions:
       Tronquer l'axe d'un graphique en barres exagère artificiellement les écarts : la
       longueur n'encode plus la valeur. Trier par valeur et partir de zéro sont, eux, de
       bonnes pratiques.
+  - prompt: |
+      Que retourne `CALCULATE([Total Sales], Products[category] = "A", Products[category] = "B")` ?
+    options:
+      - "La somme des ventes Electronics et Furniture"
+      - "Un blanc — aucun produit ne peut appartenir aux deux catégories à la fois"
+      - "Une erreur DAX"
+    answer: 1
+    explanation: >
+      Plusieurs arguments filtres dans CALCULATE s'appliquent comme un AND. Aucun produit
+      n'appartient simultanément à "A" et "B" → ensemble vide → BLANK.
+      Pour un OR, il faut FILTER(..., category = "A" || category = "B") ou l'opérateur IN.
+  - prompt: |
+      Une mesure `Margin % = Sales[amount] - Sales[unit_cost] / Sales[amount]` est-elle correcte ?
+    options:
+      - "Oui, elle calcule bien la marge en %"
+      - "Non — la division s'applique avant la soustraction (précédence des opérateurs)"
+      - "Non — il faut utiliser SUMX pour les colonnes"
+    answer: 1
+    explanation: >
+      En DAX comme en maths, `*` et `/` ont la priorité sur `+` et `-`. La formule est
+      lue comme `amount - (unit_cost / amount)`. La correction :
+      DIVIDE(Sales[amount] - Sales[unit_cost], Sales[amount]).
+  - prompt: |
+      Tu veux calculer `CA_B2B / CA_Total` dans un tableau découpé par région. Quelle formule pour le dénominateur ?
+    options:
+      - "SUM(Sales[amount]) — c'est déjà le total"
+      - "CALCULATE([Total Sales], ALL(Customers[segment])) — pour ignorer le filtre de segment"
+      - "CALCULATE([Total Sales], ALL(Customers[region])) — pour ignorer le filtre de région"
+    answer: 1
+    explanation: >
+      Le dénominateur doit être le CA total toutes catégories de segment confondues.
+      ALL(Customers[segment]) retire le filtre de segment → on obtient le CA global de
+      chaque région. ALL(Customers[region]) retirerait le filtre région, ce qui n'est
+      pas ce qu'on veut.
+  - prompt: |
+      Quelle étape Power Query permet de passer d'un tableau « large » (une colonne par mois)
+      à un tableau « long » exploitable par Power BI ?
+    options:
+      - "Merge (Fusion)"
+      - "Append (Ajout)"
+      - "Unpivot (Dépivotement)"
+    answer: 2
+    explanation: >
+      Unpivot transforme les colonnes de mois en lignes : une colonne Attribut (le nom du
+      mois) et une colonne Valeur (le montant). C'est le format long / tidy que Power BI
+      attend pour les axes temporels.
 ---
 
 Le grand récapitulatif : data → modèle → DAX → restitution.

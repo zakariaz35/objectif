@@ -54,6 +54,47 @@ flowchart LR
     A["Total Sales"] --> B["vs mois précédent<br/>(MoM %)"]
     A --> C["cumul annuel<br/>(YTD)"]
     A --> D["vs même mois N-1<br/>(YoY %)"]
+    A --> E["cumul N-1<br/>(Sales LY YTD)"]
 ```
 
-> **À retenir —** Variation = `[mesure] - CALCULATE([mesure], <décalage temporel>)`, puis `DIVIDE` pour le %. `TOTALYTD` pour le cumul annuel, `SAMEPERIODLASTYEAR` pour le N-1. Tout cela repose sur une **table de dates marquée** — sans elle, rien ne fonctionne.
+## Cas vente complet : les 5 mesures temporelles essentielles
+
+```text
+// 1. Current period
+Total Sales = SUM ( Sales[amount] )
+
+// 2. Previous month
+Sales Prev Month =
+CALCULATE ( [Total Sales], PREVIOUSMONTH ( 'Date'[date] ) )
+
+// 3. MoM variation in %
+Sales MoM % =
+DIVIDE ( [Total Sales] - [Sales Prev Month], [Sales Prev Month] )
+
+// 4. Year-to-date cumulative
+Sales YTD = TOTALYTD ( [Total Sales], 'Date'[date] )
+
+// 5. Same period last year + year-over-year growth
+Sales LY      = CALCULATE ( [Total Sales], SAMEPERIODLASTYEAR ( 'Date'[date] ) )
+Sales YoY %   = DIVIDE ( [Total Sales] - [Sales LY], [Sales LY] )
+```
+
+## Autres fonctions de time intelligence utiles
+
+| Fonction | Usage |
+|---|---|
+| `PREVIOUSMONTH(date)` | Mois précédent (glissant) |
+| `PREVIOUSQUARTER(date)` | Trimestre précédent |
+| `PREVIOUSYEAR(date)` | Année précédente |
+| `DATEADD(date, -1, MONTH)` | Décalage flexible (n périodes, n'importe quelle granularité) |
+| `TOTALYTD(expr, date)` | Cumul depuis le 1er janvier |
+| `TOTALQTD(expr, date)` | Cumul depuis le début du trimestre |
+| `TOTALMTD(expr, date)` | Cumul depuis le début du mois |
+| `SAMEPERIODLASTYEAR(date)` | Même période N-1 |
+| `DATESINPERIOD(date, LASTDATE(date), -3, MONTH)` | Fenêtre glissante (ex. 3 derniers mois) |
+
+## Piège : la mesure temporelle dans un visuel sans contexte date
+
+Une mesure `PREVIOUSMONTH` affichée dans une **carte** (sans dimension date en contexte) retourne un blanc — il n'y a pas de « mois courant » à déplacer. Ces mesures ont du sens dans un **tableau ou une courbe avec `Date` en axe** : le contexte de filtre fournit le mois.
+
+> **À retenir —** Variation = `[mesure] - CALCULATE([mesure], <décalage>)`, puis `DIVIDE`. `TOTALYTD` pour le cumul annuel, `SAMEPERIODLASTYEAR` pour le N-1, `DATEADD` pour les décalages flexibles. Tout repose sur une **table de dates marquée et continue** — sans elle, rien ne fonctionne.

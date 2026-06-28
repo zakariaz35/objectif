@@ -1,0 +1,158 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 480" width="800" height="480" font-family="'Segoe UI', Arial, sans-serif">
+  <!-- Background -->
+  <rect width="800" height="480" fill="#f8fafc" rx="12"/>
+
+  <!-- Title -->
+  <text x="400" y="30" text-anchor="middle" font-size="16" font-weight="700" fill="#1e293b">Maquette de dashboard — wireframe type vente</text>
+
+  <!-- ── HEADER / SLICER BAR ── -->
+  <rect x="16" y="44" width="768" height="38" rx="7" fill="#e2e8f0" stroke="#cbd5e1" stroke-width="1"/>
+  <text x="28" y="57" font-size="10" font-weight="600" fill="#64748b">FILTRES</text>
+  <!-- Slicer 1 -->
+  <rect x="90" y="50" width="120" height="26" rx="5" fill="#ffffff" stroke="#94a3b8" stroke-width="1"/>
+  <text x="150" y="67" text-anchor="middle" font-size="11" fill="#334155">Region ▾</text>
+  <!-- Slicer 2 -->
+  <rect x="220" y="50" width="120" height="26" rx="5" fill="#ffffff" stroke="#94a3b8" stroke-width="1"/>
+  <text x="280" y="67" text-anchor="middle" font-size="11" fill="#334155">Category ▾</text>
+  <!-- Slicer 3 -->
+  <rect x="350" y="50" width="160" height="26" rx="5" fill="#ffffff" stroke="#94a3b8" stroke-width="1"/>
+  <text x="430" y="67" text-anchor="middle" font-size="11" fill="#334155">Date : Jan 2024 – Déc 2024</text>
+
+  <!-- ── ROW 1 : KPI CARDS ── -->
+  <!-- KPI 1 -->
+  <rect x="16" y="92" width="176" height="80" rx="8" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5"/>
+  <text x="104" y="114" text-anchor="middle" font-size="11" fill="#64748b">CA Total</text>
+  <text x="104" y="144" text-anchor="middle" font-size="26" font-weight="700" fill="#1e293b">2,4 M€</text>
+  <text x="104" y="162" text-anchor="middle" font-size="11" fill="#16a34a">▲ +12 % vs N-1</text>
+
+  <!-- KPI 2 -->
+  <rect x="204" y="92" width="176" height="80" rx="8" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5"/>
+  <text x="292" y="114" text-anchor="middle" font-size="11" fill="#64748b">Marge brute</text>
+  <text x="292" y="144" text-anchor="middle" font-size="26" font-weight="700" fill="#1e293b">38,4 %</text>
+  <text x="292" y="162" text-anchor="middle" font-size="11" fill="#dc2626">▼ -1,2 pt vs N-1</text>
+
+  <!-- KPI 3 -->
+  <rect x="392" y="92" width="176" height="80" rx="8" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5"/>
+  <text x="480" y="114" text-anchor="middle" font-size="11" fill="#64748b">Commandes</text>
+  <text x="480" y="144" text-anchor="middle" font-size="26" font-weight="700" fill="#1e293b">8 341</text>
+  <text x="480" y="162" text-anchor="middle" font-size="11" fill="#16a34a">▲ +7 % vs N-1</text>
+
+  <!-- KPI 4 -->
+  <rect x="580" y="92" width="204" height="80" rx="8" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5"/>
+  <text x="682" y="114" text-anchor="middle" font-size="11" fill="#64748b">Clients actifs</text>
+  <text x="682" y="144" text-anchor="middle" font-size="26" font-weight="700" fill="#1e293b">1 207</text>
+  <text x="682" y="162" text-anchor="middle" font-size="11" fill="#16a34a">▲ +5 % vs N-1</text>
+
+  <!-- ── ROW 2 : Line chart + Bar chart ── -->
+  <!-- Line chart -->
+  <rect x="16" y="184" width="464" height="156" rx="8" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5"/>
+  <text x="28" y="202" font-size="12" font-weight="600" fill="#1e293b">CA mensuel — le CA recule depuis sept. (-8 %)</text>
+  <!-- fake axes -->
+  <line x1="44" y1="318" x2="464" y2="318" stroke="#e2e8f0" stroke-width="1"/>
+  <line x1="44" y1="318" x2="44" y2="212" stroke="#e2e8f0" stroke-width="1"/>
+  <!-- grid lines -->
+  <line x1="44" y1="285" x2="464" y2="285" stroke="#f1f5f9" stroke-width="1"/>
+  <line x1="44" y1="252" x2="464" y2="252" stroke="#f1f5f9" stroke-width="1"/>
+  <line x1="44" y1="219" x2="464" y2="219" stroke="#f1f5f9" stroke-width="1"/>
+  <!-- fake line chart (polyline) -->
+  <polyline points="60,300 95,282 130,270 165,255 200,268 235,248 270,242 305,238 340,258 375,272 410,290 445,312"
+            fill="none" stroke="#1d4ed8" stroke-width="2.5" stroke-linejoin="round"/>
+  <!-- dots -->
+  <circle cx="60" cy="300" r="3" fill="#1d4ed8"/>
+  <circle cx="130" cy="270" r="3" fill="#1d4ed8"/>
+  <circle cx="270" cy="242" r="3" fill="#1d4ed8"/>
+  <circle cx="375" cy="272" r="5" fill="#dc2626"/>
+  <text x="370" y="268" font-size="9" fill="#dc2626">-8%</text>
+  <!-- month labels -->
+  <text x="60" y="330" text-anchor="middle" font-size="8" fill="#94a3b8">Jan</text>
+  <text x="130" y="330" text-anchor="middle" font-size="8" fill="#94a3b8">Mar</text>
+  <text x="200" y="330" text-anchor="middle" font-size="8" fill="#94a3b8">Mai</text>
+  <text x="270" y="330" text-anchor="middle" font-size="8" fill="#94a3b8">Juil</text>
+  <text x="340" y="330" text-anchor="middle" font-size="8" fill="#94a3b8">Sep</text>
+  <text x="410" y="330" text-anchor="middle" font-size="8" fill="#94a3b8">Nov</text>
+  <!-- YTD line -->
+  <line x1="44" y1="245" x2="464" y2="245" stroke="#f59e0b" stroke-width="1.2" stroke-dasharray="4,3"/>
+  <text x="450" y="242" font-size="9" fill="#b45309">Obj.</text>
+
+  <!-- Bar chart -->
+  <rect x="492" y="184" width="292" height="156" rx="8" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5"/>
+  <text x="504" y="202" font-size="12" font-weight="600" fill="#1e293b">CA par catégorie</text>
+  <!-- Bars (horizontal) -->
+  <rect x="540" y="214" width="180" height="18" rx="3" fill="#1d4ed8"/>
+  <text x="534" y="227" text-anchor="end" font-size="10" fill="#475569">Electronics</text>
+  <text x="726" y="227" font-size="10" fill="#1e293b">862 k€</text>
+
+  <rect x="540" y="238" width="128" height="18" rx="3" fill="#3b82f6"/>
+  <text x="534" y="251" text-anchor="end" font-size="10" fill="#475569">Furniture</text>
+  <text x="674" y="251" font-size="10" fill="#1e293b">614 k€</text>
+
+  <rect x="540" y="262" width="96" height="18" rx="3" fill="#60a5fa"/>
+  <text x="534" y="275" text-anchor="end" font-size="10" fill="#475569">Office</text>
+  <text x="642" y="275" font-size="10" fill="#1e293b">460 k€</text>
+
+  <rect x="540" y="286" width="64" height="18" rx="3" fill="#93c5fd"/>
+  <text x="534" y="299" text-anchor="end" font-size="10" fill="#475569">Toys</text>
+  <text x="610" y="299" font-size="10" fill="#1e293b">307 k€</text>
+
+  <rect x="540" y="310" width="32" height="18" rx="3" fill="#bfdbfe"/>
+  <text x="534" y="323" text-anchor="end" font-size="10" fill="#475569">Other</text>
+  <text x="578" y="323" font-size="10" fill="#1e293b">157 k€</text>
+
+  <!-- ── ROW 3 : Matrix table + Map placeholder ── -->
+  <!-- Matrix -->
+  <rect x="16" y="352" width="320" height="116" rx="8" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5"/>
+  <text x="28" y="370" font-size="12" font-weight="600" fill="#1e293b">Détail région × catégorie</text>
+  <!-- Table header -->
+  <rect x="16" y="374" width="320" height="18" rx="0" fill="#f1f5f9"/>
+  <text x="28" y="387" font-size="10" font-weight="600" fill="#475569">Region</text>
+  <text x="148" y="387" font-size="10" font-weight="600" fill="#475569">Electronics</text>
+  <text x="218" y="387" font-size="10" font-weight="600" fill="#475569">Furniture</text>
+  <text x="288" y="387" font-size="10" font-weight="600" fill="#475569">Total</text>
+  <!-- rows -->
+  <line x1="16" y1="392" x2="336" y2="392" stroke="#f1f5f9" stroke-width="1"/>
+  <text x="28" y="406" font-size="10" fill="#334155">Paris</text>
+  <text x="148" y="406" font-size="10" fill="#334155">310 k</text>
+  <text x="218" y="406" font-size="10" fill="#334155">220 k</text>
+  <text x="288" y="406" font-size="10" font-weight="600" fill="#1e293b">530 k</text>
+  <line x1="16" y1="410" x2="336" y2="410" stroke="#f1f5f9" stroke-width="1"/>
+  <text x="28" y="424" font-size="10" fill="#334155">Lyon</text>
+  <text x="148" y="424" font-size="10" fill="#334155">210 k</text>
+  <text x="218" y="424" font-size="10" fill="#334155">140 k</text>
+  <text x="288" y="424" font-size="10" font-weight="600" fill="#1e293b">350 k</text>
+  <line x1="16" y1="428" x2="336" y2="428" stroke="#f1f5f9" stroke-width="1"/>
+  <text x="28" y="442" font-size="10" fill="#334155">Bordeaux</text>
+  <text x="148" y="442" font-size="10" fill="#334155">120 k</text>
+  <text x="218" y="442" font-size="10" fill="#334155">98 k</text>
+  <text x="288" y="442" font-size="10" font-weight="600" fill="#1e293b">218 k</text>
+  <line x1="16" y1="446" x2="336" y2="446" stroke="#e2e8f0" stroke-width="1"/>
+  <text x="28" y="460" font-size="10" font-weight="700" fill="#1e293b">Total</text>
+  <text x="148" y="460" font-size="10" font-weight="700" fill="#1e293b">862 k</text>
+  <text x="218" y="460" font-size="10" font-weight="700" fill="#1e293b">614 k</text>
+  <text x="288" y="460" font-size="10" font-weight="700" fill="#1d4ed8">2,4 M</text>
+
+  <!-- Map placeholder -->
+  <rect x="348" y="352" width="200" height="116" rx="8" fill="#f0fdf4" stroke="#86efac" stroke-width="1.5"/>
+  <text x="448" y="374" text-anchor="middle" font-size="11" font-weight="600" fill="#14532d">Carte géographique</text>
+  <text x="448" y="394" text-anchor="middle" font-size="28" fill="#4ade80">🗺</text>
+  <text x="448" y="424" text-anchor="middle" font-size="10" fill="#166534">CA par région</text>
+  <text x="448" y="440" text-anchor="middle" font-size="9" fill="#6b7280">(Map visuel Power BI)</text>
+
+  <!-- Scatter placeholder -->
+  <rect x="560" y="352" width="224" height="116" rx="8" fill="#faf5ff" stroke="#d8b4fe" stroke-width="1.5"/>
+  <text x="672" y="374" text-anchor="middle" font-size="11" font-weight="600" fill="#4c1d95">Budget pub vs Ventes</text>
+  <!-- fake scatter dots -->
+  <circle cx="592" cy="430" r="4" fill="#8b5cf6" opacity="0.7"/>
+  <circle cx="614" cy="412" r="5" fill="#8b5cf6" opacity="0.7"/>
+  <circle cx="638" cy="400" r="4" fill="#8b5cf6" opacity="0.7"/>
+  <circle cx="660" cy="420" r="3" fill="#8b5cf6" opacity="0.7"/>
+  <circle cx="688" cy="394" r="6" fill="#8b5cf6" opacity="0.7"/>
+  <circle cx="710" cy="408" r="4" fill="#8b5cf6" opacity="0.7"/>
+  <circle cx="730" cy="385" r="5" fill="#8b5cf6" opacity="0.7"/>
+  <!-- trend line -->
+  <line x1="588" y1="438" x2="754" y2="378" stroke="#a78bfa" stroke-width="1.5" stroke-dasharray="4,2"/>
+  <text x="672" y="465" text-anchor="middle" font-size="9" fill="#6b7280">Nuage de points (corrélation)</text>
+
+  <!-- Legend bar bottom -->
+  <rect x="16" y="474" width="768" height="1" fill="#e2e8f0"/>
+  <text x="400" y="490" text-anchor="middle" font-size="9" fill="#94a3b8">Ordre de lecture : haut-gauche → bas-droite · KPI en haut · détail en bas · ≈ 5-7 visuels par page</text>
+</svg>
