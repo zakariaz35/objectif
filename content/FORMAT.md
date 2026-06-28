@@ -139,6 +139,34 @@ Texte d'intro optionnel (corps Markdown).
 L'API sert les questions **sans la réponse** ; la note et les explications ne sont
 renvoyées qu'après soumission (`POST …/grade`). Les tentatives sont enregistrées en base.
 
+## Images et diagrammes
+
+**Images** : placez vos fichiers (PNG/JPG/SVG/GIF) dans un dossier **`assets/`** à la
+racine de la formation, et référencez-les en relatif depuis n'importe quelle leçon :
+
+```
+ma-formation/
+├─ assets/
+│  └─ schema.svg
+└─ 01-module/
+   └─ 01-lecon.md      ← ![Légende](assets/schema.svg)
+```
+
+À l'import, les images sont copiées et servies ; leurs URLs sont réécrites
+automatiquement. La formation reste **autonome** (pas de lien externe).
+
+**Diagrammes (Mermaid)** : écrivez le diagramme en texte dans un bloc ` ```mermaid ` —
+il est rendu graphiquement dans le navigateur (le thème du diagramme suit le thème de
+l'app) :
+
+````markdown
+```mermaid
+sequenceDiagram
+    Client->>API: POST /login
+    API-->>Client: 200 { token }
+```
+````
+
 ## Rendu
 Le Markdown est converti en HTML côté serveur (CommonMark + GitHub Flavored :
 tables, listes de tâches, autoliens). Le HTML inline est autorisé (callouts, etc.).

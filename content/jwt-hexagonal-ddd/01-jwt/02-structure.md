@@ -9,6 +9,8 @@ Un JWT, c'est littéralement `xxxxx.yyyyy.zzzzz` :
 eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0MiIsIm5hbWUiOiJIYXNzYW5lIiwicm9sZSI6ImFkbWluIiwiZXhwIjoxNzE3NX0.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
 ```
 
+![Les trois parties d'un JWT](assets/jwt-parts.svg)
+
 - **HEADER** — algo de signature
 - **PAYLOAD** — les données (claims)
 - **SIGNATURE** — le sceau

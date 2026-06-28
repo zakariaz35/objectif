@@ -3,7 +3,21 @@ title: "Le flux complet : login → requêtes protégées"
 type: lesson
 ---
 
-> **Schéma (séquence) —** 1 · Authentification (une seule fois) : le client envoie `POST /login {email, password}` ; l'API Laravel vérifie en DB et génère le JWT signé, puis répond `200 { token: "eyJ..." }`. Le client stocke le token. 2 · Chaque requête protégée : le client envoie `GET /api/factures` avec `Authorization: Bearer eyJ...` ; l'API lit l'en-tête, vérifie la signature + `exp`. Si le token est valide → `200 [ ...données... ]`, sinon (invalide / expiré / absent) → `401 Unauthorized`. Le login se fait une fois ; ensuite chaque appel re-présente le token. C'est sans session.
+```mermaid
+sequenceDiagram
+    participant C as Client
+    participant API as API Laravel
+    Note over C,API: 1 · Authentification (une seule fois)
+    C->>API: POST /login {email, password}
+    API->>API: Vérifie en DB, génère le JWT signé
+    API-->>C: 200 { token: "eyJ..." }
+    Note over C,API: 2 · Chaque requête protégée
+    C->>API: GET /api/factures + Authorization: Bearer eyJ...
+    API->>API: Vérifie la signature + exp
+    API-->>C: 200 [ ...données... ]  (sinon 401)
+```
+
+Le **login se fait une fois** ; ensuite chaque appel re-présente le token dans l'en-tête `Authorization`. C'est **sans session** : le serveur ne retient rien entre les requêtes.
 
 > **⬢ Repère Laravel —** Tu n'extrais quasiment jamais le header à la main. Laravel le fait :
 >
