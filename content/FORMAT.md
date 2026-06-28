@@ -29,8 +29,13 @@ ma-formation/
 title: JWT, Bearer, Hexagonal & DDD
 slug: jwt-hexagonal-ddd        # optionnel (déduit du titre sinon)
 description: Formation pour devs Laravel.
+stack: Laravel / PHP           # optionnel : techno/framework enseigné (badge affiché)
 order: 0                       # optionnel
 ```
+
+> `stack` décrit le langage/framework de la formation (ex. `Vue 3 + TypeScript`,
+> `Python / FastAPI`, `React`). Il s'affiche comme badge dans le catalogue. C'est aussi
+> l'info qui permettra de router le bon playground par framework (cf. README).
 
 ## Front-matter d'une leçon (.md)
 

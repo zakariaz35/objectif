@@ -145,6 +145,7 @@ onMounted(load)
         class="card"
         @click="router.push(`/f/${f.slug}`)"
       >
+        <span v-if="f.stack" class="stack">{{ f.stack }}</span>
         <h3>{{ f.title }}</h3>
         <p class="desc">{{ f.description }}</p>
         <span class="badge">{{ f.modules_count }} module(s)</span>
@@ -287,6 +288,18 @@ h1 {
   color: var(--accent2);
   padding: 3px 10px;
   border-radius: 20px;
+}
+.stack {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--accent-contrast);
+  background: var(--accent);
+  padding: 2px 9px;
+  border-radius: 20px;
+  margin-bottom: 8px;
 }
 .docs {
   margin-top: 40px;

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Formation extends Model
 {
-    protected $fillable = ['slug', 'title', 'description', 'position'];
+    protected $fillable = ['slug', 'title', 'description', 'stack', 'position'];
 
     public function modules(): HasMany
     {

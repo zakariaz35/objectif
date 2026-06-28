@@ -114,6 +114,7 @@ watch(() => props.formation, load)
       <template v-else>
         <RouterView v-if="route.params.lesson" />
         <div v-else class="welcome">
+          <span v-if="tree.stack" class="stack">{{ tree.stack }}</span>
           <h1>{{ tree.title }}</h1>
           <p class="muted">{{ tree.description }}</p>
 
@@ -231,6 +232,18 @@ watch(() => props.formation, load)
 }
 
 /* Roadmap (parcours) */
+.stack {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--accent-contrast);
+  background: var(--accent);
+  padding: 2px 9px;
+  border-radius: 20px;
+  margin-bottom: 8px;
+}
 .rbar {
   height: 8px;
   background: var(--panel2);

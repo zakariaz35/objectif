@@ -19,6 +19,7 @@ class FormationController extends Controller
                 'slug' => $f->slug,
                 'title' => $f->title,
                 'description' => $f->description,
+                'stack' => $f->stack,
                 'modules_count' => $f->modules_count,
             ]);
 
@@ -36,6 +37,7 @@ class FormationController extends Controller
             'slug' => $formation->slug,
             'title' => $formation->title,
             'description' => $formation->description,
+            'stack' => $formation->stack,
             'modules' => $formation->modules->map(fn ($m) => [
                 'slug' => $m->slug,
                 'title' => $m->title,

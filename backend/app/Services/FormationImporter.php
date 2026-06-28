@@ -46,7 +46,12 @@ class FormationImporter
         return DB::transaction(function () use ($root, $meta) {
             $formation = Formation::updateOrCreate(
                 ['slug' => $meta['slug']],
-                ['title' => $meta['title'], 'description' => $meta['description'] ?? null, 'position' => $meta['position'] ?? 0],
+                [
+                    'title' => $meta['title'],
+                    'description' => $meta['description'] ?? null,
+                    'stack' => $meta['stack'] ?? null,
+                    'position' => $meta['position'] ?? 0,
+                ],
             );
 
             // Clean re-import: start from scratch for this course.
@@ -283,6 +288,7 @@ class FormationImporter
             'title' => $title,
             'slug' => $slug,
             'description' => $meta['description'] ?? null,
+            'stack' => $meta['stack'] ?? $meta['framework'] ?? null,
             'position' => (int) ($meta['order'] ?? $meta['position'] ?? 0),
         ];
     }
