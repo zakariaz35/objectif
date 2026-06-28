@@ -52,6 +52,18 @@ function makeConsole(buf) {
 }
 var SILENT = { log: function(){}, info: function(){}, warn: function(){}, error: function(){} };
 function assert(cond, msg) { if (!cond) throw new Error(msg || 'Assertion échouée'); }
+function deepEqual(a, b) {
+  if (a === b) return true;
+  if (typeof a !== 'object' || typeof b !== 'object' || !a || !b) return false;
+  var ka = Object.keys(a), kb = Object.keys(b);
+  if (ka.length !== kb.length) return false;
+  for (var i = 0; i < ka.length; i++) if (!deepEqual(a[ka[i]], b[ka[i]])) return false;
+  return true;
+}
+function assertEqual(actual, expected, msg) {
+  if (!deepEqual(actual, expected))
+    throw new Error((msg || 'assertEqual') + ' — attendu ' + fmt([expected]) + ', obtenu ' + fmt([actual]));
+}
 
 self.onmessage = function (e) {
   var userCode = e.data.userCode, tests = e.data.tests;
@@ -70,7 +82,7 @@ self.onmessage = function (e) {
     var out = [];
     try {
       var body = 'var console = SILENT;\\n' + userCode + '\\n;\\nconsole = CAP;\\n{\\n' + tests[i].code + '\\n}\\n';
-      new Function('assert', 'SILENT', 'CAP', body)(assert, SILENT, makeConsole(out));
+      new Function('assert', 'assertEqual', 'SILENT', 'CAP', body)(assert, assertEqual, SILENT, makeConsole(out));
       results.push({ name: tests[i].name, pass: true, output: out });
     } catch (err) {
       results.push({ name: tests[i].name, pass: false, error: String((err && err.message) || err), output: out });

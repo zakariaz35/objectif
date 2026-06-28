@@ -70,30 +70,51 @@ Un exercice devient **interactif** (éditeur de code + tests dans le navigateur)
 déclare un bloc `exercise` en front-matter. Sans ce bloc, il reste en mode énoncé +
 correction repliable.
 
+### Gabarit (copier-coller)
+
 ```markdown
 ---
-title: Décoder un JWT (JS)
+title: Mon exercice (JS)
 type: exercise
 exercise:
   language: js                 # seul "js" est exécuté (dans le navigateur)
   starter: |                   # code pré-rempli dans l'éditeur
-    function decodePayload(token) {
+    function maFonction(x) {
+      // TODO : à compléter
       return null
     }
   tests:                       # suite de tests ; tout doit passer pour valider
-    - name: "décode le payload"
+    - name: "cas nominal"
       code: |
-        const r = decodePayload('h.' + btoa('{"sub":"1"}') + '.s')
-        assert(r.sub === '1', 'sub doit valoir 1')
+        const entree = 21
+        const obtenu = maFonction(entree)
+        console.log('entrée  :', entree)   # illustre : visible sous le test
+        console.log('obtenu  :', obtenu)
+        assertEqual(obtenu, 42, 'doit doubler la valeur')
+    - name: "cas limite"
+      code: |
+        assertEqual(maFonction(0), 0, 'zéro reste zéro')
 ---
 Énoncé…
 <!--correction-->
 Correction…
 ```
 
-- `assert(condition, message)` est fourni par le runner ; un test échoue s'il lève.
-- Le code de l'utilisateur + chaque test sont exécutés dans un **Web Worker** isolé
-  (timeout anti-boucle-infinie). Réussir tous les tests marque la leçon comme complétée.
+### Helpers disponibles dans `tests[].code`
+
+| Helper | Rôle |
+|---|---|
+| `assert(condition, message)` | échoue si la condition est fausse |
+| `assertEqual(obtenu, attendu, message)` | compare en profondeur (objets/tableaux) ; message d'échec « attendu … obtenu … » automatique |
+| `console.log(...)` | **illustre** : la sortie s'affiche **sous le test** (ex. montrer entrée → sortie) |
+
+### À savoir
+
+- Chaque test est exécuté dans un **Web Worker** isolé (timeout anti-boucle-infinie).
+  Réussir tous les tests marque la leçon comme complétée.
+- Le `console.log` du **code de l'éditeur** (niveau global) s'affiche dans le panneau
+  « Sortie (console) » ; celui d'un **test** s'affiche **sous ce test**.
+- Les `const`/`let` d'un test sont locaux : pas de collision avec le code de l'éditeur.
 
 ## Cartes mémo (`type: flashcards`)
 
