@@ -62,6 +62,28 @@ async function loadDoc(name) {
   }
 }
 
+// Slug façon GitHub (garde les lettres accentuées) pour relier ancre ↔ titre.
+function ghSlug(text) {
+  return text.toLowerCase().trim().replace(/[^\p{L}\p{N}\s-]/gu, '').replace(/\s/g, '-')
+}
+
+// Les liens du sommaire (#ancre) pointent vers des titres sans id : on intercepte
+// le clic et on défile vers le bon titre, dans le panneau (sans remonter la page).
+function onDocClick(e) {
+  const a = e.target.closest('a[href^="#"]')
+  if (!a) return
+  e.preventDefault()
+  const target = decodeURIComponent(a.getAttribute('href').slice(1))
+  const prose = a.closest('.prose')
+  if (!prose) return
+  for (const h of prose.querySelectorAll('h1, h2, h3, h4, h5, h6')) {
+    if (ghSlug(h.textContent) === target) {
+      h.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      return
+    }
+  }
+}
+
 onMounted(load)
 </script>
 
@@ -129,7 +151,7 @@ onMounted(load)
       </article>
     </div>
 
-    <section class="docs">
+    <section class="docs" @click="onDocClick">
       <details @toggle="$event.target.open && loadDoc('format')">
         <summary>📐 Format d'une formation (arborescence du ZIP)</summary>
         <div v-if="docLoading.format" class="muted">Chargement…</div>
