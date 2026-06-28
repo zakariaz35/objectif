@@ -2,6 +2,8 @@
 import { RouterView, RouterLink, useRouter } from 'vue-router'
 import { auth } from './lib/auth'
 import { theme } from './lib/theme'
+import { openScratch } from './lib/scratch'
+import ScratchPad from './components/ScratchPad.vue'
 
 const router = useRouter()
 
@@ -44,6 +46,9 @@ async function logout() {
       </nav>
     </header>
     <RouterView />
+
+    <button class="fab" type="button" title="Bac à sable JS / TS" @click="openScratch('')">⌗</button>
+    <ScratchPad />
   </div>
 </template>
 
@@ -141,5 +146,23 @@ async function logout() {
 .signin:hover {
   border-color: var(--accent);
   text-decoration: none;
+}
+.fab {
+  position: fixed;
+  bottom: 22px;
+  right: 22px;
+  z-index: 50;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: none;
+  background: var(--accent);
+  color: var(--accent-contrast);
+  font-size: 22px;
+  font-weight: 700;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+}
+.fab:hover {
+  filter: brightness(1.05);
 }
 </style>

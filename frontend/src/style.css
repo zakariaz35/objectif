@@ -204,6 +204,7 @@ button {
   color: var(--code-inline);
 }
 .prose pre {
+  position: relative;
   background: var(--code);
   border: 1px solid var(--border);
   border-radius: 10px;
@@ -211,6 +212,29 @@ button {
   overflow-x: auto;
   font-size: 13.5px;
   line-height: 1.55;
+}
+/* "Tester" button injected on JS/TS code blocks (opens the sandbox) */
+.prose pre .scratch-btn {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  font: inherit;
+  font-size: 11px;
+  padding: 3px 9px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--panel);
+  color: var(--muted);
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.12s;
+}
+.prose pre:hover .scratch-btn {
+  opacity: 1;
+}
+.prose pre .scratch-btn:hover {
+  color: var(--txt);
+  border-color: var(--accent);
 }
 .prose pre code {
   background: none;

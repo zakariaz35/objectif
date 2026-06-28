@@ -3,6 +3,7 @@ import { ref, inject, watch, computed, nextTick } from 'vue'
 import { useRouter } from 'vue-router'
 import api from '../lib/api'
 import { theme } from '../lib/theme'
+import { openScratch } from '../lib/scratch'
 import QuizPlayer from '../components/QuizPlayer.vue'
 import ExercisePlayer from '../components/ExercisePlayer.vue'
 import Flashcards from '../components/Flashcards.vue'
@@ -26,6 +27,26 @@ async function load() {
   }
   await nextTick()
   renderDiagrams()
+  decorateCodeBlocks()
+}
+
+// Add a "Tester" button on JS/TS code blocks → opens the sandbox prefilled.
+function decorateCodeBlocks() {
+  const pres = articleEl.value?.querySelectorAll('.prose pre:not([data-scratch])')
+  if (!pres) return
+  pres.forEach((pre) => {
+    pre.dataset.scratch = '1'
+    const codeEl = pre.querySelector('code')
+    const lang = ((codeEl?.className || '').match(/language-(\w+)/) || [])[1]
+    if (lang && !['js', 'javascript', 'ts', 'typescript'].includes(lang)) return
+    const codeText = (codeEl || pre).innerText
+    const btn = document.createElement('button')
+    btn.type = 'button'
+    btn.className = 'scratch-btn'
+    btn.textContent = 'Tester'
+    btn.addEventListener('click', () => openScratch(codeText))
+    pre.appendChild(btn)
+  })
 }
 
 // Render Mermaid diagrams (```mermaid blocks). Lazy-loaded: only pulled in when
