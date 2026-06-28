@@ -61,7 +61,7 @@ self.onmessage = function (e) {
   // 2) Run each test (silent console), collect pass/fail.
   for (var i = 0; i < tests.length; i++) {
     try {
-      new Function('assert', 'console', userCode + '\\n;\\n' + tests[i].code)(assert, SILENT);
+      new Function('assert', 'console', userCode + '\\n;\\n{\\n' + tests[i].code + '\\n}\\n')(assert, SILENT);
       results.push({ name: tests[i].name, pass: true });
     } catch (err) {
       results.push({ name: tests[i].name, pass: false, error: String((err && err.message) || err) });
