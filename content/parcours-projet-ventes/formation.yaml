@@ -1,0 +1,12 @@
+title: "Projet : analyse des ventes (capstone)"
+slug: parcours-projet-ventes
+order: 6
+stack: "Projet · SQL · pandas · Power BI"
+track: Data-Analyst
+description: >-
+  Le projet portfolio bout-en-bout du cursus Data-Analyst : un cas Vente/Achat
+  réaliste, du cadrage métier au dashboard. Nettoyer un jeu de commandes,
+  agréger le chiffre d'affaires, joindre produits et calculer la marge, puis
+  transformer les chiffres en insights présentables en entretien. La logique
+  est montrée en SQL et pandas (réalisme métier) et implémentée en exercices
+  interactifs TypeScript.
