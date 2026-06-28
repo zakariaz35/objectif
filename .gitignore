@@ -14,8 +14,9 @@ backend/database/*.sqlite
 backend/storage/logs/*
 backend/storage/framework/cache/*
 
-# Archives de contenu générées
-content/*.zip
+# Archives de contenu : les zips des formations sont versionnés (légers, prêts à
+# l'import) ; seul le zip de démo (jetable) est ignoré.
+content/demo.zip
 
 # Divers
 .DS_Store

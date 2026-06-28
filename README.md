@@ -110,6 +110,19 @@ docker compose exec backend php artisan formation:import-all /content --force
 > ne pas écraser la progression. `--force` réimporte (et **réinitialise** la progression de
 > cette formation).
 
+### Construire les ZIP
+
+Les `.zip` importables (un par formation) sont versionnés dans `content/` et **prêts à
+glisser-déposer** dans l'interface. Après avoir **modifié le contenu Markdown**,
+régénère-les :
+
+```bash
+php content/make-zips.php          # un .zip par dossier contenant un formation.yaml
+```
+
+> ⚠️ Les `.zip` sont des **artefacts** : si tu édites le Markdown, **régénère-les** (sinon
+> ils sont obsolètes), puis commite-les. Le contenu source reste le Markdown.
+
 ---
 
 ## Écrire une formation (format)
