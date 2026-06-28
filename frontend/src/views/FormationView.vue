@@ -61,6 +61,23 @@ async function load() {
 
 const typeIcon = { lesson: '🥄', exercise: '🛠️', quiz: '🎯', flashcards: '🃏' }
 
+// Roadmap: each module is a stage (done / current / todo) with its own progress.
+const roadmap = computed(() =>
+  (tree.value?.modules || []).map((m) => {
+    const total = m.lessons.length
+    const done = m.lessons.filter((l) => isDone(m.slug, l.slug)).length
+    const next = m.lessons.find((l) => !isDone(m.slug, l.slug)) || m.lessons[0]
+    return {
+      slug: m.slug,
+      title: m.title,
+      total,
+      done,
+      status: total > 0 && done === total ? 'done' : done > 0 ? 'current' : 'todo',
+      to: next ? `/f/${props.formation}/${m.slug}/${next.slug}` : null,
+    }
+  })
+)
+
 onMounted(load)
 watch(() => props.formation, load)
 </script>
@@ -99,7 +116,22 @@ watch(() => props.formation, load)
         <div v-else class="welcome">
           <h1>{{ tree.title }}</h1>
           <p class="muted">{{ tree.description }}</p>
-          <p>👈 Choisis une leçon dans le sommaire pour commencer.</p>
+
+          <div class="rbar"><div class="rfill" :style="{ width: percent + '%' }"></div></div>
+          <p class="rpct">Parcours : {{ doneCount }}/{{ totalLessons }} leçons · {{ percent }}%</p>
+
+          <ol class="steps">
+            <li v-for="(s, i) in roadmap" :key="s.slug" class="step" :class="s.status">
+              <div class="dot">{{ s.status === 'done' ? '✓' : i + 1 }}</div>
+              <div class="sbody">
+                <div class="stitle">{{ s.title }}</div>
+                <div class="smeta">{{ s.done }}/{{ s.total }} leçon(s)</div>
+              </div>
+              <RouterLink v-if="s.to" :to="s.to" class="btn btn-primary sbtn">
+                {{ s.status === 'todo' ? 'Commencer' : s.status === 'done' ? 'Revoir' : 'Continuer' }}
+              </RouterLink>
+            </li>
+          </ol>
         </div>
       </template>
     </main>
@@ -196,5 +228,94 @@ watch(() => props.formation, load)
 }
 .err {
   color: var(--bad);
+}
+
+/* Roadmap (parcours) */
+.rbar {
+  height: 8px;
+  background: var(--panel2);
+  border-radius: 5px;
+  overflow: hidden;
+  margin: 18px 0 6px;
+}
+.rfill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  transition: width 0.25s;
+}
+.rpct {
+  color: var(--muted);
+  font-size: 14px;
+  margin: 0 0 18px;
+}
+.steps {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.step {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--panel);
+  margin: 10px 0;
+  position: relative;
+}
+/* connecting line between steps */
+.step:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  left: 31px;
+  top: 100%;
+  height: 10px;
+  width: 2px;
+  background: var(--border);
+}
+.step.done {
+  border-left: 4px solid var(--good);
+}
+.step.current {
+  border-left: 4px solid var(--accent);
+}
+.dot {
+  flex: 0 0 34px;
+  height: 34px;
+  width: 34px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  background: var(--panel2);
+  color: var(--muted);
+}
+.step.done .dot {
+  background: var(--good);
+  color: var(--accent-contrast);
+}
+.step.current .dot {
+  background: var(--accent);
+  color: var(--accent-contrast);
+}
+.sbody {
+  flex: 1;
+  min-width: 0;
+}
+.stitle {
+  font-weight: 600;
+}
+.smeta {
+  color: var(--muted);
+  font-size: 13px;
+}
+.sbtn {
+  flex: 0 0 auto;
+  text-decoration: none;
+}
+.sbtn:hover {
+  text-decoration: none;
 }
 </style>
