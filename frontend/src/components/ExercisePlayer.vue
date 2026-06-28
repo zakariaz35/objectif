@@ -28,15 +28,27 @@ watch(allPass, (ok) => {
   }
 })
 
-// Web Worker source. First runs the user code once with a captured console
-// (so console.log output is shown), then runs each test in isolation (silent).
+// Web Worker source. Phase 1: run the user code once with a captured console
+// (free experimentation → "Sortie" panel). Phase 2: run each test capturing its
+// OWN console output (so a test can illustrate encode → decode), while the user
+// code's top-level logs stay silent during tests (no duplication).
 // (concatenated string to avoid nested backticks)
 const WORKER_SRC = `
+var REAL = self.console || {};
 function fmt(args) {
   return Array.prototype.map.call(args, function (v) {
     if (typeof v === 'string') return v;
     try { return JSON.stringify(v); } catch (e) { return String(v); }
   }).join(' ');
+}
+function makeConsole(buf) {
+  function c(method) {
+    return function () {
+      buf.push(fmt(arguments));
+      if (REAL[method]) REAL[method].apply(REAL, arguments);
+    };
+  }
+  return { log: c('log'), info: c('info'), warn: c('warn'), error: c('error') };
 }
 var SILENT = { log: function(){}, info: function(){}, warn: function(){}, error: function(){} };
 function assert(cond, msg) { if (!cond) throw new Error(msg || 'Assertion échouée'); }
@@ -45,29 +57,23 @@ self.onmessage = function (e) {
   var userCode = e.data.userCode, tests = e.data.tests;
   var logs = [], runError = null, results = [];
 
-  // 1) Run the user code once, capturing console output (and forwarding it to
-  //    the worker's real console so it also shows in the browser devtools).
-  var REAL = self.console || {};
-  function cap(method) {
-    return function () {
-      logs.push(fmt(arguments));
-      if (REAL[method]) REAL[method].apply(REAL, arguments);
-    };
-  }
-  var captured = { log: cap('log'), info: cap('info'), warn: cap('warn'), error: cap('error') };
+  // Phase 1 — run user code once, capturing its console output.
   try {
-    new Function('console', userCode)(captured);
+    new Function('console', userCode)(makeConsole(logs));
   } catch (err) {
     runError = String((err && err.message) || err);
   }
 
-  // 2) Run each test (silent console), collect pass/fail.
+  // Phase 2 — per test: user code runs SILENT, then the test runs with its own
+  // captured console (its const/let live in a block, no name collisions).
   for (var i = 0; i < tests.length; i++) {
+    var out = [];
     try {
-      new Function('assert', 'console', userCode + '\\n;\\n{\\n' + tests[i].code + '\\n}\\n')(assert, SILENT);
-      results.push({ name: tests[i].name, pass: true });
+      var body = 'var console = SILENT;\\n' + userCode + '\\n;\\nconsole = CAP;\\n{\\n' + tests[i].code + '\\n}\\n';
+      new Function('assert', 'SILENT', 'CAP', body)(assert, SILENT, makeConsole(out));
+      results.push({ name: tests[i].name, pass: true, output: out });
     } catch (err) {
-      results.push({ name: tests[i].name, pass: false, error: String((err && err.message) || err) });
+      results.push({ name: tests[i].name, pass: false, error: String((err && err.message) || err), output: out });
     }
   }
 
@@ -181,9 +187,12 @@ function onTab(e) {
 
     <ul v-if="results" class="tests">
       <li v-for="(r, i) in results" :key="i" :class="r.pass ? 'ok' : 'ko'">
-        <span class="ic">{{ r.pass ? '✓' : '✗' }}</span>
-        <span class="nm">{{ r.name }}</span>
-        <span v-if="!r.pass && r.error" class="msg">— {{ r.error }}</span>
+        <div class="trow">
+          <span class="ic">{{ r.pass ? '✓' : '✗' }}</span>
+          <span class="nm">{{ r.name }}</span>
+          <span v-if="!r.pass && r.error" class="msg">— {{ r.error }}</span>
+        </div>
+        <pre v-for="(o, j) in r.output" :key="j" class="tout">{{ o }}</pre>
       </li>
     </ul>
   </div>
@@ -260,15 +269,26 @@ function onTab(e) {
   margin: 14px 0 0;
 }
 .tests li {
-  display: flex;
-  align-items: baseline;
-  gap: 8px;
   padding: 8px 12px;
   border: 1px solid var(--border);
   border-radius: 8px;
   margin: 6px 0;
   background: var(--panel);
   font-size: 14px;
+}
+.trow {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+.tout {
+  margin: 6px 0 0 24px;
+  padding: 4px 0 0;
+  font-family: 'SF Mono', Menlo, Consolas, monospace;
+  font-size: 12.5px;
+  color: var(--muted);
+  white-space: pre-wrap;
+  word-break: break-word;
 }
 .tests li.ok {
   border-left: 3px solid var(--good);

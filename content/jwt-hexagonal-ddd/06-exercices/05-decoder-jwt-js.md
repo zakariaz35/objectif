@@ -15,17 +15,23 @@ exercise:
     const token = 'h.' + btoa('{"sub":"42","role":"admin"}') + '.sig'
     console.log('payload =', decodePayload(token))
   tests:
-    - name: "décode sub et role"
+    - name: "encode → décode : sub et role"
       code: |
-        const token = 'h.' + btoa(JSON.stringify({ sub: '123', role: 'admin' })) + '.sig'
-        const r = decodePayload(token)
-        assert(r.sub === '123', "sub doit valoir '123'")
-        assert(r.role === 'admin', "role doit valoir 'admin'")
+        const payload = { sub: '123', role: 'admin' }
+        const token = 'header.' + btoa(JSON.stringify(payload)) + '.signature'
+        console.log('1) payload de départ :', payload)
+        console.log('2) token encodé      :', token)
+        const decoded = decodePayload(token)
+        console.log('3) payload décodé    :', decoded)
+        assert(decoded.sub === '123', "sub doit valoir '123'")
+        assert(decoded.role === 'admin', "role doit valoir 'admin'")
     - name: "gère un autre payload"
       code: |
-        const token = 'h.' + btoa(JSON.stringify({ sub: 'abc', exp: 42 })) + '.sig'
-        const r = decodePayload(token)
-        assert(r.sub === 'abc' && r.exp === 42, 'doit décoder fidèlement le payload')
+        const payload = { sub: 'abc', exp: 42 }
+        const token = 'header.' + btoa(JSON.stringify(payload)) + '.signature'
+        console.log('encodé →', token, ' / décodé →', decodePayload(token))
+        const decoded = decodePayload(token)
+        assert(decoded.sub === 'abc' && decoded.exp === 42, 'doit décoder fidèlement le payload')
 ---
 ## Énoncé
 
