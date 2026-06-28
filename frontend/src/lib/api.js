@@ -2,7 +2,7 @@ import axios from 'axios'
 
 const baseURL = (import.meta.env.VITE_API_URL || 'http://localhost:8000') + '/api'
 
-// Token client persistant (identité anonyme pour la progression, avant la vraie auth).
+// Persistent client token (anonymous identity for progress tracking, before real auth).
 function clientToken() {
   let t = localStorage.getItem('client_token')
   if (!t) {
@@ -15,7 +15,7 @@ function clientToken() {
 const api = axios.create({ baseURL })
 api.interceptors.request.use((config) => {
   config.headers['X-Client-Token'] = clientToken()
-  // Token Bearer si l'utilisateur est connecté (lu directement de localStorage).
+  // Bearer token if the user is logged in (read directly from localStorage).
   const token = localStorage.getItem('auth_token')
   if (token) {
     config.headers['Authorization'] = `Bearer ${token}`
@@ -28,7 +28,7 @@ export default {
   login: (payload) => api.post('/auth/login', payload).then((r) => r.data),
   logout: () => api.post('/auth/logout').then((r) => r.data),
   getDoc: (name) => api.get(`/docs/${name}`).then((r) => r.data.html),
-  // ⚠️ DEBUG / perso uniquement — à retirer si le projet n'est plus personnel.
+  // ⚠️ DEBUG / personal use only — remove if the project is no longer personal.
   listUsers: () => api.get('/users').then((r) => r.data.data),
   listFormations: () => api.get('/formations').then((r) => r.data.data),
   getFormation: (slug) => api.get(`/formations/${slug}`).then((r) => r.data),

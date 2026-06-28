@@ -9,14 +9,14 @@ use Illuminate\Http\JsonResponse;
 
 /*
 |--------------------------------------------------------------------------
-| ⚠️ DEBUG / USAGE PERSONNEL UNIQUEMENT — À SUPPRIMER
+| ⚠️ DEBUG / PERSONAL USE ONLY — TO BE REMOVED
 |--------------------------------------------------------------------------
-| Cet endpoint expose la liste de TOUS les comptes (sans authentification ni
-| autorisation). C'est volontaire car le projet est PERSONNEL et mono-utilisateur.
+| This endpoint exposes the list of ALL accounts (without authentication or
+| authorization). This is intentional because the project is PERSONAL and single-user.
 |
-| À SUPPRIMER si le projet devient multi-utilisateurs / public / partagé :
-| retirer cette classe, sa route (/api/users) et la vue + le lien frontend
-| associés. Laisser ceci en place exposerait les emails de tous les comptes.
+| TO BE REMOVED if the project becomes multi-user / public / shared:
+| remove this class, its route (/api/users) and the associated view + frontend
+| link. Leaving this in place would expose the emails of all accounts.
 */
 class UserController extends Controller
 {

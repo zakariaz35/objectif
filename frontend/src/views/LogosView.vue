@@ -1,6 +1,6 @@
 <!--
-  ⚠️ PAGE TEMPORAIRE — comparateur de logos. À SUPPRIMER une fois le logo choisi
-  (retirer cette vue, sa route /logos et le lien dans la barre du haut).
+  ⚠️ TEMPORARY PAGE — logo comparator. TO BE DELETED once the logo is chosen
+  (remove this view, its route /logos and the link in the top bar).
 -->
 <script setup>
 const concepts = [

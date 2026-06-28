@@ -1,5 +1,5 @@
 <script setup>
-// Encadré réutilisable. tone : note (défaut) | good | warn | bad
+// Reusable callout box. tone: note (default) | good | warn | bad
 defineProps({ tone: { type: String, default: 'note' } })
 </script>
 

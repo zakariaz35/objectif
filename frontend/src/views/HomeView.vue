@@ -47,28 +47,28 @@ function onDrop(e) {
   handleFile(e.dataTransfer.files[0])
 }
 
-// Docs (FORMAT / README) chargées à la première ouverture du panneau.
+// Docs (FORMAT / README) loaded on first panel open.
 const docs = ref({}) // { format: html, readme: html }
 const docLoading = ref({})
 async function loadDoc(name) {
   if (docs.value[name] || docLoading.value[name]) return
-  docLoading.value = { ...docLoading.value, [name]: true }
+  docLoading.value[name] = true
   try {
-    docs.value = { ...docs.value, [name]: await api.getDoc(name) }
+    docs.value[name] = await api.getDoc(name)
   } catch (e) {
-    docs.value = { ...docs.value, [name]: '<p>Impossible de charger ce document.</p>' }
+    docs.value[name] = '<p>Impossible de charger ce document.</p>'
   } finally {
-    docLoading.value = { ...docLoading.value, [name]: false }
+    docLoading.value[name] = false
   }
 }
 
-// Slug façon GitHub (garde les lettres accentuées) pour relier ancre ↔ titre.
+// GitHub-style slug (keeps accented letters) to link anchor ↔ heading.
 function ghSlug(text) {
   return text.toLowerCase().trim().replace(/[^\p{L}\p{N}\s-]/gu, '').replace(/\s/g, '-')
 }
 
-// Les liens du sommaire (#ancre) pointent vers des titres sans id : on intercepte
-// le clic et on défile vers le bon titre, dans le panneau (sans remonter la page).
+// Table-of-contents links (#anchor) point to headings without ids: intercept the
+// click and scroll to the matching heading inside the panel (without scrolling the page).
 function onDocClick(e) {
   const a = e.target.closest('a[href^="#"]')
   if (!a) return

@@ -4,11 +4,11 @@ import BaseCallout from './BaseCallout.vue'
 
 const props = defineProps({
   cards: { type: Array, default: () => [] }, // [{ q_html, a_html }]
-  storageKey: { type: String, default: '' }, // pour persister l'auto-éval
+  storageKey: { type: String, default: '' }, // to persist the self-assessment
 })
 const emit = defineEmits(['completed'])
 
-// État par carte : 'hidden' | 'revealed' ; note : 'known' | 'review' | null
+// Per-card state: 'hidden' | 'revealed' ; rating: 'known' | 'review' | null
 const revealed = ref(props.cards.map(() => false))
 const ratings = ref(loadRatings())
 let emitted = false

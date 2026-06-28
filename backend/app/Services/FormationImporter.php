@@ -16,7 +16,7 @@ class FormationImporter
     public function __construct(private readonly MarkdownService $markdown) {}
 
     /**
-     * Importe une formation depuis un fichier .zip de Markdown.
+     * Imports a course from a Markdown .zip file.
      */
     public function importZip(string $zipPath, ?string $fallbackName = null): Formation
     {
@@ -33,7 +33,7 @@ class FormationImporter
     }
 
     /**
-     * Importe une formation depuis un dossier déjà décompressé.
+     * Imports a course from an already-extracted directory.
      */
     public function importDirectory(string $root, ?string $fallbackName = null): Formation
     {
@@ -45,7 +45,7 @@ class FormationImporter
                 ['title' => $meta['title'], 'description' => $meta['description'] ?? null, 'position' => $meta['position'] ?? 0],
             );
 
-            // Réimport propre : on repart de zéro pour cette formation.
+            // Clean re-import: start from scratch for this course.
             $formation->modules()->delete();
 
             $moduleDirs = $this->orderedChildren($root, true);
@@ -82,7 +82,7 @@ class FormationImporter
         $raw = file_get_contents($file);
         [$meta, $body] = FrontMatter::parse($raw);
 
-        // Sépare énoncé / correction sur le marqueur <!--correction-->
+        // Split statement / solution on the <!--correction--> marker
         $correctionMd = null;
         if (preg_match('/<!--\s*correction\s*-->/i', $body)) {
             [$body, $correctionMd] = preg_split('/<!--\s*correction\s*-->/i', $body, 2);
@@ -104,14 +104,14 @@ class FormationImporter
             'cards' => $this->normalizeCards($meta['cards'] ?? null),
         ]);
 
-        // Quiz noté : questions structurées en front-matter (clé "questions").
+        // Graded quiz: questions structured in front-matter (the "questions" key).
         if (! empty($meta['questions']) && is_array($meta['questions'])) {
             $this->importQuizQuestions($lesson, $meta['questions']);
         }
     }
 
     /**
-     * Exercice interactif optionnel (clé "exercise" du front-matter).
+     * Optional interactive exercise (the "exercise" key in the front-matter).
      *
      * @return array{language:string, starter:string, tests:list<array{name:string, code:string}>}|null
      */
@@ -144,7 +144,7 @@ class FormationImporter
     }
 
     /**
-     * Cartes mémo optionnelles (clé "cards" du front-matter).
+     * Optional memo cards (the "cards" key in the front-matter).
      *
      * @return list<array{q_html:string, a_html:string}>|null
      */
@@ -198,7 +198,7 @@ class FormationImporter
         }
     }
 
-    /** Markdown inline (sans le <p> englobant) pour énoncés et options courts. */
+    /** Inline Markdown (without the wrapping <p>) for short prompts and options. */
     private function inlineHtml(string $text): string
     {
         $html = (string) $this->markdown->toHtml($text);
@@ -206,7 +206,7 @@ class FormationImporter
         return preg_replace('/^<p>(.*)<\/p>\s*$/s', '$1', trim($html)) ?? $html;
     }
 
-    // ---- Lecture des métadonnées ----
+    // ---- Reading metadata ----
 
     private function readFormationMeta(string $root, ?string $fallbackName): array
     {
@@ -250,18 +250,18 @@ class FormationImporter
         ];
     }
 
-    // ---- Helpers fichiers ----
+    // ---- File helpers ----
 
-    /** Enlève un préfixe numérique d'ordre type "01-". */
+    /** Removes a numeric ordering prefix such as "01-". */
     private function stripPrefix(string $name): string
     {
         return preg_replace('/^\d+[-_.\s]+/', '', $name) ?: $name;
     }
 
     /**
-     * Enfants triés (dossiers ou fichiers) par préfixe numérique puis alpha.
+     * Children (directories or files) sorted by numeric prefix then alphabetically.
      *
-     * @return list<string> chemins absolus
+     * @return list<string> absolute paths
      */
     private function orderedChildren(string $dir, bool $dirsOnly): array
     {
@@ -285,15 +285,15 @@ class FormationImporter
         return $items;
     }
 
-    /** Localise le dossier racine de la formation (celui qui contient formation.yaml ou des modules). */
+    /** Locates the course root directory (the one containing formation.yaml or modules). */
     private function findFormationRoot(string $tmpDir): string
     {
-        // Cas 1 : formation.yaml à la racine d'extraction.
+        // Case 1: formation.yaml at the extraction root.
         if ($this->hasFormationYaml($tmpDir)) {
             return $tmpDir;
         }
 
-        // Cas 2 : un unique dossier racine (zip "wrappé").
+        // Case 2: a single root directory (a "wrapped" zip).
         $children = $this->orderedChildren($tmpDir, true);
         $files = $this->orderedChildren($tmpDir, false);
 

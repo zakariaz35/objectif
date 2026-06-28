@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('lessons', function (Blueprint $table) {
-            // Exercice interactif optionnel : { language, starter, tests:[{name, code}] }
+            // Optional interactive exercise: { language, starter, tests:[{name, code}] }
             $table->json('exercise')->nullable()->after('correction_html');
         });
     }

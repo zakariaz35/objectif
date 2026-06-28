@@ -6,8 +6,8 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
 /**
- * Identifie le « propriétaire » d'une progression : l'utilisateur connecté
- * (via token Sanctum) si présent, sinon un client anonyme (X-Client-Token).
+ * Identifies the "owner" of a progress record: the logged-in user
+ * (via Sanctum token) if present, otherwise an anonymous client (X-Client-Token).
  */
 trait ResolvesOwner
 {
@@ -16,7 +16,7 @@ trait ResolvesOwner
         return auth('sanctum')->user();
     }
 
-    /** Clés d'identité pour updateOrCreate / create. */
+    /** Identity keys for updateOrCreate / create. */
     protected function ownerKeys(Request $request): array
     {
         if ($user = $this->currentUser($request)) {
@@ -26,7 +26,7 @@ trait ResolvesOwner
         return ['client_token' => $this->clientToken($request)];
     }
 
-    /** Filtre une requête sur le propriétaire courant. */
+    /** Filters a query by the current owner. */
     protected function scopeToOwner(Builder $query, Request $request): Builder
     {
         if ($user = $this->currentUser($request)) {

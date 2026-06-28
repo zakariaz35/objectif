@@ -10,14 +10,14 @@ class DocController extends Controller
     public function __construct(private readonly MarkdownService $markdown) {}
 
     /**
-     * Sert un document Markdown du dépôt, rendu en HTML.
-     * Allowlist stricte (pas de chemin arbitraire).
+     * Serves a Markdown document from the repo, rendered as HTML.
+     * Strict allowlist (no arbitrary path).
      */
     public function show(string $doc): JsonResponse
     {
         $paths = [
-            'format' => '/content/FORMAT.md',          // monté dans le conteneur
-            'readme' => base_path('README.md'),         // monté sur /app/README.md
+            'format' => '/content/FORMAT.md',          // mounted in the container
+            'readme' => base_path('README.md'),         // mounted at /app/README.md
         ];
 
         $file = $paths[$doc] ?? null;

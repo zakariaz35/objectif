@@ -15,9 +15,9 @@ return new class extends Migration
             $table->id();
             $table->foreignId('lesson_id')->constrained()->cascadeOnDelete();
             $table->unsignedInteger('position')->default(0);
-            $table->longText('prompt_html');          // énoncé rendu
+            $table->longText('prompt_html');          // rendered prompt
             $table->json('options');                   // [{html: "..."}, ...]
-            $table->unsignedInteger('correct_index');  // 0-indexé
+            $table->unsignedInteger('correct_index');  // 0-indexed
             $table->longText('explanation_html')->nullable();
             $table->timestamps();
         });

@@ -15,13 +15,13 @@ class QuizController extends Controller
     use ResolvesOwner;
 
     /**
-     * Corrige un quiz : calcule le score, persiste la tentative, renvoie le
-     * feedback par question (bonne réponse + explication).
+     * Grades a quiz: computes the score, persists the attempt, returns the
+     * per-question feedback (correct answer + explanation).
      */
     public function grade(Request $request, Formation $formation, string $moduleSlug, string $lessonSlug): JsonResponse
     {
         $validated = $request->validate([
-            'answers' => ['required', 'array'],          // { "<question_id>": <index choisi> }
+            'answers' => ['required', 'array'],          // { "<question_id>": <chosen index> }
         ]);
 
         $lesson = Lesson::query()
@@ -62,7 +62,7 @@ class QuizController extends Controller
             'answers' => $answers,
         ]));
 
-        // Un quiz tenté compte comme leçon « complétée » dans la progression.
+        // An attempted quiz counts as a "completed" lesson in the progress.
         Progress::updateOrCreate(
             array_merge($owner, ['lesson_id' => $lesson->id]),
             ['completed' => true],

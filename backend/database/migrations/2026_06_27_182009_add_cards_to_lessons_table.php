@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('lessons', function (Blueprint $table) {
-            // Cartes mémo (type flashcards) : [{ q_html, a_html }]
+            // Memo cards (flashcard style): [{ q_html, a_html }]
             $table->json('cards')->nullable()->after('exercise');
         });
     }

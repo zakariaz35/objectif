@@ -64,8 +64,8 @@ class AuthController extends Controller
     }
 
     /**
-     * Rattache au compte la progression/les tentatives faites en anonyme
-     * (mêmes appareil/navigateur) via le X-Client-Token.
+     * Attaches anonymous progress/attempts (same device/browser) to the
+     * account via the X-Client-Token.
      */
     private function claimAnonymousProgress(Request $request, User $user): void
     {
@@ -74,18 +74,18 @@ class AuthController extends Controller
             return;
         }
 
-        // Doublons : si une leçon est déjà suivie par le compte, on jette la
-        // ligne anonyme (sinon le rattachement violerait l'unicité user/leçon).
+        // Duplicates: if a lesson is already tracked by the account, drop the
+        // anonymous row (otherwise the attachment would violate the user/lesson uniqueness).
         $ownedLessonIds = Progress::where('user_id', $user->id)->pluck('lesson_id');
         Progress::where('client_token', $token)->whereNull('user_id')
             ->whereIn('lesson_id', $ownedLessonIds)
             ->delete();
 
-        // Le reste de la progression anonyme est rattaché au compte.
+        // The rest of the anonymous progress is attached to the account.
         Progress::where('client_token', $token)->whereNull('user_id')
             ->update(['user_id' => $user->id]);
 
-        // Les tentatives de quiz n'ont pas de contrainte unique : rattachement direct.
+        // Quiz attempts have no unique constraint: attach them directly.
         QuizAttempt::where('client_token', $token)->whereNull('user_id')
             ->update(['user_id' => $user->id]);
     }

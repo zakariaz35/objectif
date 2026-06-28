@@ -1,9 +1,9 @@
 /* ---------------------------------------------------------------------------
-   Thèmes — tout est piloté par des variables CSS (design tokens).
-   Le thème actif est choisi via l'attribut data-theme sur <html> (cf. lib/theme.js).
-   Ajouter un thème = ajouter un bloc [data-theme="..."] ci-dessous.
+   Themes — everything is driven by CSS variables (design tokens).
+   The active theme is selected via the data-theme attribute on <html> (see lib/theme.js).
+   Add a theme = add a [data-theme="..."] block below.
 --------------------------------------------------------------------------- */
-/* Thème par défaut : « blue » (inspiré de Coursera — bleu sur fond clair). */
+/* Default theme: « blue » (inspired by Coursera — blue on a light background). */
 :root,
 [data-theme='blue'] {
   --bg: #f5f7fb;
@@ -13,15 +13,15 @@
   --txt: #1f2733;
   --muted: #5a6b82;
   --heading: #14274e;
-  --accent: #0056d2; /* bleu Coursera */
+  --accent: #0056d2; /* Coursera blue */
   --accent2: #1c7ed6;
-  --accent-contrast: #ffffff; /* texte posé sur --accent */
+  --accent-contrast: #ffffff; /* text placed on --accent */
   --warn: #b8860b;
   --bad: #e03131;
   --good: #2f9e44;
   --code: #eef2fb;
-  --code-txt: #1f2733; /* texte des blocs de code */
-  --code-inline: #0b5bd0; /* code inline */
+  --code-txt: #1f2733; /* code block text */
+  --code-inline: #0b5bd0; /* inline code */
 }
 
 [data-theme='dark'] {
@@ -118,7 +118,7 @@ h4 {
 }
 
 /* ---------------------------------------------------------------------------
-   Boutons partagés — utilisés dans tous les composants (évite la duplication).
+   Shared buttons — used across all components (avoids duplication).
 --------------------------------------------------------------------------- */
 button {
   font: inherit;
@@ -160,7 +160,7 @@ button {
   color: var(--txt);
 }
 
-/* Rendu du contenu Markdown (HTML venant de l'API) */
+/* Rendering of Markdown content (HTML coming from the API) */
 .prose {
   font-size: 16px;
 }

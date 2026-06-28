@@ -7,7 +7,7 @@ use Symfony\Component\Yaml\Yaml;
 class FrontMatter
 {
     /**
-     * Sépare le front-matter YAML du corps Markdown.
+     * Splits the YAML front-matter from the Markdown body.
      *
      * @return array{0: array<string,mixed>, 1: string} [meta, body]
      */

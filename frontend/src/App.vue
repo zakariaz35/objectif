@@ -32,9 +32,9 @@ async function logout() {
             <option v-for="t in theme.list" :key="t.key" :value="t.key">{{ t.label }}</option>
           </select>
         </label>
-        <!-- ⚠️ TEMPORAIRE — comparateur de logos. À retirer une fois le logo choisi. -->
+        <!-- ⚠️ TEMPORARY — logo comparator. Remove once the logo is chosen. -->
         <RouterLink to="/logos" class="debug-link" title="Comparateur de logos (temporaire)">✦ Logos</RouterLink>
-        <!-- ⚠️ DEBUG / perso uniquement — lien vers la liste des comptes. À retirer si non-perso. -->
+        <!-- ⚠️ DEBUG / personal use only — link to the accounts list. Remove if not personal. -->
         <RouterLink to="/comptes" class="debug-link" title="Debug perso : liste des comptes">⚙ Comptes</RouterLink>
         <template v-if="auth.isAuthenticated.value">
           <span class="who">👤 {{ auth.state.user?.name }}</span>

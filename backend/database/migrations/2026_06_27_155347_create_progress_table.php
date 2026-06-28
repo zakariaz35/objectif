@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('progress', function (Blueprint $table) {
             $table->id();
-            $table->string('client_token')->index(); // device/anon id (auth viendra plus tard)
+            $table->string('client_token')->index(); // device/anon id (auth will come later)
             $table->foreignId('lesson_id')->constrained()->cascadeOnDelete();
             $table->boolean('completed')->default(true);
             $table->timestamps();

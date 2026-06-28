@@ -13,7 +13,7 @@ class ProgressController extends Controller
 {
     use ResolvesOwner;
 
-    /** Slugs des leçons complétées pour une formation et le propriétaire courant. */
+    /** Slugs of completed lessons for a training and the current owner. */
     public function index(Request $request, Formation $formation): JsonResponse
     {
         $lessonIds = Lesson::query()
@@ -36,7 +36,7 @@ class ProgressController extends Controller
         ]);
     }
 
-    /** Marque/démarque une leçon comme complétée. */
+    /** Marks/unmarks a lesson as completed. */
     public function toggle(Request $request, Formation $formation, string $moduleSlug, string $lessonSlug): JsonResponse
     {
         $lesson = Lesson::query()

@@ -7,7 +7,7 @@ use Illuminate\Http\JsonResponse;
 
 class FormationController extends Controller
 {
-    /** Liste des formations (sans le contenu lourd). */
+    /** List of trainings (without the heavy content). */
     public function index(): JsonResponse
     {
         $formations = Formation::query()
@@ -25,7 +25,7 @@ class FormationController extends Controller
         return response()->json(['data' => $formations]);
     }
 
-    /** Arbre complet d'une formation : modules + leçons (titres seulement). */
+    /** Full tree of a training: modules + lessons (titles only). */
     public function show(Formation $formation): JsonResponse
     {
         $formation->load(['modules.lessons' => function ($q) {

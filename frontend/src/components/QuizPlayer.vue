@@ -28,7 +28,7 @@ const scorePct = computed(() =>
 )
 
 function pick(qId, idx) {
-  if (result.value) return // verrouillé après correction
+  if (result.value) return // locked after grading
   choices.value = { ...choices.value, [qId]: idx }
 }
 

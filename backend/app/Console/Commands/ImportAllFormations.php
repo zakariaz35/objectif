@@ -39,13 +39,13 @@ class ImportAllFormations extends Command
 
             $manifest = $this->manifest($dir);
             if ($manifest === null) {
-                continue; // pas une formation (pas de formation.yaml)
+                continue; // not a course (no formation.yaml)
             }
 
             $slug = $this->slugFor($manifest, $entry);
 
-            // Non destructif : on ne réimporte pas une formation déjà présente
-            // (préserve la progression liée aux leçons) sauf --force.
+            // Non-destructive: we don't re-import a course that already exists
+            // (preserves the progress tied to its lessons) unless --force is given.
             if (! $force && Formation::where('slug', $slug)->exists()) {
                 $this->line("↷ {$slug} déjà présente — ignorée");
                 $skipped++;
@@ -80,7 +80,7 @@ class ImportAllFormations extends Command
         return null;
     }
 
-    /** Même logique de slug que l'importer (slug explicite, sinon dérivé). */
+    /** Same slug logic as the importer (explicit slug, otherwise derived). */
     private function slugFor(array $manifest, string $dirName): string
     {
         $title = $manifest['title'] ?? $dirName;

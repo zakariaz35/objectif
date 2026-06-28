@@ -27,8 +27,8 @@ watch(allPass, (ok) => {
   }
 })
 
-// Source du Web Worker : exécute le code utilisateur + chaque test en isolation.
-// (string concaténée pour éviter les backticks imbriqués)
+// Web Worker source: runs the user code + each test in isolation.
+// (concatenated string to avoid nested backticks)
 const WORKER_SRC = `
 self.onmessage = function (e) {
   var userCode = e.data.userCode, tests = e.data.tests, results = [];
@@ -82,7 +82,7 @@ async function run() {
   running.value = true
   results.value = null
   globalError.value = null
-  emitted = allPass.value // évite de ré-émettre si déjà réussi
+  emitted = allPass.value // avoid re-emitting if already passed
   const out = await runInWorker(code.value, props.tests)
   running.value = false
   if (out.timeout) {
@@ -101,7 +101,7 @@ function reset() {
   emitted = false
 }
 
-// Tab insère 2 espaces au lieu de changer de champ.
+// Tab inserts 2 spaces instead of moving to the next field.
 function onTab(e) {
   const el = e.target
   const s = el.selectionStart

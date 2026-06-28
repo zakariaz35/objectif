@@ -16,7 +16,7 @@ class MarkdownService
     public function __construct()
     {
         $environment = new Environment([
-            'html_input' => 'allow',          // on autorise le HTML inline du cours
+            'html_input' => 'allow',          // allow inline HTML from the course content
             'allow_unsafe_links' => false,
         ]);
         $environment->addExtension(new CommonMarkCoreExtension());

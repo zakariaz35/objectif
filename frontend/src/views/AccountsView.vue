@@ -1,9 +1,9 @@
 <!--
-  ⚠️ PAGE DEBUG / USAGE PERSONNEL UNIQUEMENT — À SUPPRIMER
-  Liste tous les comptes (emails inclus), sans contrôle d'accès. Volontaire tant
-  que le projet est personnel/mono-utilisateur. Si le projet devient public ou
-  multi-utilisateurs : supprimer cette vue, sa route (/comptes), le lien dans la
-  barre du haut, ainsi que l'endpoint backend /api/users (cf. UserController).
+  ⚠️ DEBUG PAGE / PERSONAL USE ONLY — TO BE DELETED
+  Lists all accounts (emails included), with no access control. Intentional while
+  the project is personal/single-user. If the project becomes public or
+  multi-user: delete this view, its route (/comptes), the link in the
+  top bar, as well as the backend endpoint /api/users (see UserController).
 -->
 <script setup>
 import { ref, onMounted } from 'vue'

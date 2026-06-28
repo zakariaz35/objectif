@@ -1,7 +1,7 @@
 import { reactive, computed } from 'vue'
 import api from './api'
 
-// État d'authentification partagé (token persistant en localStorage).
+// Shared authentication state (token persisted in localStorage).
 const state = reactive({
   token: localStorage.getItem('auth_token') || null,
   user: JSON.parse(localStorage.getItem('auth_user') || 'null'),
@@ -40,7 +40,7 @@ export const auth = {
     try {
       await api.logout()
     } catch (e) {
-      /* token déjà invalide : on nettoie quand même */
+      /* token already invalid: clean up anyway */
     }
     state.token = null
     state.user = null

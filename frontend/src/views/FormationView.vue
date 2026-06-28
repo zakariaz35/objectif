@@ -34,20 +34,24 @@ async function toggle(moduleSlug, lessonSlug, value) {
   try {
     await api.toggleProgress(props.formation, moduleSlug, lessonSlug, value)
   } catch (e) {
-    /* offline : on garde l'état local */
+    /* offline: keep local state */
   }
 }
 
-// Exposé aux LessonView enfants.
+// Exposed to child LessonView components.
 provide('progress', { isDone, toggle })
 
 async function load() {
   loading.value = true
   error.value = null
   try {
-    tree.value = await api.getFormation(props.formation)
-    const p = await api.getProgress(props.formation)
-    completed.value = new Set(p.completed)
+    // Independent requests, fetched in parallel.
+    const [tree2, progress] = await Promise.all([
+      api.getFormation(props.formation),
+      api.getProgress(props.formation),
+    ])
+    tree.value = tree2
+    completed.value = new Set(progress.completed)
   } catch (e) {
     error.value = 'Formation introuvable.'
   } finally {

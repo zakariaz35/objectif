@@ -8,12 +8,12 @@ use Illuminate\Http\JsonResponse;
 
 class LessonController extends Controller
 {
-    /** Détail d'une leçon, avec navigation précédent/suivant dans la formation. */
+    /** Lesson details, with previous/next navigation within the training. */
     public function show(Formation $formation, string $moduleSlug, string $lessonSlug): JsonResponse
     {
         $formation->load(['modules.lessons' => fn ($q) => $q->orderBy('position')]);
 
-        // Liste à plat ordonnée pour le prev/next.
+        // Ordered flat list for prev/next.
         $flat = $formation->modules->flatMap(fn ($m) => $m->lessons->map(fn ($l) => [
             'module' => $m->slug,
             'lesson' => $l->slug,
@@ -32,7 +32,7 @@ class LessonController extends Controller
         $prev = $idx > 0 ? $flat[$idx - 1] : null;
         $next = $idx < $flat->count() - 1 ? $flat[$idx + 1] : null;
 
-        // Quiz : on expose les questions SANS la bonne réponse ni l'explication.
+        // Quiz: we expose the questions WITHOUT the correct answer or the explanation.
         $quiz = null;
         if ($lesson->type === 'quiz') {
             $lesson->load('quizQuestions');

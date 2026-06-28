@@ -3,15 +3,15 @@ import HomeView from '../views/HomeView.vue'
 import FormationView from '../views/FormationView.vue'
 import LessonView from '../views/LessonView.vue'
 import AuthView from '../views/AuthView.vue'
-// ⚠️ DEBUG / perso uniquement — à retirer si le projet n'est plus personnel.
+// ⚠️ DEBUG / personal use only — remove if the project is no longer personal.
 import AccountsView from '../views/AccountsView.vue'
 
 const routes = [
   { path: '/', name: 'home', component: HomeView },
   { path: '/auth', name: 'auth', component: AuthView },
-  // ⚠️ DEBUG / perso uniquement — liste des comptes. À retirer si non-perso.
+  // ⚠️ DEBUG / personal use only — accounts list. Remove if not personal.
   { path: '/comptes', name: 'accounts', component: AccountsView },
-  // ⚠️ TEMPORAIRE — comparateur de logos. À retirer une fois le logo choisi.
+  // ⚠️ TEMPORARY — logo comparator. Remove once the logo is chosen.
   { path: '/logos', name: 'logos', component: () => import('../views/LogosView.vue') },
   {
     path: '/f/:formation',
