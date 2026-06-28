@@ -78,6 +78,46 @@ questions:
     explanation: >-
       Un `NULL` dans la liste rend `NOT IN` toujours `NULL` (donc faux), et la requête ne
       renvoie rien. `NOT EXISTS` n'a pas ce piège.
+  - prompt: "Que renvoie `WHERE region = NULL` quand des lignes ont bien region = NULL ?"
+    options:
+      - "Toutes les lignes où region est NULL"
+      - "Aucune ligne — il faut écrire WHERE region IS NULL"
+      - "Une erreur de syntaxe"
+    answer: 1
+    explanation: >-
+      Comparer quoi que ce soit à `NULL` avec `=` renvoie `NULL` (ni vrai ni faux), jamais
+      `TRUE`. Le moteur filtre uniquement les conditions qui valent `TRUE` : la requête ne
+      renvoie donc aucune ligne. La seule syntaxe correcte est `IS NULL`.
+  - prompt: "Tu joins orders (1 ligne par commande) à tags (N tags par client). Que risques-tu en faisant SUM(o.amount) après cette jointure ?"
+    options:
+      - "Rien, SQL déduplique automatiquement"
+      - "Un résultat gonflé : chaque amount est compté autant de fois qu'il y a de tags pour le client"
+      - "Une erreur : SUM n'est pas autorisé après un JOIN"
+    answer: 1
+    explanation: >-
+      Le fan-out de la jointure 1-N duplique les lignes de gauche. Un `SUM(amount)` additionne
+      alors le montant autant de fois qu'il y a de correspondances côté tags. La correction :
+      agréger la table « N » dans une CTE/sous-requête avant de joindre.
+  - prompt: "COALESCE(a, b, c) renvoie…"
+    options:
+      - "La somme de a, b et c"
+      - "Le premier argument non-NULL parmi a, b, c"
+      - "NULL si l'un des arguments est NULL"
+    answer: 1
+    explanation: >-
+      `COALESCE` parcourt ses arguments de gauche à droite et renvoie le premier non-NULL.
+      C'est l'outil standard pour remplacer les valeurs manquantes par un défaut
+      (`COALESCE(region, 'Inconnue')`).
+  - prompt: "Un cumul (running total) avec SUM(amount) OVER (ORDER BY order_date) diffère d'un SUM(amount) GROUP BY parce que…"
+    options:
+      - "Il ne fonctionne que sur des colonnes de type DATE"
+      - "Il renvoie une ligne cumulée par groupe, pas par ligne individuelle"
+      - "Il conserve toutes les lignes et ajoute le cumul sur chacune, sans réduire"
+    answer: 2
+    explanation: >-
+      La fonction fenêtre ne réduit pas : autant de lignes en sortie qu'en entrée, chacune
+      enrichie du cumul calculé jusqu'à elle-même. Un `GROUP BY` réduirait à une ligne
+      par date, perdant le détail commande par commande.
 ---
 
 Dernière étape : vérifie tes réflexes d'analyste sur l'ensemble du parcours

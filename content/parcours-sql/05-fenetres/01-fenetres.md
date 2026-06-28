@@ -27,6 +27,8 @@ flowchart LR
     W["OVER (PARTITION BY)\n→ toutes les lignes + valeur du groupe"]
 ```
 
+![Schéma PARTITION BY et ROW_NUMBER](assets/fonctions-fenetres.svg)
+
 ## Anatomie de OVER
 
 ```sql

@@ -84,6 +84,8 @@ JOIN customers AS c ON c.customer_id = o.customer_id
 JOIN products  AS p ON p.product_id = o.product_id;
 ```
 
+![Schéma INNER JOIN vs LEFT JOIN](assets/jointures.svg)
+
 ## Les deux pièges classiques
 
 **1. Le filtre du LEFT JOIN dans le WHERE.** Mettre une condition sur la table de droite
