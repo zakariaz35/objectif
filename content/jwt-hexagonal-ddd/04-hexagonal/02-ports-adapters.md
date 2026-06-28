@@ -3,7 +3,28 @@ title: "Ports & Adapters : l'image de l'hexagone"
 type: lesson
 ---
 
-> **Schéma —** Au centre, le **CŒUR** (logique métier, zéro dépendance externe) contient : un **port d'entrée** (interface UseCase) → un **service applicatif** `CreerFacture` → un **port de sortie** (interface `FactureRepository`). Côté entrée (driving), des **adapters** s'y branchent : Contrôleur HTTP, Commande CLI, Job de queue → tous appellent le port d'entrée. Côté sortie (driven), le port de sortie est implémenté par : `EloquentFactureRepository`, Adapter Mailgun. Les flèches pointent toujours **vers le centre**.
+Les **adapters** (côté entrée *et* côté sortie) dépendent du cœur, jamais l'inverse — toutes les flèches pointent **vers le centre** :
+
+```mermaid
+flowchart LR
+    HTTP["Contrôleur HTTP"]
+    CLI["Commande CLI"]
+    subgraph Core["Cœur métier — zéro dépendance externe"]
+        direction TB
+        PIN(["Port d'entrée : interface UseCase"])
+        SVC["CreerFacture (service applicatif)"]
+        POUT(["Port de sortie : interface FactureRepository"])
+        PIN --> SVC --> POUT
+    end
+    ELO[("EloquentFactureRepository")]
+    MAIL["Adapter Mailgun"]
+    HTTP -->|appelle| PIN
+    CLI -->|appelle| PIN
+    ELO -. implémente .-> POUT
+    MAIL -. implémente .-> POUT
+```
+
+*À gauche, les adapters **driving** (HTTP, CLI) qui déclenchent le métier ; à droite, les adapters **driven** (DB, mail) qui l'implémentent. Le cœur, au milieu, ne dépend que d'interfaces.*
 
 - **Port** = une **interface** (un contrat). « Voici ce dont j'ai besoin / ce que j'offre. »
 - **Adapter** = une **implémentation concrète** de ce contrat (Eloquent, HTTP, Mailgun…).

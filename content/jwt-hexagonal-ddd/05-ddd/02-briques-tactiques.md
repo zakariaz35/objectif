@@ -41,6 +41,23 @@ Le VO **concentre la règle** (« un montant ne peut pas être négatif ») en u
 
 ## L'agrégat protège les invariants
 
+Le code client **ne touche jamais** les objets internes : il passe par la racine, qui valide chaque règle. C'est la racine qui garantit les invariants.
+
+```mermaid
+flowchart TB
+    Client(["Code client"])
+    subgraph Agg["Agrégat Commande"]
+        direction TB
+        Root["Commande (Aggregate Root)"]
+        L["LigneCommande (entity interne)"]
+        M["Montant (value object)"]
+        Root --> L
+        Root --> M
+    end
+    Client -->|"ajouterLigne() : la racine vérifie"| Root
+    Client -. "accès direct interdit" .-> L
+```
+
 ```php
 class Commande {              // Aggregate Root
     private array $lignes = [];

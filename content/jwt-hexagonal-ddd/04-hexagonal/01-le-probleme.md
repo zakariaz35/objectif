@@ -25,3 +25,15 @@ public function store(Request $request) {
 ```
 
 Problèmes : la **règle métier** (« au-dessus de 10000€ il faut une validation ») est noyée dans du HTTP et de l'Eloquent. Pour la **tester**, il faut une vraie DB et une fausse requête. Pour **changer de DB** ou exposer la même logique en CLI, tout casse.
+
+```mermaid
+flowchart TB
+    subgraph Avant["❌ Tout mélangé dans le contrôleur"]
+        direction TB
+        H["HTTP / validation"] --- B["Règle métier (noyée)"]
+        B --- D[("Eloquent / MySQL")]
+        B --- IO["Mail / IO"]
+    end
+```
+
+*Le métier est collé au HTTP et à la DB : intestable et non réutilisable. L'hexagonal va **extraire le métier au centre** et repousser HTTP/DB autour (leçon suivante).*
