@@ -185,6 +185,7 @@ function retry() {
 }
 .opt:hover:not(:disabled) {
   border-color: var(--accent);
+  background: var(--panel2);
 }
 .opt:disabled {
   cursor: default;
@@ -203,6 +204,11 @@ function retry() {
 .opt.sel {
   border-color: var(--accent);
   background: var(--panel2);
+  box-shadow: inset 0 0 0 1px var(--accent);
+}
+.opt.sel .mark {
+  background: var(--accent);
+  color: var(--accent-contrast);
 }
 .opt.good {
   border-color: var(--good);
