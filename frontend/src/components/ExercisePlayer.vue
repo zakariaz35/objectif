@@ -135,11 +135,11 @@ async function run() {
   // Plain copy: a reactive proxy can't be structured-cloned by postMessage.
   let userCode = code.value
   let tests = props.tests.map((t) => ({ name: t.name, code: t.code }))
-  // TypeScript exercises: transpile user code + tests to JS before running.
-  if (props.language === 'ts') {
+  // TS / TSX / JSX exercises: transpile user code + tests to JS before running.
+  if (['ts', 'tsx', 'jsx'].includes(props.language)) {
     try {
-      userCode = await toJs(userCode)
-      tests = await Promise.all(tests.map(async (t) => ({ name: t.name, code: await toJs(t.code) })))
+      userCode = await toJs(userCode, props.language)
+      tests = await Promise.all(tests.map(async (t) => ({ name: t.name, code: await toJs(t.code, props.language) })))
     } catch (e) {
       running.value = false
       globalError.value = 'Erreur de syntaxe : ' + (e.message || e)

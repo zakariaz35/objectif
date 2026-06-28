@@ -3,8 +3,7 @@ import { ref, inject, watch, computed, nextTick } from 'vue'
 import { useRouter } from 'vue-router'
 import api from '../lib/api'
 import { theme } from '../lib/theme'
-import { openScratch } from '../lib/scratch'
-import { openVuePlayground } from '../lib/vuePlayground'
+import { playgroundFor } from '../lib/playgrounds'
 import QuizPlayer from '../components/QuizPlayer.vue'
 import ExercisePlayer from '../components/ExercisePlayer.vue'
 import Flashcards from '../components/Flashcards.vue'
@@ -39,15 +38,14 @@ function decorateCodeBlocks() {
     pre.dataset.scratch = '1'
     const codeEl = pre.querySelector('code')
     const lang = ((codeEl?.className || '').match(/language-(\w+)/) || [])[1]
-    const isJs = !lang || ['js', 'javascript', 'ts', 'typescript'].includes(lang)
-    const isVue = lang === 'vue'
-    if (!isJs && !isVue) return
+    const open = playgroundFor(lang)
+    if (!open) return // language not runnable → no button
     const codeText = (codeEl || pre).innerText
     const btn = document.createElement('button')
     btn.type = 'button'
     btn.className = 'scratch-btn'
     btn.textContent = 'Tester'
-    btn.addEventListener('click', () => (isVue ? openVuePlayground(codeText) : openScratch(codeText)))
+    btn.addEventListener('click', () => open(codeText))
     pre.appendChild(btn)
   })
 }

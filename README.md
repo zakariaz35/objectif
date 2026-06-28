@@ -221,6 +221,31 @@ users ──< progress, quiz_attempts, personal_access_tokens (Sanctum)
 | Repartir d'une base vide | `docker compose exec backend php artisan migrate:fresh --force` (⚠️ efface comptes + progression). |
 | Voir les logs de l'API | `docker compose logs -f backend`. |
 
+## Étendre à un autre framework (React, Angular…)
+
+L'appli est **agnostique du framework enseigné**. Pour ajouter un parcours React ou Angular :
+
+1. **Contenu** — rien de spécial : crée une formation Markdown (`content/parcours-react/…`)
+   et importe-la. Le backend (formations / modules / leçons / exercices / cartes / quiz)
+   ne connaît aucun framework.
+2. **Exercices de logique** — mets `language: ts` / `tsx` / `jsx` dans le bloc `exercise` :
+   le runner transpile via Sucrase (`frontend/src/lib/transpile.js`, table `TRANSFORMS`)
+   et exécute dans le worker isolé. JS/TS/JSX/TSX déjà couverts.
+3. **Playground / bouton « Tester »** — un seul point d'extension :
+   `frontend/src/lib/playgrounds.js`. Écris un `openReactPlayground(code)` (sur le modèle
+   de `vuePlayground.js`) puis :
+
+   ```js
+   registerPlayground(['jsx', 'tsx'], openReactPlayground)
+   ```
+
+   Les leçons détectent le langage du bloc de code et branchent le bon playground
+   automatiquement — **aucun autre fichier à modifier**.
+
+> Limite connue : exécuter des **composants** (Vue/React) en live demande un playground
+> dédié par framework (compilateur + preview). La **logique** (JS/TS/JSX/TSX), elle, tourne
+> partout via le même runner.
+
 ## Roadmap
 
 - [x] Import ZIP Markdown → base
