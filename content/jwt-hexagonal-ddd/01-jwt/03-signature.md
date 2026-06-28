@@ -19,6 +19,19 @@ signature = HMAC_SHA256(
 
 Un attaquant qui change `"role":"admin"` ne peut **pas** recalculer une signature valide : il n'a pas le secret. C'est ce qui rend le « tout sur le billet » sûr.
 
-> **Schéma —** Vérification d'un JWT : on prend Header + Payload (modifiables, lisibles), on recalcule la signature avec HMAC + SECRET, et on la compare à la signature reçue. Si elles sont égales → token valide ✅ ; sinon → rejeté ❌. On ne fait jamais confiance au token, on revérifie la signature.
+On ne fait **jamais confiance** au token : à chaque requête, on recalcule la signature et on compare.
+
+```mermaid
+flowchart TB
+    H["base64url(header)"] --> J["header.payload"]
+    P["base64url(payload)"] --> J
+    SEC[("SECRET (serveur uniquement)")] --> HM["HMAC-SHA256"]
+    J --> HM
+    HM --> SIG["signature recalculée"]
+    RECU["signature reçue dans le token"] --> CMP{"identiques ?"}
+    SIG --> CMP
+    CMP -->|oui| OK["✅ authentique et intact"]
+    CMP -->|non| KO["❌ rejeté — 401"]
+```
 
 > **HS256 vs RS256 (en une phrase) —** **HS256** = *secret partagé* (même clé pour signer et vérifier) — simple, parfait si c'est la même appli qui émet et vérifie. **RS256** = *paire clé privée/publique* — l'émetteur signe avec la privée, n'importe qui vérifie avec la publique. Utile quand plusieurs services doivent vérifier sans pouvoir émettre (microservices, SSO).

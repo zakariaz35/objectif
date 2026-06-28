@@ -5,7 +5,24 @@ type: lesson
 
 OAuth2 n'est pas « du login ». C'est un protocole de **délégation d'autorisation** : il permet à une appli tierce d'accéder à tes ressources **sans connaître ton mot de passe**. C'est le « Se connecter avec Google » : tu autorises l'appli, Google émet un token, l'appli l'utilise.
 
-> **Schéma —** Les 4 rôles d'OAuth2 : le **Resource Owner** (toi) utilise un **Client** (l'appli tierce). 1 · le client te redirige vers l'**Authorization Server** (Google / ton Passport) ; 2 · tu autorises sur ce serveur ; 3 · le serveur renvoie un code échangé contre un token au client ; 4 · le client utilise ce token (`Bearer`) auprès du **Resource Server** (l'API protégée). Le mot de passe ne quitte jamais l'Authorization Server.
+Le flux **Authorization Code** met en scène 4 rôles. Le mot de passe ne quitte **jamais** l'Authorization Server :
+
+```mermaid
+sequenceDiagram
+    participant U as Toi (Resource Owner)
+    participant App as Client (appli tierce)
+    participant AS as Authorization Server (Google)
+    participant RS as Resource Server (API)
+    U->>App: « Se connecter avec Google »
+    App->>AS: redirige : demande d'autorisation
+    U->>AS: s'authentifie + autorise (sur Google)
+    AS-->>App: code d'autorisation
+    App->>AS: échange le code (+ client_secret / PKCE)
+    AS-->>App: access token (+ refresh)
+    App->>RS: GET /ressource + Bearer access
+    RS-->>App: 200 données
+    Note over U,AS: Ton mot de passe reste chez Google
+```
 
 ## Les « grant types » utiles à connaître
 
