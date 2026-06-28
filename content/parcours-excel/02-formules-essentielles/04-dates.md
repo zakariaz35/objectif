@@ -62,6 +62,31 @@ plus loin.)
 
 `DATEDIF(start, end, unité)` accepte `"Y"` (années), `"M"` (mois), `"D"` (jours).
 
+## NETWORKDAYS : délais hors week-ends
+
+En logistique ou en achat, les délais s'expriment souvent en **jours ouvrés** (hors
+week-ends et jours fériés) :
+
+```
+// Working days between order_date and delivery_date (Mon-Fri only)
+=NETWORKDAYS([@order_date], [@delivery_date])
+
+// With public holidays listed in a range named "Holidays"
+=NETWORKDAYS([@order_date], [@delivery_date], Holidays)
+```
+
+Un délai négatif ou nul signifie que la livraison est arrivée avant ou le jour même de la
+commande — souvent une anomalie à vérifier.
+
+## Pièges courants sur les dates
+
+| Symptôme | Cause probable | Solution |
+|---|---|---|
+| Date alignée à **gauche** | Stockée en texte | `=DATEVALUE([@col])` |
+| `YEAR()` renvoie `1900` | Cellule contient `0` (vide de date) | `=IF([@date]="","",YEAR([@date]))` |
+| Clé mois `"2024-1"` au lieu de `"2024-01"` | Oubli du format `"00"` | `TEXT(MONTH(...),"00")` |
+| `DATEDIF` renvoie une erreur | `start > end` | Vérifier la cohérence des colonnes |
+
 > **À retenir —** vérifie d'abord qu'une date est bien typée (alignée à droite). Ensuite :
-> `YEAR`/`MONTH` pour grouper, `EOMONTH` pour les échéances, `DATEDIF` pour les durées
-> (ancienneté RH, délais de livraison).
+> `YEAR`/`MONTH` pour grouper, `EOMONTH` pour les échéances, `DATEDIF` pour les durées,
+> `NETWORKDAYS` pour les délais en jours ouvrés.

@@ -60,5 +60,40 @@ utilise `SUMPRODUCT` :
 
 Chaque `(condition)` vaut `1` ou `0` ; multipliée aux colonnes, elle filtre la somme.
 
+## Cas d'usage métier supplémentaires
+
+**Finance — budget vs réalisé par centre de coût :**
+
+```
+// Budget consumed by cost center "MKT" for month 3
+=SUMIFS(Budget[consumed], Budget[cost_center], "MKT", Budget[month], 3)
+
+// Variance: consumed - planned
+=SUMIFS(Budget[consumed], Budget[cost_center], "MKT", Budget[month], 3)
+ - SUMIFS(Budget[planned], Budget[cost_center], "MKT", Budget[month], 3)
+```
+
+**Logistique — commandes en retard :**
+
+```
+// Number of deliveries where actual_date > promised_date (late orders)
+=COUNTIFS(Deliveries[actual_date], ">" & TODAY(),
+          Deliveries[promised_date], "<" & TODAY())
+```
+
+**Achat — total fournisseur sur une plage de dates :**
+
+```
+// Total purchase amount from supplier "Acme" between two dates (D1 and D2)
+=SUMIFS(Purchases[amount],
+        Purchases[supplier], "Acme",
+        Purchases[order_date], ">=" & D1,
+        Purchases[order_date], "<=" & D2)
+```
+
+> **Piège —** `AVERAGEIFS` renvoie `#DIV/0!` si aucune ligne ne correspond aux critères.
+> Protège avec `IFERROR(AVERAGEIFS(...), 0)` dans un tableau de bord.
+
 > **À retenir —** `SUMIFS` / `COUNTIFS` / `AVERAGEIFS` couvrent l'essentiel des calculs
-> conditionnels. Garde `SUMPRODUCT` pour les sommes de produits filtrés.
+> conditionnels. Garde `SUMPRODUCT` pour les sommes de produits filtrés. Toujours vérifier
+> qu'un critère sur une date est collé avec `&`, jamais mis entre guillemets seul.

@@ -1,0 +1,128 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 740 400" font-family="Segoe UI, Arial, sans-serif" font-size="13">
+  <!-- Background -->
+  <rect width="740" height="400" rx="12" fill="#f8fafc"/>
+
+  <!-- Title -->
+  <text x="370" y="30" text-anchor="middle" font-size="17" font-weight="bold" fill="#1e293b">Avant / Après nettoyage d'un fichier Excel</text>
+
+  <!-- ===== AVANT (left) ===== -->
+  <rect x="20" y="48" width="320" height="316" rx="10" fill="#fff" stroke="#fca5a5" stroke-width="2"/>
+  <rect x="20" y="48" width="320" height="34" rx="10" fill="#fee2e2"/>
+  <text x="180" y="70" text-anchor="middle" font-size="14" font-weight="bold" fill="#b91c1c">AVANT — Fichier reçu (sale)</text>
+
+  <!-- cells avant -->
+  <!-- row header -->
+  <rect x="34" y="92" width="292" height="22" fill="#fef2f2" stroke="#fca5a5" stroke-width="0.5"/>
+  <text x="90" y="108" text-anchor="middle" font-size="11" fill="#7f1d1d" font-weight="bold">order_id</text>
+  <text x="180" y="108" text-anchor="middle" font-size="11" fill="#7f1d1d" font-weight="bold">category</text>
+  <text x="290" y="108" text-anchor="middle" font-size="11" fill="#7f1d1d" font-weight="bold">amount</text>
+
+  <!-- rows AVANT - row 1: duplicate -->
+  <rect x="34" y="114" width="292" height="22" fill="#ffe4e6" stroke="#fca5a5" stroke-width="0.5"/>
+  <text x="90" y="130" text-anchor="middle" font-size="11" fill="#dc2626">1001</text>
+  <text x="180" y="130" text-anchor="middle" font-size="11" fill="#dc2626">Office</text>
+  <text x="290" y="130" text-anchor="middle" font-size="11" fill="#dc2626">150</text>
+  <text x="316" y="130" font-size="10" fill="#dc2626">← doublon</text>
+
+  <!-- row 2 -->
+  <rect x="34" y="136" width="292" height="22" fill="#fff7f7" stroke="#fca5a5" stroke-width="0.5"/>
+  <text x="90" y="152" text-anchor="middle" font-size="11" fill="#991b1b">1001</text>
+  <text x="180" y="152" text-anchor="middle" font-size="11" fill="#991b1b">Office</text>
+  <text x="290" y="152" text-anchor="middle" font-size="11" fill="#991b1b">150</text>
+  <text x="316" y="152" font-size="10" fill="#dc2626">← doublon</text>
+
+  <!-- row 3: espaces invisibles -->
+  <rect x="34" y="158" width="292" height="22" fill="#fffbeb" stroke="#fbbf24" stroke-width="0.5"/>
+  <text x="90" y="174" text-anchor="middle" font-size="11" fill="#92400e">1002</text>
+  <text x="180" y="174" text-anchor="middle" font-size="11" fill="#92400e">"Office " ←espace</text>
+  <text x="290" y="174" text-anchor="middle" font-size="11" fill="#92400e">200</text>
+
+  <!-- row 4: date texte -->
+  <rect x="34" y="180" width="292" height="22" fill="#fffbeb" stroke="#fbbf24" stroke-width="0.5"/>
+  <text x="90" y="196" text-anchor="middle" font-size="11" fill="#92400e">1003</text>
+  <text x="180" y="196" text-anchor="middle" font-size="11" fill="#92400e">Hardware</text>
+  <text x="290" y="196" text-anchor="middle" font-size="11" fill="#b45309">"80€" (texte)</text>
+
+  <!-- row 5: vide -->
+  <rect x="34" y="202" width="292" height="22" fill="#f9fafb" stroke="#e5e7eb" stroke-width="0.5"/>
+  <text x="180" y="218" text-anchor="middle" font-size="11" fill="#9ca3af" font-style="italic">(ligne vide)</text>
+
+  <!-- row 6: montant negatif -->
+  <rect x="34" y="224" width="292" height="22" fill="#ffe4e6" stroke="#fca5a5" stroke-width="0.5"/>
+  <text x="90" y="240" text-anchor="middle" font-size="11" fill="#dc2626">1004</text>
+  <text x="180" y="240" text-anchor="middle" font-size="11" fill="#dc2626">Office</text>
+  <text x="290" y="240" text-anchor="middle" font-size="11" fill="#dc2626">-50 ← anomalie</text>
+
+  <!-- row 7: casse hétérogène -->
+  <rect x="34" y="246" width="292" height="22" fill="#fffbeb" stroke="#fbbf24" stroke-width="0.5"/>
+  <text x="90" y="262" text-anchor="middle" font-size="11" fill="#92400e">1005</text>
+  <text x="180" y="262" text-anchor="middle" font-size="11" fill="#92400e">HARDWARE ←casse</text>
+  <text x="290" y="262" text-anchor="middle" font-size="11" fill="#92400e">320</text>
+
+  <!-- Legend avant -->
+  <rect x="34" y="282" width="12" height="12" fill="#ffe4e6" stroke="#fca5a5"/>
+  <text x="52" y="293" font-size="11" fill="#7f1d1d">Doublons / montant invalide</text>
+  <rect x="34" y="300" width="12" height="12" fill="#fffbeb" stroke="#fbbf24"/>
+  <text x="52" y="311" font-size="11" fill="#78350f">Espaces, texte, casse hétérogène</text>
+  <rect x="34" y="318" width="12" height="12" fill="#f9fafb" stroke="#e5e7eb"/>
+  <text x="52" y="329" font-size="11" fill="#6b7280">Ligne vide</text>
+
+  <!-- ===== ARROW in the middle ===== -->
+  <line x1="348" y1="200" x2="388" y2="200" stroke="#7c3aed" stroke-width="3" marker-end="url(#arrmid)"/>
+  <text x="368" y="192" text-anchor="middle" font-size="12" fill="#5b21b6" font-weight="bold">TRIM</text>
+  <text x="368" y="208" text-anchor="middle" font-size="12" fill="#5b21b6">PROPER</text>
+  <text x="368" y="224" text-anchor="middle" font-size="11" fill="#7c3aed">DATEVALUE</text>
+  <text x="368" y="238" text-anchor="middle" font-size="11" fill="#7c3aed">MFC</text>
+
+  <!-- ===== APRES (right) ===== -->
+  <rect x="400" y="48" width="320" height="316" rx="10" fill="#fff" stroke="#86efac" stroke-width="2"/>
+  <rect x="400" y="48" width="320" height="34" rx="10" fill="#dcfce7"/>
+  <text x="560" y="70" text-anchor="middle" font-size="14" font-weight="bold" fill="#15803d">APRÈS — Tableau propre</text>
+
+  <!-- cells apres -->
+  <rect x="414" y="92" width="292" height="22" fill="#f0fdf4" stroke="#86efac" stroke-width="0.5"/>
+  <text x="470" y="108" text-anchor="middle" font-size="11" fill="#14532d" font-weight="bold">order_id</text>
+  <text x="560" y="108" text-anchor="middle" font-size="11" fill="#14532d" font-weight="bold">category</text>
+  <text x="670" y="108" text-anchor="middle" font-size="11" fill="#14532d" font-weight="bold">amount</text>
+
+  <!-- row 1 (doublon supprimé) -->
+  <rect x="414" y="114" width="292" height="22" fill="#f0fdf4" stroke="#86efac" stroke-width="0.5"/>
+  <text x="470" y="130" text-anchor="middle" font-size="11" fill="#166534">1001</text>
+  <text x="560" y="130" text-anchor="middle" font-size="11" fill="#166534">Office</text>
+  <text x="670" y="130" text-anchor="middle" font-size="11" fill="#166534">150</text>
+
+  <!-- row 2 (trim applied) -->
+  <rect x="414" y="136" width="292" height="22" fill="#f0fdf4" stroke="#86efac" stroke-width="0.5"/>
+  <text x="470" y="152" text-anchor="middle" font-size="11" fill="#166534">1002</text>
+  <text x="560" y="152" text-anchor="middle" font-size="11" fill="#166534">"Office"</text>
+  <text x="670" y="152" text-anchor="middle" font-size="11" fill="#166534">200</text>
+
+  <!-- row 3 (datevalue + nombre) -->
+  <rect x="414" y="158" width="292" height="22" fill="#f0fdf4" stroke="#86efac" stroke-width="0.5"/>
+  <text x="470" y="174" text-anchor="middle" font-size="11" fill="#166534">1003</text>
+  <text x="560" y="174" text-anchor="middle" font-size="11" fill="#166534">Hardware</text>
+  <text x="670" y="174" text-anchor="middle" font-size="11" fill="#166534">80</text>
+
+  <!-- row 5 (ligne vide supprimée, montant négatif écarté) -->
+  <rect x="414" y="180" width="292" height="22" fill="#f0fdf4" stroke="#86efac" stroke-width="0.5"/>
+  <text x="470" y="196" text-anchor="middle" font-size="11" fill="#166534">1005</text>
+  <text x="560" y="196" text-anchor="middle" font-size="11" fill="#166534">Hardware</text>
+  <text x="670" y="196" text-anchor="middle" font-size="11" fill="#166534">320</text>
+
+  <!-- empty placeholder -->
+  <rect x="414" y="202" width="292" height="22" fill="#f8fafc" stroke="#e2e8f0" stroke-width="0.5"/>
+  <text x="560" y="218" text-anchor="middle" font-size="11" fill="#94a3b8" font-style="italic">1 doublon supprimé · 1 anomalie écartée</text>
+
+  <!-- Legend apres -->
+  <rect x="414" y="282" width="12" height="12" fill="#f0fdf4" stroke="#86efac"/>
+  <text x="432" y="293" font-size="11" fill="#14532d">Types homogènes (nombres, texte)</text>
+  <text x="432" y="311" font-size="11" fill="#14532d">Casse uniforme — espaces supprimés</text>
+  <text x="432" y="329" font-size="11" fill="#14532d">Aucune ligne vide — anomalies tracées</text>
+
+  <!-- Arrow marker -->
+  <defs>
+    <marker id="arrmid" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L10,3 z" fill="#7c3aed"/>
+    </marker>
+  </defs>
+</svg>

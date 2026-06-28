@@ -18,11 +18,14 @@ flowchart TD
     A -->|non| B{"Explorer / croiser\nplusieurs dimensions ?"}
     B -->|oui| T["Tableau croisé\ndynamique"]
     B -->|non| C{"Aller chercher une\nvaleur dans une autre table ?"}
-    C -->|oui| L["XLOOKUP / INDEX+MATCH"]
+    C -->|oui| R{"Recherche\nexacte ou approchée ?"}
+    R -->|exacte| L["XLOOKUP / INDEX+MATCH(…,0)"]
+    R -->|par tranches| AP["XLOOKUP(-1) / MATCH(…,1)\nsur table triée"]
+    C -->|non| D["Nettoyage / calcul\nde colonne"]
 ```
 
 En clair : **un chiffre ciblé** → une formule `*IFS` ; **une vue d'ensemble qui se
-réarrange** → un TCD ; **une donnée venue d'ailleurs** → une recherche.
+réarrange** → un TCD ; **une donnée venue d'ailleurs** → une recherche exacte ou approchée.
 
 ## Cas vente / achat
 
@@ -69,6 +72,28 @@ la même table (auto-jointure) :
 =XLOOKUP([@manager_id], Employees[employee_id], Employees[name], "—")
 ```
 
+## Cas finance / contrôle de gestion
+
+**« Quel est l'écart budget/réalisé par centre de coût ce mois-ci ? »**
+
+On a `Budget` (`cost_center | month | planned`) et `Actuals` (`cost_center | month |
+consumed`). Ce n'est pas un TCD (on veut une formule dans un tableau de synthèse) :
+
+```
+// Planned amount for cost center in column A, month in column B
+=SUMIFS(Budget[planned], Budget[cost_center], A2, Budget[month], B2)
+
+// Consumed amount
+=SUMIFS(Actuals[consumed], Actuals[cost_center], A2, Actuals[month], B2)
+
+// Variance
+=C2 - D2
+```
+
+**« Quelle est la catégorie de dépenses la plus importante par département ? »**
+→ TCD : `department` en lignes, `category` en colonnes, SOMME de `amount` en valeurs,
+trié par total décroissant.
+
 > **À retenir —** avant de taper une formule, classe la question : chiffre ciblé (`*IFS`),
-> exploration multi-dimensions (TCD), ou valeur venue d'une autre table (recherche). Le bon
-> réflexe vaut mieux que la formule la plus longue.
+> exploration multi-dimensions (TCD), valeur venue d'une autre table (recherche), ou besoin
+> de nettoyage/structuration. Le bon réflexe vaut mieux que la formule la plus longue.

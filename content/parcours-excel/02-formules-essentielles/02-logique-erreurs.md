@@ -52,5 +52,45 @@ de `#DIV/0!` ou `#N/A`. `IFERROR` remplace l'erreur par une valeur propre :
 > **Attention —** `IFERROR` masque **toutes** les erreurs. Ne t'en sers pas pour cacher un
 > vrai problème : assure-toi d'abord de comprendre *pourquoi* l'erreur apparaît.
 
+## Cas concrets : segmenter pour analyser
+
+**Segmentation achat — statut de paiement :**
+
+```
+// Payment status based on due_date
+=IFS([@paid_date] <> "", "Paid",
+     TODAY() > [@due_date], "Overdue",
+     TRUE, "Pending")
+```
+
+**RH — plage salariale :**
+
+```
+// Salary band classification
+=IFS([@salary] >= 60000, "Senior",
+     [@salary] >= 40000, "Mid",
+     [@salary] >= 25000, "Junior",
+     TRUE, "Unclassified")
+```
+
+**Logistique — alerte de stock :**
+
+```
+// Stock alert: critical if below safety level AND reorder not placed
+=IF(AND([@stock_qty] < [@safety_stock], [@reorder_placed] = "No"),
+    "CRITICAL", "OK")
+```
+
+## IFNA : cibler uniquement les #N/A
+
+`IFERROR` capture **toutes** les erreurs. Quand tu veux uniquement intercepter les
+`#N/A` d'une recherche (pour laisser passer les vraies erreurs de formule) :
+
+```
+// Replace only #N/A (missing key), let other errors surface
+=IFNA(XLOOKUP([@product_id], Products[product_id], Products[name]), "unknown")
+```
+
 > **À retenir —** `IF` pour un choix binaire, `IFS` pour des paliers, `AND`/`OR` pour
-> combiner, `IFERROR` pour afficher un résultat propre plutôt qu'un code d'erreur.
+> combiner, `IFERROR` pour afficher un résultat propre, `IFNA` pour cibler uniquement les
+> clés manquantes d'une recherche.

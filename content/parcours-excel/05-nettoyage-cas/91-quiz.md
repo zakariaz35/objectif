@@ -105,6 +105,62 @@ questions:
     explanation: >
       Une recherche suppose une clé **unique** côté table de référence. Un doublon fait
       renvoyer silencieusement la première occurrence : vérifie l'unicité avant de joindre.
+  - prompt: |
+      Tu compares deux colonnes ligne à ligne pour compter les retards
+      (`actual_date > promised_date`). Quelle formule utilises-tu ?
+    options:
+      - "=COUNTIFS(Deliveries[actual_date], \">\" & Deliveries[promised_date])"
+      - "=SUMPRODUCT((Deliveries[actual_date] > Deliveries[promised_date]) * (Deliveries[actual_date] <> \"\"))"
+      - "=COUNT(Deliveries[actual_date])"
+    answer: 1
+    explanation: >
+      `COUNTIFS` ne supporte pas la comparaison colonne-à-colonne. `SUMPRODUCT` avec une
+      condition booléenne (`TRUE`/`FALSE` → `1`/`0`) est la bonne approche ici.
+  - prompt: |
+      `IFERROR` et `IFNA` : quelle est la différence ?
+    options:
+      - "Il n'y en a aucune, ce sont des synonymes"
+      - "`IFNA` intercepte uniquement les erreurs `#N/A` ; `IFERROR` intercepte toutes les erreurs"
+      - "`IFERROR` ne fonctionne pas avec XLOOKUP"
+    answer: 1
+    explanation: >
+      `IFNA` cible spécifiquement les `#N/A` (clé absente dans une recherche), ce qui
+      laisse remonter les vraies erreurs de formule. `IFERROR` masque **tout**, y compris
+      les erreurs de logique.
+  - prompt: |
+      Dans un champ calculé de TCD, tu écris `= quantity * unit_price`. Qu'obtiens-tu ?
+    options:
+      - "La somme exacte des montants ligne à ligne (= SUMPRODUCT)"
+      - "SOMME(quantity) × SOMME(unit_price) — ce qui peut être inexact"
+      - "Une erreur car les champs calculés ne supportent pas la multiplication"
+    answer: 1
+    explanation: >
+      Un champ calculé opère sur des **agrégats** : il multiplie les sommes de chaque
+      colonne, pas les lignes brutes. Pour un résultat exact, crée une colonne `line_total`
+      dans la table source, puis somme-la dans le TCD.
+  - prompt: |
+      Tu dois classer une commande dans une remise progressive (table triée croissante).
+      Quel argument de `XLOOKUP` utilises-tu ?
+    options:
+      - "Le 3ᵉ argument (colonne de retour)"
+      - "Le 5ᵉ argument à `-1` (mode approché : borne inférieure)"
+      - "Le 4ᵉ argument (valeur si absent)"
+    answer: 1
+    explanation: >
+      Le 5ᵉ argument de `XLOOKUP` contrôle le mode de correspondance. `-1` signifie
+      « prends la valeur égale ou immédiatement inférieure » — parfait pour des tranches de
+      remise. La table doit être triée croissante.
+  - prompt: |
+      Quelle formule calcule le nombre de jours **ouvrés** entre deux dates ?
+    options:
+      - "=[@end_date] - [@start_date]"
+      - "=DATEDIF([@start_date], [@end_date], \"D\")"
+      - "=NETWORKDAYS([@start_date], [@end_date])"
+    answer: 2
+    explanation: >
+      `NETWORKDAYS` exclut les samedis et dimanches (et optionnellement les jours fériés
+      fournis en troisième argument). `DATEDIF` avec `"D"` compte tous les jours
+      calendaires.
 ---
 
 Quelques questions pour valider tes réflexes Excel d'analyste : structurer, calculer,

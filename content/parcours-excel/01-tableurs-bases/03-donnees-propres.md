@@ -42,5 +42,30 @@ pour vérifier une hypothèse avant de lancer un calcul.
 
 Pour des filtres plus visuels, on verra les **segments** (slicers) dans le module TCD.
 
+## Exemples de tables mal structurées (à éviter)
+
+Ces configurations cassent les formules et les TCD :
+
+| Problème | Exemple concret | Conséquence |
+|---|---|---|
+| Titre fusionné au-dessus | « Rapport ventes 2024 » sur 3 colonnes | TCD ne détecte pas les en-têtes |
+| Totaux en milieu de tableau | Ligne « Sous-total Janvier » entre des données | SUMIFS compte les sous-totaux en double |
+| Deux informations en une cellule | `"Nord - Office"` | Impossible de filtrer sur `region` seul |
+| Cellules fusionnées | `amount` sur 2 lignes | Le tri désynchronise les lignes |
+
+## Cas logistique : fichier de livraisons
+
+Un fichier type reçu d'un transporteur arrive souvent ainsi :
+
+```
+// BAD: two pieces of information in one cell
+origin_destination  | delay_days | status
+"Paris > Lyon"      | 3          | OK
+"Marseille > Paris" | 1          | OK
+```
+
+Il faut éclater `origin_destination` en deux colonnes `origin` et `destination` avant toute
+analyse (`Données → Convertir`, ou `TEXTSPLIT` sur les versions récentes).
+
 > **À retenir —** vise une table plate : un en-tête, une ligne par enregistrement, un type
 > par colonne. C'est le socle de tout le reste du parcours.

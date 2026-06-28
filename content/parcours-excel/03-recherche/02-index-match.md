@@ -52,6 +52,43 @@ Table `Tiers` triée par `min_amount` croissant :
 Le `-1` de `XLOOKUP` (ou le `1` de `MATCH`) signifie « prends la borne juste en dessous ».
 La table **doit** être triée croissante, sinon le résultat est faux.
 
+## Arbre de décision : quelle formule de recherche ?
+
+```mermaid
+flowchart TD
+    A["J'ai besoin de\nrechercher une valeur"] --> B{"XLOOKUP\ndisponible ?"}
+    B -->|oui| C{"Recherche\nexacte ?"}
+    B -->|non| D["INDEX + MATCH(…, 0)\npour une recherche exacte"]
+    C -->|oui| E["XLOOKUP(clé, col_clé, col_résultat, fallback)"]
+    C -->|non — tranches| F["XLOOKUP(…, -1) ou MATCH(…, 1)\nsur table triée croissante"]
+    D --> G{"Recherche\napprochée ?"}
+    G -->|oui| H["INDEX + MATCH(…, 1)\nsur table triée croissante"]
+    G -->|non| D
+```
+
+## Cas concret : grille tarifaire fournisseur
+
+Un fournisseur applique un prix dégressif selon le volume commandé. La table `Pricing`
+(triée croissante sur `min_qty`) :
+
+| min_qty | unit_price |
+|---|---|
+| 1 | 12.00 |
+| 50 | 10.50 |
+| 200 | 9.00 |
+| 500 | 7.50 |
+
+```
+// Retrieve the applicable unit price for the ordered quantity
+=XLOOKUP([@quantity], Pricing[min_qty], Pricing[unit_price], 0, -1)
+
+// With INDEX+MATCH (older Excel)
+=INDEX(Pricing[unit_price], MATCH([@quantity], Pricing[min_qty], 1))
+```
+
+Pour une commande de 120 unités, le résultat est `10.50` (la borne `50 ≤ qty < 200`).
+
 > **À retenir —** `INDEX + MATCH(…, 0)` = recherche exacte universelle. Pour ranger une
-> valeur dans des tranches, passe en mode **approché** (`-1`/`1`) sur une table de bornes
-> triée.
+> valeur dans des tranches (remise, tarif progressif), passe en mode **approché** (`-1`/`1`)
+> sur une table de bornes triée croissante. La table **doit** être triée — sinon le résultat
+> est faux sans message d'erreur.

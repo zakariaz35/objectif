@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 340" font-family="Segoe UI, Arial, sans-serif" font-size="14">
+  <!-- Background -->
+  <rect width="720" height="340" rx="12" fill="#f8fafc"/>
+
+  <!-- Title -->
+  <text x="360" y="32" text-anchor="middle" font-size="17" font-weight="bold" fill="#1e293b">XLOOKUP — clé → recherche → résultat</text>
+
+  <!-- === TABLE Sales (left) === -->
+  <rect x="24" y="54" width="240" height="200" rx="8" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+  <text x="144" y="76" text-anchor="middle" font-size="13" font-weight="bold" fill="#1d4ed8">Table Sales</text>
+  <!-- header row -->
+  <rect x="38" y="84" width="212" height="24" rx="3" fill="#2563eb"/>
+  <text x="74" y="101" text-anchor="middle" font-size="11" fill="#fff" font-weight="bold">order_id</text>
+  <text x="144" y="101" text-anchor="middle" font-size="11" fill="#fff" font-weight="bold">product_id</text>
+  <text x="218" y="101" text-anchor="middle" font-size="11" fill="#fff" font-weight="bold">amount</text>
+  <!-- data rows -->
+  <text x="74" y="124" text-anchor="middle" font-size="12" fill="#1e40af">1001</text>
+  <text x="144" y="124" text-anchor="middle" font-size="12" fill="#1e40af" font-weight="bold">P-42</text>
+  <text x="218" y="124" text-anchor="middle" font-size="12" fill="#1e40af">500</text>
+
+  <text x="74" y="148" text-anchor="middle" font-size="12" fill="#1e40af">1002</text>
+  <text x="144" y="148" text-anchor="middle" font-size="12" fill="#1e40af">P-07</text>
+  <text x="218" y="148" text-anchor="middle" font-size="12" fill="#1e40af">150</text>
+
+  <text x="74" y="172" text-anchor="middle" font-size="12" fill="#1e40af">1003</text>
+  <text x="144" y="172" text-anchor="middle" font-size="12" fill="#1e40af" font-weight="bold">P-42</text>
+  <text x="218" y="172" text-anchor="middle" font-size="12" fill="#1e40af">200</text>
+
+  <text x="74" y="196" text-anchor="middle" font-size="12" fill="#1e40af">1004</text>
+  <text x="144" y="196" text-anchor="middle" font-size="12" fill="#1e40af">P-15</text>
+  <text x="218" y="196" text-anchor="middle" font-size="12" fill="#1e40af">80</text>
+
+  <!-- highlight P-42 row 1 -->
+  <rect x="130" y="112" width="28" height="18" rx="3" fill="#bfdbfe" stroke="#2563eb" stroke-width="1"/>
+  <rect x="130" y="160" width="28" height="18" rx="3" fill="#bfdbfe" stroke="#2563eb" stroke-width="1"/>
+
+  <!-- label under Sales -->
+  <text x="144" y="228" text-anchor="middle" font-size="11" fill="#3b82f6" font-style="italic">① clé à chercher : [@product_id]</text>
+  <text x="144" y="246" text-anchor="middle" font-size="11" fill="#3b82f6" font-style="italic">= "P-42" pour les lignes 1 et 3</text>
+
+  <!-- === ARROW: Sales → Products === -->
+  <!-- horizontal arrow -->
+  <line x1="265" y1="160" x2="355" y2="160" stroke="#7c3aed" stroke-width="2.5" marker-end="url(#arrp)"/>
+  <!-- label on arrow -->
+  <rect x="268" y="130" width="84" height="52" rx="6" fill="#ede9fe" stroke="#7c3aed" stroke-width="1"/>
+  <text x="310" y="148" text-anchor="middle" font-size="11" font-weight="bold" fill="#5b21b6">XLOOKUP</text>
+  <text x="310" y="163" text-anchor="middle" font-size="10" fill="#4c1d95">cherche "P-42"</text>
+  <text x="310" y="177" text-anchor="middle" font-size="10" fill="#4c1d95">dans Products</text>
+
+  <!-- === TABLE Products (center-right) === -->
+  <rect x="356" y="54" width="220" height="200" rx="8" fill="#fef3c7" stroke="#d97706" stroke-width="1.5"/>
+  <text x="466" y="76" text-anchor="middle" font-size="13" font-weight="bold" fill="#b45309">Table Products</text>
+  <!-- header -->
+  <rect x="370" y="84" width="192" height="24" rx="3" fill="#d97706"/>
+  <text x="430" y="101" text-anchor="middle" font-size="11" fill="#fff" font-weight="bold">product_id</text>
+  <text x="526" y="101" text-anchor="middle" font-size="11" fill="#fff" font-weight="bold">name</text>
+  <!-- data -->
+  <text x="430" y="124" text-anchor="middle" font-size="12" fill="#92400e">P-07</text>
+  <text x="526" y="124" text-anchor="middle" font-size="12" fill="#92400e">Keyboard</text>
+
+  <!-- highlight P-42 -->
+  <rect x="372" y="134" width="192" height="22" rx="3" fill="#fde68a" stroke="#d97706" stroke-width="1"/>
+  <text x="430" y="150" text-anchor="middle" font-size="12" fill="#78350f" font-weight="bold">P-42</text>
+  <text x="526" y="150" text-anchor="middle" font-size="12" fill="#78350f" font-weight="bold">Laptop</text>
+
+  <text x="430" y="174" text-anchor="middle" font-size="12" fill="#92400e">P-15</text>
+  <text x="526" y="174" text-anchor="middle" font-size="12" fill="#92400e">Mouse</text>
+
+  <text x="466" y="228" text-anchor="middle" font-size="11" fill="#d97706" font-style="italic">② colonne_clé : Products[product_id]</text>
+  <text x="466" y="246" text-anchor="middle" font-size="11" fill="#d97706" font-style="italic">③ colonne_résultat : Products[name]</text>
+
+  <!-- === ARROW: Products → Result === -->
+  <line x1="578" y1="160" x2="640" y2="160" stroke="#16a34a" stroke-width="2.5" marker-end="url(#arrg)"/>
+
+  <!-- === RESULT box === -->
+  <rect x="642" y="128" width="62" height="64" rx="8" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/>
+  <text x="673" y="152" text-anchor="middle" font-size="12" font-weight="bold" fill="#15803d">Résultat</text>
+  <text x="673" y="172" text-anchor="middle" font-size="13" fill="#14532d" font-weight="bold">"Laptop"</text>
+
+  <!-- formula at bottom -->
+  <rect x="24" y="272" width="680" height="52" rx="8" fill="#1e293b"/>
+  <text x="360" y="294" text-anchor="middle" font-size="12" fill="#94a3b8" font-family="Consolas, monospace">=XLOOKUP(</text>
+  <text x="360" y="314" text-anchor="middle" font-size="12" fill="#7dd3fc" font-family="Consolas, monospace">[@product_id],  Products[product_id],  Products[name],  "unknown")</text>
+
+  <!-- Argument labels under formula -->
+  <!-- Arrow markers -->
+  <defs>
+    <marker id="arrp" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#7c3aed"/>
+    </marker>
+    <marker id="arrg" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#16a34a"/>
+    </marker>
+  </defs>
+</svg>

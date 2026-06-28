@@ -51,5 +51,34 @@ version, utilise-le par défaut.
 =XLOOKUP([@product_id], Products[product_id], Products[[name]:[unit_price]], "unknown")
 ```
 
+## Le schéma clé → recherche
+
+![Schéma XLOOKUP : clé dans Sales, recherche dans Products, retour du nom](assets/xlookup-schema.svg)
+
+## Recherche inversée : vers la gauche
+
+`VLOOKUP` ne peut chercher que vers la droite (la clé doit être la première colonne de la
+plage). `XLOOKUP` s'en moque :
+
+```
+// Find product_id from a product name (reverse lookup, left-to-right or right-to-left)
+=XLOOKUP("Laptop", Products[name], Products[product_id], "not found")
+```
+
+## Cas d'usage achat : enrichir un bon de commande
+
+```
+// Purchase order line: retrieve unit_price from Products using article code
+=XLOOKUP([@article_code], Products[code], Products[unit_price], 0)
+
+// Calculated column: line total
+=[@quantity] * XLOOKUP([@article_code], Products[code], Products[unit_price], 0)
+```
+
+> **Piège —** si deux lignes de `Products` ont le même `code`, `XLOOKUP` renvoie la
+> **première** trouvée (comportement identique à `VLOOKUP`). Vérifie l'unicité de la clé
+> avant de te fier au résultat.
+
 > **À retenir —** `XLOOKUP(clé, colonne_clé, colonne_résultat, valeur_si_absent)`. Mets
-> toujours le 4ᵉ argument pour ne jamais laisser un `#N/A` polluer ton tableau.
+> toujours le 4ᵉ argument pour ne jamais laisser un `#N/A` polluer ton tableau. Et
+> souviens-toi : `XLOOKUP` cherche dans les deux sens, `VLOOKUP` non.

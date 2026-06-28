@@ -51,5 +51,19 @@ Hors tableau, le `$` contrôle ce qui est figé quand on recopie une formule :
 
 Astuce : la touche `F4` fait défiler ces variantes pendant l'édition d'une formule.
 
+### Cas concret : table de remise
+
+Tu as un taux de remise en `B1` et tu veux l'appliquer à chaque ligne de la colonne `amount` :
+
+```
+// B1 = 0.05 (5% discount rate, fixed cell)
+// Drag this formula down the column: B1 stays fixed, row adapts
+=[@amount] * (1 - $B$1)
+```
+
+Sans le `$`, quand tu recopies vers le bas, Excel suivrait `B2`, `B3`… et ta remise serait perdue.
+
+> **Piège classique —** oublier le `$` sur une cellule de paramètre (taux, seuil, date de référence) recopiée en colonne : la formule se décale silencieusement et donne de faux résultats. Utilise `F4` dès que tu fixes un paramètre.
+
 > **À retenir —** commence **toujours** par mettre tes données en Tableau (`Ctrl+L`) et
-> par le nommer. C'est ce qui rend tes formules et tes TCD fiables.
+> par le nommer. C'est ce qui rend tes formules et tes TCD fiables. Réserve les `$` aux cellules de paramètre hors tableau.
