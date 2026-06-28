@@ -41,12 +41,41 @@ exprimée **dans la même unité** que les données (€, jours…).
 > **Repère —** « CA moyen 100, écart-type 5 » = très stable. « CA moyen 100, écart-type
 > 90 » = un mois peut faire 10 comme 190. Le même moyenne, deux décisions opposées.
 
+## Calcul de l'écart-type — formule complète
+
+Pour `n` valeurs `x₁ … xₙ` de moyenne `μ` :
+
+```
+variance  = Σ(xᵢ − μ)² / n
+écart-type = √variance
+```
+
+**Exemple chiffré —** délais de livraison (jours) : `2, 3, 3, 4, 4, 4, 5, 7`
+
+- Moyenne `μ = 32 / 8 = 4`
+- Écarts² : `(2-4)²=4, (3-4)²=1, (3-4)²=1, (4-4)²=0, (4-4)²=0, (4-4)²=0, (5-4)²=1, (7-4)²=9`
+- Variance `= (4+1+1+0+0+0+1+9) / 8 = 16/8 = 2`
+- Écart-type `= √2 ≈ 1,41 jour`
+
+→ On peut dire : « le délai moyen est de **4 jours**, avec un écart-type de **1,4 jour** »,
+soit une variabilité très contenue. Si l'écart-type était **3 jours**, certains colis
+arriveraient en 1 jour, d'autres en 7 — même moyenne, expérience client radicalement
+différente.
+
 ## En pratique pour l'analyste
 
 - Toujours accompagner une moyenne d'une **mesure de dispersion** (au moins min/max).
 - Pour des données avec extrêmes : préfère **médiane + interquartile** à moyenne +
   écart-type.
 - Un *boxplot* (boîte à moustaches) visualise tout ça d'un coup : médiane, Q1/Q3, extrêmes.
+
+**Tableau de bord type :**
+
+| KPI | Valeur | Dispersion | Interprétation |
+|---|---|---|---|
+| Délai livraison | 4 j (moy.) | σ = 1,4 j | Stable, peu de surprises |
+| Panier moyen | 80 € (moy.) | σ = 55 € | Grande hétérogénéité → segmenter |
+| Taux conversion | 3 % (moy.) | σ = 0,2 pp | Homogène entre canaux |
 
 > **À retenir —** une moyenne sans dispersion, c'est une photo sans mise au point. La
 > question n'est pas seulement « combien en moyenne ? » mais « **à quel point ça varie ?** »

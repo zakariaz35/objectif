@@ -31,6 +31,30 @@ cards:
     a: |
       Le **nettoyage** (doublons, formats, valeurs manquantes). On la néglige car elle est
       ingrate et invisible, mais des **données sales = conclusions fausses**.
+  - q: |
+      Un manager te demande « Est-ce que nos ventes vont bien ? ». Quelle est la **bonne
+      réaction** d'un·e analyste avant de toucher aux données ?
+    a: |
+      **Reformuler et valider** la question : « Souhaitez-vous le CA du mois en cours,
+      comparé au mois précédent et à l'objectif, par région ? » Sans question précise, on
+      risque de produire un livrable qui ne répond pas au vrai besoin.
+  - q: |
+      Quelle est la différence entre comparer **mois à mois (MoM)** et **année sur année
+      (YoY)** pour une vente de saison ?
+    a: |
+      Le **MoM** montre l'évolution brute : en décembre, le CA grimpe naturellement
+      (Noël). Le **YoY** (même mois, année N-1) **neutralise l'effet de saisonnalité** et
+      révèle la vraie tendance de fond. Pour des données saisonnières, le YoY est plus
+      fiable.
+  - q: |
+      Cite les **5 étapes du workflow** de l'analyste dans l'ordre.
+    a: |
+      1. **Question** — cadrer ce qu'on cherche vraiment.
+      2. **Collecte** — identifier les sources, rapatrier le nécessaire.
+      3. **Nettoyage** — doublons, formats, valeurs manquantes.
+      4. **Analyse** — filtrer, grouper, agréger, calculer.
+      5. **Restitution** — dashboard, insights, recommandations.
+      Et un **feedback** qui relance la question suivante.
 ---
 
 Lis, réfléchis, révèle, auto-évalue.

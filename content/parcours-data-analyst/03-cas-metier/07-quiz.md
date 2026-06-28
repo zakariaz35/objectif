@@ -54,6 +54,29 @@ questions:
     explanation: >
       Sur des coûts, réel > budget = dépassement. Le même signe sur des **revenus** serait
       au contraire une bonne nouvelle : c'est le sens du poste qui décide.
+  - prompt: |
+      COGS annuels = 240 000 €. Stock début = 30 000 €, stock fin = 50 000 €.
+      Quelle est la **rotation de stock** ?
+    options:
+      - "4× (240 000 / 60 000)"
+      - "6× (240 000 / 40 000)"
+      - "8× (240 000 / 30 000)"
+    answer: 1
+    explanation: >
+      Stock moyen = (30 000 + 50 000) / 2 = 40 000 €. Rotation = 240 000 / 40 000 = **6×**.
+      Le stock se renouvelle 6 fois par an (~toutes les 2 mois).
+  - prompt: |
+      Le CA de décembre est en hausse de **+70 %** par rapport à novembre. Le manager crie
+      victoire. Quel KPI complémentaire doit absolument regarder l'analyste ?
+    options:
+      - "Le taux de retour des commandes uniquement"
+      - "La comparaison YoY (décembre N-1) pour séparer la saisonnalité de la vraie tendance"
+      - "La masse salariale du mois"
+    answer: 1
+    explanation: >
+      La hausse MoM en décembre est souvent de la **saisonnalité Noël**. La vraie tendance
+      se lit en **YoY** (même mois N-1). Un +70 % MoM peut cacher un −5 % YoY si l'année
+      précédente était encore meilleure.
 ---
 
 Dernier quiz du HUB : valide que tu sais calculer **et interpréter** les KPI métier.

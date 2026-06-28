@@ -45,6 +45,32 @@ questions:
     explanation: >
       Power BI (ou Tableau) est conçu pour modéliser et publier des dashboards
       interactifs. Excel reste excellent pour l'exploration rapide et les petits volumes.
+  - prompt: |
+      Un manager demande « le CA du mois ». Tu constates que la colonne `region` contient
+      `nord`, `Nord` et `Nord ` (avec espace). À quelle **étape du workflow** appartient
+      ce problème, et quelle en est la conséquence si on l'ignore ?
+    options:
+      - "Étape Collecte — on duplique les lignes"
+      - "Étape Nettoyage — le CA Nord sera fragmenté en 3 groupes erronés"
+      - "Étape Analyse — le GROUP BY donnera un résultat aléatoire"
+    answer: 1
+    explanation: >
+      C'est un problème de **nettoyage** (casse et espaces). Sans correction, un `GROUP BY region`
+      crée 3 groupes distincts au lieu d'un seul « Nord ». Le CA Nord affiché sera fragmenté
+      et faussement bas pour chaque variante.
+  - prompt: |
+      Un analyste calcule « CA mensuel 85 000 € ». Un KPI manager dit
+      « CA mensuel 85 000 € vs objectif 80 000 €, +6,25 % — cible dépassée ».
+      Quelle est la différence fondamentale ?
+    options:
+      - "Aucune — ce sont les mêmes informations"
+      - "Le KPI ajoute la comparaison à un objectif et la décision associée"
+      - "Le KPI est moins précis car il ajoute un commentaire"
+    answer: 1
+    explanation: >
+      Une métrique est un chiffre brut. Un KPI est une métrique **comparée à un objectif
+      et reliée à une décision**. Le seuil de performance transforme la donnée en
+      instrument de pilotage.
 ---
 
 Quelques questions pour ancrer le vocabulaire et le workflow.

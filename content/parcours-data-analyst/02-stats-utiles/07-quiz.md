@@ -54,6 +54,30 @@ questions:
     explanation: >
       Un axe tronqué (ne partant pas de zéro) dramatise des variations minuscules. Pour des
       barres, l'axe doit partir de zéro afin que la longueur reste proportionnelle.
+  - prompt: |
+      Délais de livraison (jours) : `2, 3, 3, 4, 4, 4, 5, 22`. Quelle mesure résume le
+      mieux le « délai typique » pour un client ?
+    options:
+      - "La moyenne (5.875 j) — elle utilise tous les délais"
+      - "La médiane (4 j) — elle n'est pas tirée par le retard exceptionnel de 22 j"
+      - "L'étendue (20 j) — elle montre le pire cas"
+    answer: 1
+    explanation: >
+      La valeur `22` gonfle fortement la moyenne à 5,875 j. La médiane (4 j) résiste à cet
+      extrême et représente bien l'expérience de la majorité des clients. L'étendue est
+      utile mais ne résume pas le cas typique.
+  - prompt: |
+      Deux équipes de vente ont le même CA moyen mensuel de 100 k€. L'équipe A a un
+      écart-type σ = 8 k€ ; l'équipe B a σ = 60 k€. Que conseille-t-on à la direction ?
+    options:
+      - "Rien : elles sont équivalentes puisque la moyenne est identique"
+      - "Investiguer B : son instabilité complique la gestion des stocks et des prévisions"
+      - "Préférer B : une forte variance signifie de bons pics de performance"
+    answer: 1
+    explanation: >
+      Une moyenne identique ne dit pas tout. L'équipe B fait parfois 40 k€, parfois 160 k€.
+      Cette **imprévisibilité** rend difficile la planification des stocks, des effectifs
+      et des approvisionnements — même si le total annuel est équivalent.
 ---
 
 Vérifie que tu sais résumer une série, manier les pourcentages et repérer les pièges.
