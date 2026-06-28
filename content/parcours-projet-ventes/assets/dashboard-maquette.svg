@@ -1,0 +1,171 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 460" width="720" height="460" font-family="'Segoe UI', system-ui, sans-serif">
+  <!-- Background -->
+  <rect width="720" height="460" rx="12" fill="#f8fafc"/>
+
+  <!-- Header bar -->
+  <rect x="0" y="0" width="720" height="44" rx="12" fill="#1e293b"/>
+  <rect x="0" y="32" width="720" height="12" fill="#1e293b"/>
+  <text x="20" y="27" font-size="14" font-weight="700" fill="#ffffff">Analyse des ventes — T1 2024</text>
+  <text x="540" y="27" font-size="11" fill="#94a3b8">Slicer : Région</text>
+  <!-- Slicer buttons -->
+  <rect x="600" y="12" width="36" height="20" rx="4" fill="#3b82f6"/>
+  <text x="618" y="25" text-anchor="middle" font-size="9" fill="#ffffff" font-weight="600">Tous</text>
+  <rect x="640" y="12" width="36" height="20" rx="4" fill="#334155"/>
+  <text x="658" y="25" text-anchor="middle" font-size="9" fill="#94a3b8">Nord</text>
+  <rect x="680" y="12" width="36" height="20" rx="4" fill="#334155"/>
+  <text x="698" y="25" text-anchor="middle" font-size="9" fill="#94a3b8">Sud</text>
+
+  <!-- KPI row -->
+  <!-- KPI 1: CA Total -->
+  <rect x="16" y="56" width="155" height="72" rx="8" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5"/>
+  <text x="34" y="76" font-size="10" fill="#64748b" font-weight="600">CA TOTAL</text>
+  <text x="34" y="106" font-size="28" font-weight="700" fill="#1e293b">260 €</text>
+  <text x="34" y="120" font-size="10" fill="#22c55e">+118 % mars</text>
+
+  <!-- KPI 2: Marge totale -->
+  <rect x="183" y="56" width="155" height="72" rx="8" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5"/>
+  <text x="201" y="76" font-size="10" fill="#64748b" font-weight="600">MARGE TOTALE</text>
+  <text x="201" y="106" font-size="28" font-weight="700" fill="#1e293b">104 €</text>
+  <text x="201" y="120" font-size="10" fill="#64748b">taux : 40 %</text>
+
+  <!-- KPI 3: Panier moyen -->
+  <rect x="350" y="56" width="155" height="72" rx="8" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5"/>
+  <text x="368" y="76" font-size="10" fill="#64748b" font-weight="600">PANIER MOYEN</text>
+  <text x="368" y="106" font-size="28" font-weight="700" fill="#1e293b">43.33 €</text>
+  <text x="368" y="120" font-size="10" fill="#64748b">6 commandes</text>
+
+  <!-- KPI 4: Commandes -->
+  <rect x="517" y="56" width="187" height="72" rx="8" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5"/>
+  <text x="535" y="76" font-size="10" fill="#64748b" font-weight="600">CLIENTS RÉCURRENTS</text>
+  <text x="535" y="106" font-size="28" font-weight="700" fill="#1e293b">2 / 4</text>
+  <text x="535" y="120" font-size="10" fill="#64748b">66 % des commandes</text>
+
+  <!-- Divider -->
+  <line x1="16" y1="144" x2="704" y2="144" stroke="#e2e8f0" stroke-width="1"/>
+
+  <!-- BOTTOM LEFT: CA par mois (courbe simulée) -->
+  <rect x="16" y="152" width="330" height="160" rx="8" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5"/>
+  <text x="30" y="172" font-size="11" font-weight="600" fill="#1e293b">CA par mois</text>
+
+  <!-- Axes -->
+  <line x1="50" y1="290" x2="330" y2="290" stroke="#cbd5e1" stroke-width="1"/>
+  <line x1="50" y1="178" x2="50" y2="290" stroke="#cbd5e1" stroke-width="1"/>
+
+  <!-- Y labels -->
+  <text x="46" y="183" text-anchor="end" font-size="9" fill="#94a3b8">120</text>
+  <text x="46" y="220" text-anchor="end" font-size="9" fill="#94a3b8">80</text>
+  <text x="46" y="257" text-anchor="end" font-size="9" fill="#94a3b8">40</text>
+  <text x="46" y="291" text-anchor="end" font-size="9" fill="#94a3b8">0</text>
+
+  <!-- Grid lines -->
+  <line x1="51" y1="183" x2="329" y2="183" stroke="#f1f5f9" stroke-width="1"/>
+  <line x1="51" y1="220" x2="329" y2="220" stroke="#f1f5f9" stroke-width="1"/>
+  <line x1="51" y1="257" x2="329" y2="257" stroke="#f1f5f9" stroke-width="1"/>
+
+  <!-- Line chart: Jan=85, Feb=55, Mar=120 scaled to y range 178-290 (range 112px for 120 units) -->
+  <!-- y = 290 - (value/120 * 112) -->
+  <!-- Jan: y=290-79=211, x=100 -->
+  <!-- Feb: y=290-51=239, x=190 -->
+  <!-- Mar: y=290-112=178, x=280 -->
+  <polyline points="100,211 190,239 280,178" fill="none" stroke="#3b82f6" stroke-width="2.5" stroke-linejoin="round"/>
+  <circle cx="100" cy="211" r="5" fill="#3b82f6"/>
+  <circle cx="190" cy="239" r="5" fill="#3b82f6"/>
+  <circle cx="280" cy="178" r="5" fill="#3b82f6"/>
+
+  <!-- Fill under curve -->
+  <polygon points="100,211 190,239 280,178 280,290 100,290" fill="#eff6ff" opacity="0.6"/>
+
+  <!-- Value labels -->
+  <text x="100" y="206" text-anchor="middle" font-size="10" font-weight="600" fill="#1e40af">85</text>
+  <text x="190" y="234" text-anchor="middle" font-size="10" font-weight="600" fill="#1e40af">55</text>
+  <text x="280" y="173" text-anchor="middle" font-size="10" font-weight="600" fill="#1e40af">120</text>
+
+  <!-- X labels -->
+  <text x="100" y="303" text-anchor="middle" font-size="10" fill="#64748b">Jan</text>
+  <text x="190" y="303" text-anchor="middle" font-size="10" fill="#64748b">Fév</text>
+  <text x="280" y="303" text-anchor="middle" font-size="10" fill="#64748b">Mar</text>
+
+  <!-- TOP PRODUCTS (barres) -->
+  <rect x="358" y="152" width="346" height="160" rx="8" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5"/>
+  <text x="372" y="172" font-size="11" font-weight="600" fill="#1e293b">Top produits par CA</text>
+
+  <!-- Bar 1: Office Chair 125 -->
+  <rect x="148" y="187" width="125" height="18" rx="3" fill="#3b82f6" transform="translate(224 0)"/>
+  <text x="372" y="200" font-size="10" fill="#475569">Office Chair</text>
+  <text x="680" y="200" text-anchor="end" font-size="10" font-weight="600" fill="#1e293b">125 €</text>
+
+  <!-- Bar 2: Stationery (Notebook+Pen) 76 -->
+  <rect x="148" y="212" width="76" height="18" rx="3" fill="#60a5fa" transform="translate(224 0)"/>
+  <text x="372" y="225" font-size="10" fill="#475569">Notebook</text>
+  <text x="680" y="225" text-anchor="end" font-size="10" font-weight="600" fill="#1e293b">36 €</text>
+
+  <!-- Bar 3: Wireless Mouse 59 -->
+  <rect x="148" y="237" width="59" height="18" rx="3" fill="#93c5fd" transform="translate(224 0)"/>
+  <text x="372" y="250" font-size="10" fill="#475569">Wireless Mouse</text>
+  <text x="680" y="250" text-anchor="end" font-size="10" font-weight="600" fill="#1e293b">59 €</text>
+
+  <!-- Bar 4: Ballpoint Pen 40 -->
+  <rect x="148" y="262" width="40" height="18" rx="3" fill="#bfdbfe" transform="translate(224 0)"/>
+  <text x="372" y="275" font-size="10" fill="#475569">Ballpoint Pen</text>
+  <text x="680" y="275" text-anchor="end" font-size="10" font-weight="600" fill="#1e293b">40 €</text>
+
+  <!-- Axis line -->
+  <line x1="372" y1="285" x2="695" y2="285" stroke="#e2e8f0" stroke-width="1"/>
+
+  <!-- BOTTOM row: CA par région + Part de marché par catégorie -->
+  <rect x="16" y="326" width="220" height="120" rx="8" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5"/>
+  <text x="30" y="346" font-size="11" font-weight="600" fill="#1e293b">CA par région</text>
+  <!-- South: 85 (winner) -->
+  <rect x="30" y="354" width="85" height="14" rx="2" fill="#f59e0b"/>
+  <text x="120" y="365" font-size="10" fill="#475569">South  85 €</text>
+  <!-- West: 80 -->
+  <rect x="30" y="373" width="80" height="14" rx="2" fill="#fbbf24"/>
+  <text x="120" y="384" font-size="10" fill="#475569">West   80 €</text>
+  <!-- North: 76 -->
+  <rect x="30" y="392" width="76" height="14" rx="2" fill="#fcd34d"/>
+  <text x="120" y="403" font-size="10" fill="#475569">North  76 €</text>
+  <!-- East: 19 -->
+  <rect x="30" y="411" width="19" height="14" rx="2" fill="#fde68a"/>
+  <text x="120" y="422" font-size="10" fill="#475569">East   19 €</text>
+
+  <!-- Part de marché par catégorie (camembert simplifié = anneaux) -->
+  <rect x="248" y="326" width="210" height="120" rx="8" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5"/>
+  <text x="262" y="346" font-size="11" font-weight="600" fill="#1e293b">Part de marché (CA)</text>
+  <!-- Donut simplified as colored arcs using circle trick -->
+  <circle cx="322" cy="400" r="42" fill="none" stroke="#3b82f6" stroke-width="20" stroke-dasharray="68 212" stroke-dashoffset="0"/>
+  <circle cx="322" cy="400" r="42" fill="none" stroke="#10b981" stroke-width="20" stroke-dasharray="144 212" stroke-dashoffset="-68"/>
+  <circle cx="322" cy="400" r="42" fill="none" stroke="#f59e0b" stroke-width="20" stroke-dasharray="88 212" stroke-dashoffset="-212"/>
+  <!-- Legend -->
+  <rect x="376" y="360" width="10" height="10" rx="2" fill="#3b82f6"/>
+  <text x="390" y="369" font-size="9" fill="#475569">Access. 23 %</text>
+  <rect x="376" y="376" width="10" height="10" rx="2" fill="#10b981"/>
+  <text x="390" y="385" font-size="9" fill="#475569">Furniture 48 %</text>
+  <rect x="376" y="392" width="10" height="10" rx="2" fill="#f59e0b"/>
+  <text x="390" y="401" font-size="9" fill="#475569">Station. 29 %</text>
+
+  <!-- Marge par catégorie (tableau) -->
+  <rect x="470" y="326" width="234" height="120" rx="8" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5"/>
+  <text x="484" y="346" font-size="11" font-weight="600" fill="#1e293b">Marge par catégorie</text>
+  <!-- Header -->
+  <rect x="471" y="350" width="232" height="18" rx="0" fill="#f8fafc"/>
+  <text x="484" y="362" font-size="9" fill="#64748b" font-weight="600">Catégorie</text>
+  <text x="600" y="362" text-anchor="middle" font-size="9" fill="#64748b" font-weight="600">Marge €</text>
+  <text x="693" y="362" text-anchor="end" font-size="9" fill="#64748b" font-weight="600">Taux</text>
+  <!-- Rows -->
+  <text x="484" y="382" font-size="10" fill="#1e293b">Stationery</text>
+  <text x="600" y="382" text-anchor="middle" font-size="10" font-weight="600" fill="#14532d">46 €</text>
+  <text x="693" y="382" text-anchor="end" font-size="10" fill="#22c55e">60.5 %</text>
+  <text x="484" y="400" font-size="10" fill="#1e293b">Accessories</text>
+  <text x="600" y="400" text-anchor="middle" font-size="10" font-weight="600" fill="#1e293b">23 €</text>
+  <text x="693" y="400" text-anchor="end" font-size="10" fill="#64748b">39.0 %</text>
+  <text x="484" y="418" font-size="10" fill="#1e293b">Furniture</text>
+  <text x="600" y="418" text-anchor="middle" font-size="10" font-weight="600" fill="#1e293b">35 €</text>
+  <text x="693" y="418" text-anchor="end" font-size="10" fill="#f59e0b">28.0 %</text>
+
+  <line x1="471" y1="369" x2="702" y2="369" stroke="#e2e8f0" stroke-width="1"/>
+  <line x1="471" y1="387" x2="702" y2="387" stroke="#f1f5f9" stroke-width="1"/>
+  <line x1="471" y1="405" x2="702" y2="405" stroke="#f1f5f9" stroke-width="1"/>
+
+  <!-- Caption -->
+  <text x="360" y="454" text-anchor="middle" font-size="9" fill="#94a3b8">Maquette dashboard Power BI — données du projet fil rouge (T1 2024)</text>
+</svg>

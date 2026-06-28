@@ -74,14 +74,55 @@ monthly = orders.groupby("month")["line_revenue"].sum().round(2)
 > même chose que la boucle d'accumulation que tu vas écrire en TS. Revois `parcours-sql`
 > pour `GROUP BY` et `parcours-python` pour `groupby`.
 
+## Les chiffres du dataset
+
+En appliquant la formule à chaque ligne :
+
+| order_id | revenu ligne | mois |
+|---|---|---|
+| 1001 | 2 × 20 × 1.00 = **40** | 2024-01 |
+| 1002 | 1 × 50 × 0.90 = **45** | 2024-01 |
+| 1003 | 3 × 12 × 1.00 = **36** | 2024-02 |
+| 1004 | 1 × 20 × 0.95 = **19** | 2024-02 |
+| 1005 | 5 ×  8 × 1.00 = **40** | 2024-03 |
+| 1006 | 2 × 50 × 0.80 = **80** | 2024-03 |
+
+**CA total = 260 €** | **Panier moyen = 43,33 €** | **CA par mois : Jan 85, Fév 55, Mar 120**
+
+L'insight mensuel est déjà lisible : **creux de 35 % en février**, puis **rebond de 118 %
+en mars**. On va quantifier ce rebond dans le nouvel exercice « évolution mois/mois ».
+
+<details>
+<summary><strong>Voir CA par région en SQL & pandas</strong></summary>
+
+```sql
+-- Revenue by region
+SELECT region,
+       ROUND(SUM(quantity * unit_price * (1 - discount)), 2) AS revenue
+FROM clean_orders
+GROUP BY region
+ORDER BY revenue DESC;
+-- South 85 | West 80 | North 76 | East 19
+```
+
+```python
+orders["line_revenue"] = orders["quantity"] * orders["unit_price"] * (1 - orders["discount"])
+revenue_by_region = orders.groupby("region")["line_revenue"].sum().round(2).sort_values(ascending=False)
+# South 85.0 | West 80.0 | North 76.0 | East 19.0
+```
+
+</details>
+
 ## À toi : implémenter les agrégations en TS
 
-Trois exercices interactifs suivent, du plus simple au plus complet :
+Quatre exercices interactifs suivent, du plus simple au plus complet :
 
 1. `totalRevenue(orders)` — la somme des revenus de ligne.
 2. `averageBasket(orders)` — le panier moyen.
 3. `monthlyRevenue(orders)` — le CA groupé par mois (`YYYY-MM`).
+4. `revenueByRegion(orders)` et `monthOverMonthGrowth(monthly)` — région et évolution (prochaine leçon).
 
 > **À retenir** — Toute agrégation = **un accumulateur**. Somme : `reduce` vers un nombre.
 > Group by : `reduce` vers un objet `{ clé: total }`. SQL, pandas et JS ne sont que trois
-> dialectes de cette même idée.
+> dialectes de cette même idée. Le « group by région » est **exactement le même code** que
+> le « group by mois » : seul change le nom de la clé.

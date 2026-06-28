@@ -22,6 +22,8 @@ Imagine ta responsable Vente/Achat. Elle ne veut pas une base de données, elle 
 - **« Quels sont nos top produits ? »**
 - **« Quelle catégorie nous fait le plus de marge ? »**
 - **« Comment ça évolue mois par mois ? »**
+- **« Quelle région performe le mieux ? »**
+- **« Nos remises nuisent-elles à la rentabilité ? »**
 
 Ton travail : partir de données brutes (et un peu sales), les nettoyer, les agréger, et
 **raconter** ce qu'elles disent. Le livrable final : un **dashboard Power BI** + une
@@ -38,7 +40,9 @@ Deux tables, comme dans une vraie boutique. On les réutilise dans **toutes** le
 | 1001 | 2024-01-05 | C001 | P01 | 2 | 20 | 0 | North |
 | 1002 | 2024-01-18 | C002 | P02 | 1 | 50 | 0.10 | South |
 | 1003 | 2024-02-02 | C001 | P03 | 3 | 12 | 0 | North |
-| … | … | … | … | … | … | … | … |
+| 1004 | 2024-02-20 | C003 | P01 | 1 | 20 | 0.05 | East |
+| 1005 | 2024-03-11 | C002 | P04 | 5 | 8 | 0 | South |
+| 1006 | 2024-03-29 | C004 | P02 | 2 | 50 | 0.20 | West |
 
 **`products`** — le catalogue, avec le **coût d'achat** (clé pour la marge) :
 
@@ -55,6 +59,8 @@ Deux tables, comme dans une vraie boutique. On les réutilise dans **toutes** le
 > sert partout.
 
 ## Le modèle de données
+
+![Modèle de données — orders × products](assets/data-model.svg)
 
 ```mermaid
 erDiagram
@@ -80,7 +86,13 @@ erDiagram
 `product_id` est la **clé** qui relie les deux tables : c'est sur elle qu'on fera la
 jointure pour récupérer la catégorie et le coût.
 
-## Le flux de travail
+## Le pipeline de travail
+
+Le schéma ci-dessous montre les quatre grandes étapes : on part de données brutes, on
+nettoie, on agrège (avec jointure), puis on restitue. Chaque flèche correspond à une
+étape du parcours.
+
+![Pipeline d'analyse](assets/pipeline-analyse.svg)
 
 ```mermaid
 flowchart LR
@@ -90,16 +102,31 @@ flowchart LR
     D --> E[Restitution / dashboard]
 ```
 
+## Aperçu des résultats finaux
+
+Voici la maquette du dashboard qu'on construit pas à pas. Chaque chiffre affiché est
+calculé à partir du dataset ci-dessus — tu vérifieras les valeurs toi-même en exercice.
+
+![Maquette dashboard ventes](assets/dashboard-maquette.svg)
+
+> Les KPI-clés à retenir : **CA total = 260 €**, **marge = 104 €** (40 %), **panier
+> moyen = 43,33 €**. Furniture domine le CA (48 %), mais Stationery affiche le meilleur
+> taux de marge (60,5 %). Ces deux faits forment l'insight central du projet.
+
 ## Ce que tu vas livrer
 
 1. Un jeu de données **propre** (étape 2).
 2. Des **KPI** : CA total, panier moyen, CA par catégorie/région/mois (étape 3).
 3. La **marge** par catégorie et les **top produits** (étape 4).
-4. Un **dashboard Power BI** + une mini-présentation d'**insights** (étape 5).
-5. Des pistes pour **étoffer** ton portfolio (étape 6).
+4. Des analyses avancées : évolution mois/mois, effet des remises, clients récurrents,
+   part de marché par catégorie (étapes 3b et 4b — nouvelles leçons).
+5. Un **dashboard Power BI** + une mini-présentation d'**insights** (étape 5).
+6. Des pistes pour **étoffer** ton portfolio (étape 6).
 
 > **À retenir** — Un bon projet data part **d'une question métier**, pas d'une table. Avant
-> de coder, écris noir sur blanc les 3-4 questions auxquelles tu veux répondre.
+> de coder, écris noir sur blanc les 3-4 questions auxquelles tu veux répondre. Le dataset
+> fait seulement 6 lignes ici, mais la méthode (nettoyer → agréger → joindre → raconter)
+> s'applique à un million de lignes sans rien changer.
 
 > **Prérequis utiles —** ce projet mobilise tout le cursus : `parcours-sql` (requêtes),
 > `parcours-python` (pandas), `parcours-powerbi` (dashboard). Le hub

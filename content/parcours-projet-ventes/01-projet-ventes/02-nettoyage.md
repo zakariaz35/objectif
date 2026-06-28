@@ -82,6 +82,18 @@ normalisent le libellé de région.
 
 </details>
 
+## Pourquoi chaque anomalie compte
+
+Prenons le cas concret :
+- Le doublon de la ligne `1006` représente **80 € de CA fictif** (+31 % sur la période).
+- La région `north` au lieu de `North` créerait deux groupes distincts dans le `GROUP BY`
+  alors que c'est la même zone : on perdrait la vision régionale correcte.
+- Un `discount` manquant traité comme `0` peut surestimer le revenu réel d'une ligne.
+- Une date mal parsée décale la ligne dans le mauvais mois, faussant la courbe mensuelle.
+
+> **Règle d'or** — Documente toujours les corrections appliquées (combien de doublons
+> supprimés, combien de valeurs imputées). Un rapport de nettoyage fait partie du livrable.
+
 ## À toi : normaliser une ligne en TypeScript
 
 Maintenant, tu implémentes la logique. C'est l'exercice **interactif** ci-après. Tu vas
@@ -90,4 +102,5 @@ Maintenant, tu implémentes la logique. C'est l'exercice **interactif** ci-aprè
 
 > **À retenir** — Le nettoyage n'est pas optionnel : un doublon gonfle le CA, une date mal
 > parsée casse l'analyse mensuelle, un libellé incohérent éclate un « North » en deux. On
-> nettoie **avant** d'agréger, et on documente ce qu'on a corrigé.
+> nettoie **avant** d'agréger, et on documente ce qu'on a corrigé. Une donnée propre vaut
+> mieux qu'un algorithme complexe sur des données sales.

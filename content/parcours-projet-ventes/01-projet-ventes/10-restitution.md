@@ -16,14 +16,37 @@ décidable** :
 
 | Chiffre brut | Insight (ce qu'on en dit) |
 |---|---|
-| CA total = 260 | « 260 € de CA sur le trimestre, panier moyen de 43 €. » |
-| Furniture = 125 € de CA | « Furniture pèse ~48 % du CA : notre locomotive. » |
-| Stationery marge = 46 € | « Mais Stationery dégage la plus grosse **marge** malgré un petit CA : produit rentable à pousser. » |
-| CA mensuel 85 → 55 → 120 | « Creux en février, fort rebond en mars : vérifier la saisonnalité. » |
+| CA total = 260 € | « 260 € de CA sur le trimestre, panier moyen de 43 €. » |
+| Furniture = 125 € de CA (48 %) | « Furniture pèse ~48 % du CA : notre locomotive. » |
+| Stationery marge = 46 € (60,5 %) | « Mais Stationery dégage la plus grosse **marge** malgré un petit CA : produit rentable à pousser. » |
+| CA mensuel 85 → 55 → 120 | « Creux de −35 % en février, fort rebond de +118 % en mars : vérifier la saisonnalité. » |
+| South = 85 €, East = 19 € | « South est notre meilleure région (33 % du CA) ; East est sous-performant. » |
+| Marge avec remise = 29 % vs sans = 53 % | « Les remises compressent fortement la marge : à cadrer plus strictement. » |
+| 2 clients récurrents / 4 | « La moitié de nos clients reviennent, et génèrent 66 % des commandes. » |
 
 > **La règle du « donc » —** un insight contient toujours un *donc* implicite :
 > « Stationery marge le mieux **donc** on devrait augmenter sa visibilité. » Si tu ne peux
 > pas finir la phrase par une action, ce n'est pas encore un insight.
+
+## Construire le fil narratif
+
+Un dashboard sans histoire est illisible. Voici comment enchaîner les insights pour une
+présentation de 5 minutes :
+
+1. **Situation** — « Sur le T1 2024, nous avons réalisé 260 € de CA sur 6 commandes, pour
+   une marge brute de 104 € (40 %). »
+2. **Tendance** — « Le CA a chuté de 35 % en février puis rebondi de 118 % en mars —
+   un profil que nous devons surveiller sur un an pour confirmer une saisonnalité. »
+3. **Segment clé** — « Furniture domine le CA (48 %) mais Stationery est nettement plus
+   rentable (taux de marge 61 % vs 28 %) : il faut arbitrer entre volume et rentabilité. »
+4. **Alerte** — « Les commandes avec remise affichent un taux de marge de 29 % contre 53 %
+   sans remise. Une politique de remise plus sélective pourrait récupérer ~10 pts de marge. »
+5. **Recommandation** — « Prioriser Stationery dans les actions marketing, revoir le
+   barème de remises Furniture, et analyser le potentiel de croissance dans la région East. »
+
+> **À retenir** — KPI = **cartes** en haut (le « combien »). Tendances = **courbes**.
+> Comparaisons de catégories = **barres**. Détail = **tableau**. Évite le camembert au-delà
+> de 3-4 parts, et bannis la 3D.
 
 ## Esquisser le dashboard Power BI
 
