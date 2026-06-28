@@ -23,20 +23,20 @@ fetch('/api/users')
 `await` met en pause **dans** une fonction `async` jusqu'à ce que la promesse soit résolue.
 
 ```js
-async function chargerUsers() {
+async function loadUsers() {
   try {
     const res = await fetch('/api/users')
     const users = await res.json()
     return users
   } catch (err) {
-    console.error('échec du chargement', err)
+    console.error('loading failed', err)
     return []
   }
 }
 ```
 
 > **Repère Vue —** Tu utiliseras ce pattern dans `onMounted` ou un composable pour
-> remplir l'état d'un composant : `users.value = await chargerUsers()`. La gestion
+> remplir l'état d'un composant : `users.value = await loadUsers()`. La gestion
 > `try/catch` + un état `loading` est la base d'un chargement propre.
 
 > **Piège —** `await` ne marche que dans une fonction `async`. Et n'oublie pas que la

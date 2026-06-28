@@ -10,15 +10,15 @@ Crée un Value Object `Email` : immuable, qui refuse une adresse invalide à la 
 ```php
 final class Email {
     public function __construct(
-        /* (1) propriété immuable */ $valeur
+        /* (1) immutable property */ $value
     ) {
-        if (/* (2) format invalide */) {
-            throw new \InvalidArgumentException('Email invalide');
+        if (/* (2) invalid format */) {
+            throw new \InvalidArgumentException('Invalid email');
         }
     }
 
-    public function equals(Email $autre): bool {
-        return /* (3) égalité par valeur */;
+    public function equals(Email $other): bool {
+        return /* (3) equality by value */;
     }
 }
 ```
@@ -32,15 +32,15 @@ Indices : (1) PHP 8 a un mot-clé pour rendre une propriété non modifiable. (2
 ```php
 final class Email {
     public function __construct(
-        public readonly string $valeur          // (1) immuable
+        public readonly string $value          // (1) immutable
     ) {
-        if (! filter_var($valeur, FILTER_VALIDATE_EMAIL)) {  // (2)
-            throw new \InvalidArgumentException('Email invalide');
+        if (! filter_var($value, FILTER_VALIDATE_EMAIL)) {  // (2)
+            throw new \InvalidArgumentException('Invalid email');
         }
     }
 
-    public function equals(Email $autre): bool {
-        return $this->valeur === $autre->valeur;     // (3)
+    public function equals(Email $other): bool {
+        return $this->value === $other->value;     // (3)
     }
 }
 ```

@@ -10,41 +10,41 @@ En Vue, on transforme sans arrêt des listes (afficher, filtrer, totaliser). Ces
 ## `map` — transformer chaque élément
 
 ```js
-const prix = [10, 20, 30]
-const ttc = prix.map((p) => p * 1.2)   // [12, 24, 36]
+const prices = [10, 20, 30]
+const withTax = prices.map((p) => p * 1.2)   // [12, 24, 36]
 ```
 
 ## `filter` — garder certains éléments
 
 ```js
 const users = [
-  { nom: 'Ada', actif: true },
-  { nom: 'Bob', actif: false },
+  { name: 'Ada', active: true },
+  { name: 'Bob', active: false },
 ]
-const actifs = users.filter((u) => u.actif)   // [{ nom: 'Ada', actif: true }]
+const activeUsers = users.filter((u) => u.active)   // [{ name: 'Ada', active: true }]
 ```
 
 ## `find` — le premier qui correspond
 
 ```js
-const ada = users.find((u) => u.nom === 'Ada')
+const ada = users.find((u) => u.name === 'Ada')
 ```
 
 ## `reduce` — réduire à une seule valeur
 
 ```js
-const total = [10, 20, 30].reduce((somme, p) => somme + p, 0)   // 60
+const total = [10, 20, 30].reduce((sum, p) => sum + p, 0)   // 60
 ```
 
 ## `some` / `every` — tester
 
 ```js
-users.some((u) => u.actif)    // true : au moins un actif
-users.every((u) => u.actif)   // false : pas tous actifs
+users.some((u) => u.active)    // true : au moins un actif
+users.every((u) => u.active)   // false : pas tous actifs
 ```
 
 > **Le combo gagnant —** `filter` puis `map` : « garde ceux qui… puis extrais… ».
 >
 > ```js
-> const nomsActifs = users.filter((u) => u.actif).map((u) => u.nom)   // ['Ada']
+> const activeNames = users.filter((u) => u.active).map((u) => u.name)   // ['Ada']
 > ```

@@ -10,7 +10,7 @@ type: exercise
 ```php
 class JwtMiddleware {
     public function handle(Request $request, Closure $next) {
-        $token = $request->/* (1) récupérer le Bearer */;
+        $token = $request->/* (1) get the Bearer */;
         if (! $token) {
             return response()->json(['error' => 'no token'], /* (2) */);
         }
@@ -20,7 +20,7 @@ class JwtMiddleware {
         } catch (\Exception $e) {
             return response()->json(['error' => 'invalid'], 401);
         }
-        return /* (3) laisser passer la requête */;
+        return /* (3) let the request through */;
     }
 }
 ```

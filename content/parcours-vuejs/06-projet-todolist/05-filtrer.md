@@ -12,36 +12,36 @@ affichée est **dérivée** de l'état, jamais dupliquée. Et un compteur de tâ
 <script setup>
 import { ref, computed } from 'vue'
 
-const taches = ref([
-  { id: 1, texte: 'Apprendre Vue', fait: true },
-  { id: 2, texte: 'Filtrer les tâches', fait: false },
-  { id: 3, texte: 'Compter les restantes', fait: false },
+const tasks = ref([
+  { id: 1, text: 'Learn Vue', done: true },
+  { id: 2, text: 'Filter the tasks', done: false },
+  { id: 3, text: 'Count the remaining ones', done: false },
 ])
-const filtre = ref('toutes')
+const filter = ref('all')
 
-const visibles = computed(() => {
-  if (filtre.value === 'actives') return taches.value.filter((t) => !t.fait)
-  if (filtre.value === 'faites') return taches.value.filter((t) => t.fait)
-  return taches.value
+const visible = computed(() => {
+  if (filter.value === 'active') return tasks.value.filter((t) => !t.done)
+  if (filter.value === 'done') return tasks.value.filter((t) => t.done)
+  return tasks.value
 })
-const restantes = computed(() => taches.value.filter((t) => !t.fait).length)
+const remaining = computed(() => tasks.value.filter((t) => !t.done).length)
 </script>
 
 <template>
   <p>
-    <button @click="filtre = 'toutes'">Toutes</button>
-    <button @click="filtre = 'actives'">Actives</button>
-    <button @click="filtre = 'faites'">Faites</button>
+    <button @click="filter = 'all'">All</button>
+    <button @click="filter = 'active'">Active</button>
+    <button @click="filter = 'done'">Done</button>
   </p>
   <ul>
-    <li v-for="t in visibles" :key="t.id">
-      <input type="checkbox" v-model="t.fait" /> {{ t.texte }}
+    <li v-for="t in visible" :key="t.id">
+      <input type="checkbox" v-model="t.done" /> {{ t.text }}
     </li>
   </ul>
-  <p>{{ restantes }} tâche(s) restante(s)</p>
+  <p>{{ remaining }} task(s) remaining</p>
 </template>
 ```
 
-> **Teste** : change de filtre, coche des tâches — `visibles` et `restantes` se
+> **Teste** : change de filtre, coche des tâches — `visible` et `remaining` se
 > recalculent tout seuls. C'est la **règle d'or** : on dérive (`computed`), on ne
 > synchronise pas à la main.

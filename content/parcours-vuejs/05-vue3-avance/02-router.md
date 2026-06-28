@@ -13,8 +13,8 @@ Le routeur officiel : il associe des **URLs** à des **composants** (les « page
 import { createRouter, createWebHistory } from 'vue-router'
 
 const routes = [
-  { path: '/', component: Accueil },
-  { path: '/factures/:id', component: Facture },   // :id = paramètre
+  { path: '/', component: Home },
+  { path: '/invoices/:id', component: Invoice },   // :id = parameter
 ]
 
 export default createRouter({ history: createWebHistory(), routes })
@@ -23,13 +23,13 @@ export default createRouter({ history: createWebHistory(), routes })
 ## Naviguer
 
 ```vue
-<RouterLink to="/factures/42">Voir</RouterLink>   <!-- déclaratif -->
+<RouterLink to="/invoices/42">View</RouterLink>   <!-- declarative -->
 ```
 
 ```js
 import { useRouter, useRoute } from 'vue-router'
 const router = useRouter()
-router.push('/factures/42')          // par code
+router.push('/invoices/42')          // programmatically
 
 const route = useRoute()
 route.params.id                       // '42'
@@ -41,7 +41,7 @@ Protéger une route (ex. authentification) :
 
 ```js
 router.beforeEach((to) => {
-  if (to.meta.auth && !connecté()) return '/login'
+  if (to.meta.auth && !isAuthenticated()) return '/login'
 })
 ```
 

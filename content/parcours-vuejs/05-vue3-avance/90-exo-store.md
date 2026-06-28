@@ -5,7 +5,7 @@ type: exercise
 
 ## Énoncé
 
-Écris un store Pinia `useCompteur` (style Composition) qui expose :
+Écris un store Pinia `useCounter` (style Composition) qui expose :
 
 1. un état `count` (départ à 0) ;
 2. un dérivé `double` ;
@@ -15,7 +15,7 @@ type: exercise
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 
-export const useCompteur = defineStore('compteur', () => {
+export const useCounter = defineStore('counter', () => {
   // 1) count
   // 2) double
   // 3) increment
@@ -31,7 +31,7 @@ export const useCompteur = defineStore('compteur', () => {
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 
-export const useCompteur = defineStore('compteur', () => {
+export const useCounter = defineStore('counter', () => {
   const count = ref(0)
   const double = computed(() => count.value * 2)
   function increment() {
@@ -44,4 +44,4 @@ export const useCompteur = defineStore('compteur', () => {
 C'est volontairement la **même structure** qu'un `<script setup>` : `ref` pour l'état,
 `computed` pour le dérivé, une fonction pour l'action — et on **retourne** ce qu'on veut
 exposer. La différence : l'état est **partagé** par tous les composants qui appellent
-`useCompteur()`.
+`useCounter()`.

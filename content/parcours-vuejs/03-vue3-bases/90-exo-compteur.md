@@ -15,8 +15,8 @@ Complète ce composant `<script setup>` pour qu'il :
 <script setup>
 import { ref, computed } from 'vue'
 
-// 1) count réactif
-// 2) double dérivé
+// 1) reactive count
+// 2) derived double
 // 3) increment()
 </script>
 

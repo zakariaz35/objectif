@@ -27,11 +27,11 @@ Utilisation dans n'importe quel composant :
 <script setup>
 import { useToggle } from '@/composables/useToggle'
 
-const { state: ouvert, toggle } = useToggle()
+const { state: open, toggle } = useToggle()
 </script>
 
 <template>
-  <button @click="toggle">{{ ouvert ? 'Fermer' : 'Ouvrir' }}</button>
+  <button @click="toggle">{{ open ? 'Close' : 'Open' }}</button>
 </template>
 ```
 
@@ -61,11 +61,11 @@ function useToggle(initial = false) {
 }
 
 const { state: menu, toggle: toggleMenu } = useToggle()
-const { state: aide, toggle: toggleAide } = useToggle(true)
+const { state: help, toggle: toggleHelp } = useToggle(true)
 </script>
 
 <template>
-  <button @click="toggleMenu">Menu : {{ menu ? 'ouvert' : 'fermé' }}</button>
-  <button @click="toggleAide">Aide : {{ aide ? 'visible' : 'cachée' }}</button>
+  <button @click="toggleMenu">Menu: {{ menu ? 'open' : 'closed' }}</button>
+  <button @click="toggleHelp">Help: {{ help ? 'visible' : 'hidden' }}</button>
 </template>
 ```

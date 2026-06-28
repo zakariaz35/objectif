@@ -4,27 +4,27 @@ type: exercise
 exercise:
   language: ts
   starter: |
-    // La logique pure derrière un `computed` de filtrage (insensible à la casse).
-    function rechercher(items: string[], q: string): string[] {
-      // TODO : garder les items qui contiennent q (sans tenir compte de la casse)
+    // The pure logic behind a filtering `computed` (case-insensitive).
+    function search(items: string[], q: string): string[] {
+      // TODO: keep the items that contain q (case-insensitive)
       return []
     }
   tests:
     - name: "filtre insensible à la casse"
       code: |
-        const fruits = ['Pomme', 'Banane', 'Cerise', 'Mangue']
-        const r = rechercher(fruits, 'an')
-        console.log('recherche "an" :', r)
-        assertEqual(r, ['Banane', 'Mangue'], 'Banane et Mangue contiennent "an"')
+        const fruits = ['Apple', 'Banana', 'Cherry', 'Mango']
+        const r = search(fruits, 'an')
+        console.log('search "an" :', r)
+        assertEqual(r, ['Banana', 'Mango'], 'Banana and Mango contain "an"')
     - name: "requête vide → tout"
       code: |
-        assertEqual(rechercher(['a', 'b'], ''), ['a', 'b'], 'vide ne filtre rien')
+        assertEqual(search(['a', 'b'], ''), ['a', 'b'], 'empty filters nothing')
 ---
 
 ## Énoncé
 
 Écris la logique **pure** d'un filtre de recherche (celle qu'on mettrait dans un
-`computed`). `rechercher(items, q)` renvoie les chaînes qui **contiennent** `q`, **sans
+`computed`). `search(items, q)` renvoie les chaînes qui **contiennent** `q`, **sans
 tenir compte de la casse**.
 
 Indice : `items.filter(...)` + `.toLowerCase().includes(...)`.
@@ -34,9 +34,9 @@ Indice : `items.filter(...)` + `.toLowerCase().includes(...)`.
 ## Correction
 
 ```ts
-function rechercher(items: string[], q: string): string[] {
-  const terme = q.toLowerCase()
-  return items.filter((item) => item.toLowerCase().includes(terme))
+function search(items: string[], q: string): string[] {
+  const term = q.toLowerCase()
+  return items.filter((item) => item.toLowerCase().includes(term))
 }
 ```
 

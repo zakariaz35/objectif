@@ -11,19 +11,19 @@ Complète l'émission d'un JWT qui expire dans 1 heure et contient l'id + le rô
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 
-// Émission
+// Issue
 $payload = [
     'sub'  => $user->id,
     'role' => $user->role,
-    'exp'  => /* (1) expire dans 1h */,
+    'exp'  => /* (1) expires in 1h */,
 ];
 $token = JWT::encode($payload, $secret, /* (2) algo */);
 
-// Vérification
+// Verify
 try {
     $claims = JWT::decode($token, /* (3) ? */);
 } catch (\Exception $e) {
-    return response()->json(['error' => 'invalid'], /* (4) code HTTP */);
+    return response()->json(['error' => 'invalid'], /* (4) HTTP code */);
 }
 ```
 
@@ -37,7 +37,7 @@ Indices : (1) une fonction de temps Unix + 3600. (2) la formation utilise du HMA
 // (1) 'exp' => time() + 3600,
 // (2) $token = JWT::encode($payload, $secret, 'HS256');
 // (3) $claims = JWT::decode($token, new Key($secret, 'HS256'));
-// (4) 401  // Unauthorized — pas authentifié
+// (4) 401  // Unauthorized — not authenticated
 ```
 
 `JWT::decode()` vérifie la signature **et** l'`exp` : un token expiré lève une `ExpiredException`, attrapée par le `catch`.

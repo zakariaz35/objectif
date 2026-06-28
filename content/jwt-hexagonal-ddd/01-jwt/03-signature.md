@@ -8,7 +8,7 @@ C'est le cœur du système. Le serveur calcule :
 ```
 signature = HMAC_SHA256(
     base64url(header) + "." + base64url(payload),
-    SECRET   // connu du serveur UNIQUEMENT
+    SECRET   // known to the server ONLY
 )
 ```
 
@@ -25,13 +25,13 @@ On ne fait **jamais confiance** au token : à chaque requête, on recalcule la s
 flowchart TB
     H["base64url(header)"] --> J["header.payload"]
     P["base64url(payload)"] --> J
-    SEC[("SECRET (serveur uniquement)")] --> HM["HMAC-SHA256"]
+    SEC[("SECRET (server only)")] --> HM["HMAC-SHA256"]
     J --> HM
-    HM --> SIG["signature recalculée"]
-    RECU["signature reçue dans le token"] --> CMP{"identiques ?"}
+    HM --> SIG["recomputed signature"]
+    RECU["signature received in the token"] --> CMP{"identical?"}
     SIG --> CMP
-    CMP -->|oui| OK["✅ authentique et intact"]
-    CMP -->|non| KO["❌ rejeté — 401"]
+    CMP -->|yes| OK["✅ authentic and intact"]
+    CMP -->|no| KO["❌ rejected — 401"]
 ```
 
 > **HS256 vs RS256 (en une phrase) —** **HS256** = *secret partagé* (même clé pour signer et vérifier) — simple, parfait si c'est la même appli qui émet et vérifie. **RS256** = *paire clé privée/publique* — l'émetteur signe avec la privée, n'importe qui vérifie avec la publique. Utile quand plusieurs services doivent vérifier sans pouvoir émettre (microservices, SSO).

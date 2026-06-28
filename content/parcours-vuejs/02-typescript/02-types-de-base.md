@@ -10,16 +10,16 @@ TypeScript = JavaScript + des annotations de **type** vérifiées avant l'exécu
 ## Annoter une variable
 
 ```ts
-let nom: string = 'Ada'
+let name: string = 'Ada'
 let age: number = 30
-let actif: boolean = true
+let active: boolean = true
 let tags: string[] = ['vue', 'ts']
 ```
 
 Souvent l'annotation est **inférée** automatiquement — pas besoin de la répéter :
 
 ```ts
-let total = 0          // TS sait que c'est un number
+let total = 0          // TS knows this is a number
 ```
 
 ## Unions
@@ -39,8 +39,8 @@ Décrire la **forme** d'un objet :
 ```ts
 interface User {
   id: number
-  nom: string
-  role?: 'admin' | 'user'   // ? = optionnel
+  name: string
+  role?: 'admin' | 'user'   // ? = optional
 }
 
 type Point = { x: number; y: number }

@@ -13,15 +13,15 @@ La confusion la plus fréquente chez les débutants Vue. Règle simple :
 ## `computed` : une valeur dérivée
 
 ```js
-const prixHT = ref(100)
-const prixTTC = computed(() => prixHT.value * 1.2)   // une VALEUR
+const priceExclTax = ref(100)
+const priceInclTax = computed(() => priceExclTax.value * 1.2)   // a VALUE
 ```
 
 ## `watch` : réagir à un changement
 
 ```js
-watch(recherche, async (nouvelle) => {
-  resultats.value = await api.chercher(nouvelle)   // un EFFET (appel API)
+watch(query, async (newValue) => {
+  results.value = await api.search(newValue)   // an EFFECT (API call)
 })
 ```
 

@@ -12,26 +12,26 @@ et on **pousse** la nouvelle tâche dans le tableau.
 <script setup>
 import { ref } from 'vue'
 
-const taches = ref([{ id: 1, texte: 'Apprendre Vue', fait: false }])
-const nouvelle = ref('')
-let prochainId = 2
+const tasks = ref([{ id: 1, text: 'Learn Vue', done: false }])
+const newTask = ref('')
+let nextId = 2
 
-function ajouter() {
-  const texte = nouvelle.value.trim()
-  if (!texte) return
-  taches.value.push({ id: prochainId++, texte, fait: false })
-  nouvelle.value = ''
+function addTask() {
+  const text = newTask.value.trim()
+  if (!text) return
+  tasks.value.push({ id: nextId++, text, done: false })
+  newTask.value = ''
 }
 </script>
 
 <template>
-  <h3>Mes tâches</h3>
-  <form @submit.prevent="ajouter">
-    <input v-model="nouvelle" placeholder="Nouvelle tâche…" />
-    <button>Ajouter</button>
+  <h3>My tasks</h3>
+  <form @submit.prevent="addTask">
+    <input v-model="newTask" placeholder="New task…" />
+    <button>Add</button>
   </form>
   <ul>
-    <li v-for="t in taches" :key="t.id">{{ t.texte }}</li>
+    <li v-for="t in tasks" :key="t.id">{{ t.text }}</li>
   </ul>
 </template>
 ```

@@ -12,13 +12,13 @@ Règle de base : **les props descendent, les événements remontent**.
 ```vue
 <script setup>
 const props = defineProps({
-  titre: String,
-  actif: { type: Boolean, default: false },
+  title: String,
+  active: { type: Boolean, default: false },
 })
 </script>
 
 <template>
-  <h2>{{ titre }}</h2>
+  <h2>{{ title }}</h2>
 </template>
 ```
 
@@ -28,10 +28,10 @@ Une prop est **en lecture seule** : l'enfant ne la modifie pas.
 
 ```vue
 <script setup>
-const emit = defineEmits(['valider'])
+const emit = defineEmits(['validate'])
 
 function onClick() {
-  emit('valider', { ok: true })   // le parent écoute @valider
+  emit('validate', { ok: true })   // the parent listens to @validate
 }
 </script>
 ```
@@ -39,7 +39,7 @@ function onClick() {
 Côté parent :
 
 ```vue
-<MonBouton titre="Envoyer" @valider="onValider" />
+<MyButton title="Send" @validate="onValidate" />
 ```
 
 ## `v-model` (liaison à double sens)
@@ -47,7 +47,7 @@ Côté parent :
 `v-model` = une prop `modelValue` + un événement `update:modelValue`, condensés :
 
 ```vue
-<input v-model="recherche" />     <!-- lie la valeur ET met à jour à la frappe -->
+<input v-model="query" />     <!-- binds the value AND updates on keystroke -->
 ```
 
 > **À retenir —** props en **lecture seule** (on ne les mute pas), on **émet** pour
@@ -62,17 +62,17 @@ Clique **« Tester »** : `v-model` lie l'input et la liste filtrée se met à j
 <script setup>
 import { ref, computed } from 'vue'
 
-const recherche = ref('')
-const fruits = ['Pomme', 'Banane', 'Cerise', 'Mangue', 'Poire']
-const filtres = computed(() =>
-  fruits.filter((f) => f.toLowerCase().includes(recherche.value.toLowerCase()))
+const query = ref('')
+const fruits = ['Apple', 'Banana', 'Cherry', 'Mango', 'Pear']
+const filtered = computed(() =>
+  fruits.filter((f) => f.toLowerCase().includes(query.value.toLowerCase()))
 )
 </script>
 
 <template>
-  <input v-model="recherche" placeholder="Filtrer…" />
+  <input v-model="query" placeholder="Filter…" />
   <ul>
-    <li v-for="f in filtres" :key="f">{{ f }}</li>
+    <li v-for="f in filtered" :key="f">{{ f }}</li>
   </ul>
 </template>
 ```

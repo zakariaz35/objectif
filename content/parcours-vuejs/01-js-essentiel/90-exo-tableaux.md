@@ -5,9 +5,9 @@ exercise:
   language: js
   starter: |
     // users : [{ email, role, active }]
-    // Renvoie les emails des utilisateurs qui sont admin ET actifs.
+    // Returns the emails of users who are admin AND active.
     function adminEmails(users) {
-      // TODO : filtrer puis extraire les emails
+      // TODO: filter then extract the emails
       return []
     }
   tests:
@@ -19,12 +19,12 @@ exercise:
           { email: 'c@x.fr', role: 'admin', active: false },
         ]
         const got = adminEmails(users)
-        console.log('entrée   :', users)
-        console.log('résultat :', got)
-        assertEqual(got, ['a@x.fr'], 'seul l’admin actif doit rester')
+        console.log('input   :', users)
+        console.log('result  :', got)
+        assertEqual(got, ['a@x.fr'], 'only the active admin should remain')
     - name: "liste vide → []"
       code: |
-        assertEqual(adminEmails([]), [], 'aucun utilisateur → tableau vide')
+        assertEqual(adminEmails([]), [], 'no users → empty array')
 ---
 
 ## Énoncé

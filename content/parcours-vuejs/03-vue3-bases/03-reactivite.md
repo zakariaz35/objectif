@@ -12,19 +12,19 @@ La réactivité, c'est ce qui fait que le **template se met à jour tout seul** 
 ```js
 import { ref } from 'vue'
 
-const compteur = ref(0)
-compteur.value++          // dans le <script> : .value
+const counter = ref(0)
+counter.value++          // in the <script>: .value
 ```
 
-Dans le **template**, pas besoin de `.value` : `{{ compteur }}`.
+Dans le **template**, pas besoin de `.value` : `{{ counter }}`.
 
 ## `reactive` — un objet réactif
 
 ```js
 import { reactive } from 'vue'
 
-const form = reactive({ nom: '', age: 0 })
-form.nom = 'Ada'          // pas de .value pour reactive
+const form = reactive({ name: '', age: 0 })
+form.name = 'Ada'         // no .value for reactive
 ```
 
 > **ref ou reactive ?** En pratique : **`ref` par défaut** (marche pour tout, y compris
@@ -38,8 +38,8 @@ Une valeur **calculée** à partir d'autres, recalculée automatiquement (et mis
 ```js
 import { ref, computed } from 'vue'
 
-const prixHT = ref(100)
-const prixTTC = computed(() => prixHT.value * 1.2)   // 120, suit prixHT
+const priceExclTax = ref(100)
+const priceInclTax = computed(() => priceExclTax.value * 1.2)   // 120, follows priceExclTax
 ```
 
 > **Règle d'or —** ne **duplique** jamais un état que tu peux **dériver**. Si une valeur
@@ -48,20 +48,20 @@ const prixTTC = computed(() => prixHT.value * 1.2)   // 120, suit prixHT
 ## À toi de jouer
 
 Survole le bloc ci-dessous et clique **« Tester »** : le composant s'exécute en direct dans
-le playground. Modifie `pas`, ajoute un `computed`…
+le playground. Modifie `step`, ajoute un `computed`…
 
 ```vue
 <script setup>
 import { ref, computed } from 'vue'
 
-const compteur = ref(0)
-const pas = ref(1)
-const double = computed(() => compteur.value * 2)
+const counter = ref(0)
+const step = ref(1)
+const double = computed(() => counter.value * 2)
 </script>
 
 <template>
-  <p>Compteur : {{ compteur }} — double : {{ double }}</p>
-  <button @click="compteur += pas">+{{ pas }}</button>
-  <button @click="pas++">Augmenter le pas</button>
+  <p>Counter: {{ counter }} — double: {{ double }}</p>
+  <button @click="counter += step">+{{ step }}</button>
+  <button @click="step++">Increase step</button>
 </template>
 ```

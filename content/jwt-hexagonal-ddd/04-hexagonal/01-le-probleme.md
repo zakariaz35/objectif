@@ -14,13 +14,13 @@ On change complètement de sujet : plus d'auth, on parle d'**organisation du cod
 Dans un Laravel « classique », le contrôleur fait souvent tout :
 
 ```php
-// ❌ Tout est mélangé : HTTP + métier + DB dans le même endroit
+// ❌ Everything is mixed: HTTP + business + DB in the same place
 public function store(Request $request) {
-    $request->validate(['montant' => 'required|numeric']);
-    $facture = Facture::create($request->all());   // Eloquent direct
-    Mail::to($request->email)->send(...);     // IO direct
-    if ($facture->montant > 10000) { /* règle métier noyée ici */ }
-    return response()->json($facture);
+    $request->validate(['amount' => 'required|numeric']);
+    $invoice = Invoice::create($request->all());   // direct Eloquent
+    Mail::to($request->email)->send(...);     // direct IO
+    if ($invoice->amount > 10000) { /* business rule buried here */ }
+    return response()->json($invoice);
 }
 ```
 

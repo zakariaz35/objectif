@@ -12,16 +12,16 @@ On part d'un tableau réactif de tâches et on l'affiche avec `v-for`. Chaque t�
 <script setup>
 import { ref } from 'vue'
 
-const taches = ref([
-  { id: 1, texte: 'Apprendre Vue', fait: false },
-  { id: 2, texte: 'Construire une todo-list', fait: false },
+const tasks = ref([
+  { id: 1, text: 'Learn Vue', done: false },
+  { id: 2, text: 'Build a todo-list', done: false },
 ])
 </script>
 
 <template>
-  <h3>Mes tâches</h3>
+  <h3>My tasks</h3>
   <ul>
-    <li v-for="t in taches" :key="t.id">{{ t.texte }}</li>
+    <li v-for="task in tasks" :key="task.id">{{ task.text }}</li>
   </ul>
 </template>
 ```

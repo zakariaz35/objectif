@@ -9,9 +9,9 @@ exercise:
       totalPages: number
     }
 
-    // Logique pure (le genre qu'on mettrait dans un composable usePagination).
+    // Pure logic (the kind you would put in a usePagination composable).
     function paginate<T>(items: T[], page: number, perPage: number): Page<T> {
-      // TODO : renvoyer la tranche de la page demandée + le nombre total de pages
+      // TODO: return the slice of the requested page + the total number of pages
       return { items: [], totalPages: 0 }
     }
   tests:
@@ -20,13 +20,13 @@ exercise:
         const data = [1, 2, 3, 4, 5]
         const r = paginate(data, 1, 2)
         console.log('page 1 :', r)
-        assertEqual(r.items, [1, 2], 'items de la page 1')
-        assertEqual(r.totalPages, 3, '5 éléments / 2 par page → 3 pages')
+        assertEqual(r.items, [1, 2], 'items of page 1')
+        assertEqual(r.totalPages, 3, '5 items / 2 per page → 3 pages')
     - name: "dernière page (incomplète)"
       code: |
         const r = paginate([1, 2, 3, 4, 5], 3, 2)
         console.log('page 3 :', r.items)
-        assertEqual(r.items, [5], 'la dernière page n’a qu’un élément')
+        assertEqual(r.items, [5], 'the last page has only one item')
 ---
 
 ## Énoncé
@@ -45,9 +45,9 @@ Indices : `items.slice(début, fin)` et `Math.ceil(total / perPage)`.
 
 ```ts
 function paginate<T>(items: T[], page: number, perPage: number): Page<T> {
-  const debut = (page - 1) * perPage
+  const start = (page - 1) * perPage
   return {
-    items: items.slice(debut, debut + perPage),
+    items: items.slice(start, start + perPage),
     totalPages: Math.ceil(items.length / perPage),
   }
 }

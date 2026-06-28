@@ -10,7 +10,7 @@ type: lesson
 On type les **paramètres** et le **retour** :
 
 ```ts
-function somme(a: number, b: number): number {
+function sum(a: number, b: number): number {
   return a + b
 }
 
@@ -30,12 +30,12 @@ function log(message: string): void {
 Un générique = un type **paramétré** (`<T>`), pour écrire du code réutilisable **sans perdre le typage**.
 
 ```ts
-function premier<T>(liste: T[]): T | undefined {
-  return liste[0]
+function first<T>(list: T[]): T | undefined {
+  return list[0]
 }
 
-premier<number>([1, 2, 3])     // number | undefined
-premier(['a', 'b'])            // string | undefined (T déduit)
+first<number>([1, 2, 3])     // number | undefined
+first(['a', 'b'])            // string | undefined (T inferred)
 ```
 
 Tu en croiseras tout le temps dans Vue : `ref<number>(0)`, `Ref<User>`, `Array<string>`.

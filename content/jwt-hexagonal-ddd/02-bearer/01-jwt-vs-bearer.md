@@ -15,10 +15,10 @@ Erreur fréquente : confondre JWT et Bearer. Ce sont deux choses à des niveaux 
 **« Bearer »** (= « porteur ») est un **schéma d'authentification HTTP**. Le principe : *« quiconque porte ce jeton y a droit »* — comme un billet de train au porteur. On l'envoie dans l'en-tête :
 
 ```http
-GET /api/factures HTTP/1.1
+GET /api/invoices HTTP/1.1
 Host: api.example.com
 Authorization: Bearer eyJhbGci….eyJzdW….SflKx…
-              └─schéma─┘ └──────────── le token (souvent un JWT) ──────────┘
+              └─scheme─┘ └──────────── the token (often a JWT) ──────────┘
 ```
 
 > **Le mot-clé compte —** Le préfixe `Bearer ` (avec l'espace) dit au serveur *comment* interpréter ce qui suit. Autres schémas : `Basic` (login:password en base64), `Digest`, `Negotiate`… Bearer est celui des tokens/API modernes.

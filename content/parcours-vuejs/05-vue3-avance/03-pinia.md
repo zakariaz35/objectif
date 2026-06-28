@@ -14,15 +14,15 @@ dans un **store** Pinia plutôt que de le faire transiter par props.
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 
-export const usePanier = defineStore('panier', () => {
-  const lignes = ref([])
-  const total = computed(() => lignes.value.reduce((s, l) => s + l.prix, 0))
+export const useCart = defineStore('cart', () => {
+  const items = ref([])
+  const total = computed(() => items.value.reduce((sum, item) => sum + item.price, 0))
 
-  function ajouter(article) {
-    lignes.value.push(article)
+  function addItem(item) {
+    items.value.push(item)
   }
 
-  return { lignes, total, ajouter }
+  return { items, total, addItem }
 })
 ```
 
@@ -33,13 +33,13 @@ des fonctions pour les actions.
 
 ```vue
 <script setup>
-import { usePanier } from '@/stores/panier'
-const panier = usePanier()
+import { useCart } from '@/stores/cart'
+const cart = useCart()
 </script>
 
 <template>
-  <p>Total : {{ panier.total }} €</p>
-  <button @click="panier.ajouter({ prix: 10 })">Ajouter</button>
+  <p>Total: {{ cart.total }} €</p>
+  <button @click="cart.addItem({ price: 10 })">Add</button>
 </template>
 ```
 

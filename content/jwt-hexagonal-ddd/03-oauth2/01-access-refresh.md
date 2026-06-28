@@ -27,19 +27,19 @@ sequenceDiagram
     participant C as Client
     participant API as API
     C->>API: POST /login (email, password)
-    API-->>C: access (15 min) + refresh (30 j)
-    Note over C,API: Usage normal pendant ~15 min
+    API-->>C: access (15 min) + refresh (30 d)
+    Note over C,API: Normal usage for ~15 min
     C->>API: GET /api/data + Bearer access
     API-->>C: 200 OK
-    Note over C,API: L'access token expire
+    Note over C,API: The access token expires
     C->>API: GET /api/data + Bearer access
-    API-->>C: 401 (expiré)
+    API-->>C: 401 (expired)
     C->>API: POST /refresh (refresh)
-    API->>API: Vérifie le refresh en base
-    API-->>C: nouvel access (+ nouveau refresh — rotation)
-    C->>API: rejoue GET /api/data + nouvel access
+    API->>API: Verifies the refresh in the store
+    API-->>C: new access (+ new refresh — rotation)
+    C->>API: replays GET /api/data + new access
     API-->>C: 200 OK
-    Note over C,API: Si le refresh est révoqué/expiré → 401 → reconnexion
+    Note over C,API: If the refresh is revoked/expired → 401 → re-login
 ```
 
 > **⚠ Bonne pratique — rotation —** À chaque refresh, on émet aussi un **nouveau** refresh token et on invalide l'ancien (*refresh token rotation*). Si un ancien refresh réapparaît, c'est le signe d'un vol → on révoque toute la famille de tokens. Sans rotation, un refresh volé reste exploitable des semaines.

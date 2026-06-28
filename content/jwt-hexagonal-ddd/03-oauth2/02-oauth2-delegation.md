@@ -9,19 +9,19 @@ Le flux **Authorization Code** met en scène 4 rôles. Le mot de passe ne quitte
 
 ```mermaid
 sequenceDiagram
-    participant U as Toi (Resource Owner)
-    participant App as Client (appli tierce)
+    participant U as You (Resource Owner)
+    participant App as Client (third-party app)
     participant AS as Authorization Server (Google)
     participant RS as Resource Server (API)
-    U->>App: « Se connecter avec Google »
-    App->>AS: redirige : demande d'autorisation
-    U->>AS: s'authentifie + autorise (sur Google)
-    AS-->>App: code d'autorisation
-    App->>AS: échange le code (+ client_secret / PKCE)
+    U->>App: "Sign in with Google"
+    App->>AS: redirects: authorization request
+    U->>AS: authenticates + authorizes (on Google)
+    AS-->>App: authorization code
+    App->>AS: exchanges the code (+ client_secret / PKCE)
     AS-->>App: access token (+ refresh)
-    App->>RS: GET /ressource + Bearer access
-    RS-->>App: 200 données
-    Note over U,AS: Ton mot de passe reste chez Google
+    App->>RS: GET /resource + Bearer access
+    RS-->>App: 200 data
+    Note over U,AS: Your password stays with Google
 ```
 
 ## Les « grant types » utiles à connaître

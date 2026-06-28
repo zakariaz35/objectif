@@ -30,10 +30,10 @@ onMounted(async () => {
 </script>
 
 <template>
-  <p v-if="loading">Chargement…</p>
+  <p v-if="loading">Loading…</p>
   <p v-else-if="error" class="err">{{ error }}</p>
   <ul v-else>
-    <li v-for="u in users" :key="u.id">{{ u.nom }}</li>
+    <li v-for="u in users" :key="u.id">{{ u.name }}</li>
   </ul>
 </template>
 ```

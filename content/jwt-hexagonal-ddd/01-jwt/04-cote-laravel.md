@@ -15,13 +15,13 @@ Décoder/vérifier à la main avec `firebase/php-jwt` :
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 
-// Émission (au login)
+// Issue (at login)
 $token = JWT::encode(
     ['sub' => $user->id, 'role' => $user->role, 'exp' => time()+3600],
     config('app.jwt_secret'), 'HS256'
 );
 
-// Vérification (à chaque requête) — lève une exception si invalide/expiré
+// Verify (on each request) — throws an exception if invalid/expired
 $claims = JWT::decode($token, new Key(config('app.jwt_secret'), 'HS256'));
 ```
 

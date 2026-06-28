@@ -11,7 +11,7 @@ Un composant Vue tient dans **un fichier `.vue`** à trois sections :
 <script setup>
 import { ref } from 'vue'
 
-const message = ref('Bonjour')
+const message = ref('Hello')
 </script>
 
 <template>
@@ -36,9 +36,9 @@ h1 { color: teal; }
 
 ```vue
 <template>
-  <p>{{ message }}</p>              <!-- texte -->
-  <img :src="url" />               <!-- v-bind (attribut dynamique) -->
-  <button @click="compter">+1</button>  <!-- v-on (événement) -->
+  <p>{{ message }}</p>              <!-- text -->
+  <img :src="url" />               <!-- v-bind (dynamic attribute) -->
+  <button @click="count">+1</button>  <!-- v-on (event) -->
 </template>
 ```
 

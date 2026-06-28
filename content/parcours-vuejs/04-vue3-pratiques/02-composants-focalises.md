@@ -17,9 +17,9 @@ qui fait tout devient vite illisible et impossible à réutiliser.
 ## Découper proprement
 
 ```
-ListeFactures.vue        ← orchestre
-├─ LigneFacture.vue      ← affiche une ligne
-└─ BadgeStatut.vue       ← affiche un statut
+InvoiceList.vue          ← orchestrates
+├─ InvoiceRow.vue        ← displays one row
+└─ StatusBadge.vue       ← displays a status
 ```
 
 Chaque enfant reçoit ses **props** et **émet** ses événements ; le parent orchestre.
@@ -27,6 +27,6 @@ Chaque enfant reçoit ses **props** et **émet** ses événements ; le parent or
 > **Rappel du flux —** les **props descendent**, les **événements remontent**. Un enfant
 > ne modifie jamais une prop : il émet, et le parent décide.
 
-> **Bonne pratique —** nomme les composants en **PascalCase** (`LigneFacture`), un fichier
+> **Bonne pratique —** nomme les composants en **PascalCase** (`InvoiceRow`), un fichier
 > par composant, et garde la logique partagée dans des **composables** (leçon suivante)
 > plutôt que de la dupliquer.

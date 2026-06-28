@@ -4,14 +4,14 @@ type: exercise
 exercise:
   language: js
   starter: |
-    // Renvoie l'objet du payload d'un JWT (le 2e segment, encodé en base64url).
-    // Indice : token.split('.'), puis base64url -> base64 (- => +, _ => /), puis atob + JSON.parse
+    // Returns the payload object of a JWT (the 2nd segment, base64url-encoded).
+    // Hint: token.split('.'), then base64url -> base64 (- => +, _ => /), then atob + JSON.parse
     function decodePayload(token) {
-      // TODO : à compléter
+      // TODO: to complete
       return null
     }
 
-    // Essaie ta fonction et regarde la « Sortie (console) » en cliquant sur Lancer :
+    // Try your function and look at the "Output (console)" by clicking Run:
     const token = 'h.' + btoa('{"sub":"42","role":"admin"}') + '.sig'
     console.log('payload =', decodePayload(token))
   tests:
@@ -19,19 +19,19 @@ exercise:
       code: |
         const payload = { sub: '123', role: 'admin' }
         const token = 'header.' + btoa(JSON.stringify(payload)) + '.signature'
-        console.log('1) payload de départ :', payload)
-        console.log('2) token encodé      :', token)
+        console.log('1) initial payload :', payload)
+        console.log('2) encoded token   :', token)
         const decoded = decodePayload(token)
-        console.log('3) payload décodé    :', decoded)
-        assert(decoded.sub === '123', "sub doit valoir '123'")
-        assert(decoded.role === 'admin', "role doit valoir 'admin'")
+        console.log('3) decoded payload :', decoded)
+        assert(decoded.sub === '123', "sub must equal '123'")
+        assert(decoded.role === 'admin', "role must equal 'admin'")
     - name: "gère un autre payload"
       code: |
         const payload = { sub: 'abc', exp: 42 }
         const token = 'header.' + btoa(JSON.stringify(payload)) + '.signature'
-        console.log('encodé →', token, ' / décodé →', decodePayload(token))
+        console.log('encoded →', token, ' / decoded →', decodePayload(token))
         const decoded = decodePayload(token)
-        assert(decoded.sub === 'abc' && decoded.exp === 42, 'doit décoder fidèlement le payload')
+        assert(decoded.sub === 'abc' && decoded.exp === 42, 'must decode the payload faithfully')
 ---
 ## Énoncé
 

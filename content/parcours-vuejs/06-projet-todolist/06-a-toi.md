@@ -18,15 +18,15 @@ les sessions), pars de la version de l'étape 4, et ajoute des fonctionnalités.
 
   ```js
   import { watch } from 'vue'
-  // sauvegarde à chaque changement
-  watch(taches, (v) => localStorage.setItem('taches', JSON.stringify(v)), { deep: true })
-  // et au démarrage : const taches = ref(JSON.parse(localStorage.getItem('taches') || '[]'))
+  // save on every change
+  watch(tasks, (v) => localStorage.setItem('tasks', JSON.stringify(v)), { deep: true })
+  // and on startup: const tasks = ref(JSON.parse(localStorage.getItem('tasks') || '[]'))
   ```
 
 - **Découper en composants** : `TodoItem.vue` (une ligne) + `TodoApp.vue` — extrais un
   composant enfant avec ses props et ses événements.
-- **Un composable** `useTodos()` qui regroupe l'état et les actions (`ajouter`,
-  `supprimer`, `restantes`).
+- **Un composable** `useTodos()` qui regroupe l'état et les actions (`addTask`,
+  `removeTask`, `remaining`).
 
 > **Pas d'idée ?** Reprends une autre app classique : une **liste de courses**, un **minuteur**,
 > un **convertisseur** de devises. L'important est de **construire** : c'est là que tout

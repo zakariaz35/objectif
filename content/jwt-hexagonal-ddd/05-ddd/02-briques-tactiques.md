@@ -17,22 +17,22 @@ type: lesson
 > **✗ Sans DDD (primitif) —**
 >
 > ```php
-> // montant = float anonyme
-> $facture->montant = -50.0;
-> // devise ? négatif permis ?
-> // validations éparpillées partout
+> // amount = anonymous float
+> $invoice->amount = -50.0;
+> // currency? is negative allowed?
+> // validations scattered everywhere
 > ```
 
 > **✓ Avec un Value Object —**
 >
 > ```php
-> final class Montant {
+> final class Money {
 >   public function __construct(
 >     public readonly int $cents,
->     public readonly string $devise
+>     public readonly string $currency
 >   ) {
 >     if($cents < 0)
->       throw new MontantNegatif();
+>       throw new NegativeAmount();
 >   }
 > }
 > ```
@@ -59,15 +59,15 @@ flowchart TB
 ```
 
 ```php
-class Commande {              // Aggregate Root
-    private array $lignes = [];
-    private Statut $statut;
+class Order {                 // Aggregate Root
+    private array $lines = [];
+    private Status $status;
 
-    // On passe TOUJOURS par la racine — jamais $ligne directement
-    public function ajouterLigne(Produit $p, int $qte): void {
-        if ($this->statut->estValidee())
-            throw new CommandeDejaValidee(); // invariant garanti
-        $this->lignes[] = new LigneCommande($p, $qte);
+    // ALWAYS go through the root — never $line directly
+    public function addLine(Product $p, int $qty): void {
+        if ($this->status->isValidated())
+            throw new OrderAlreadyValidated(); // invariant guaranteed
+        $this->lines[] = new OrderLine($p, $qty);
     }
 }
 ```
