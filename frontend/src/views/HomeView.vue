@@ -226,7 +226,7 @@ h1 {
   padding: 2px 6px;
   border-radius: 5px;
   font-size: 13px;
-  color: #aee0ff;
+  color: var(--code-inline);
 }
 .onboarding .hint {
   color: var(--muted);
@@ -251,7 +251,7 @@ h1 {
 .onboarding pre code {
   background: none;
   padding: 0;
-  color: #d7e0f0;
+  color: var(--code-txt);
   font-size: 13px;
 }
 .grid {

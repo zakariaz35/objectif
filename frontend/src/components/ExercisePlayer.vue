@@ -1,5 +1,6 @@
 <script setup>
 import { ref, computed, watch } from 'vue'
+import BaseCallout from './BaseCallout.vue'
 
 const props = defineProps({
   starter: { type: String, default: '' },
@@ -117,8 +118,8 @@ function onTab(e) {
     <div class="bar">
       <span class="lang">{{ language }}</span>
       <span class="spacer"></span>
-      <button class="ghost" type="button" @click="reset">↻ Réinitialiser</button>
-      <button class="primary" type="button" :disabled="running" @click="run">
+      <button class="btn btn-ghost" type="button" @click="reset">↻ Réinitialiser</button>
+      <button class="btn btn-primary" type="button" :disabled="running" @click="run">
         {{ running ? 'Exécution…' : '▶ Lancer les tests' }}
       </button>
     </div>
@@ -132,9 +133,11 @@ function onTab(e) {
       @keydown.tab.prevent="onTab"
     ></textarea>
 
-    <div v-if="globalError" class="gerr">{{ globalError }}</div>
+    <BaseCallout v-if="globalError" tone="bad" class="banner">{{ globalError }}</BaseCallout>
 
-    <div v-if="allPass" class="win">✅ Tous les tests passent ({{ passCount }}/{{ results.length }}) — exercice validé !</div>
+    <BaseCallout v-if="allPass" tone="good" class="banner">
+      ✅ Tous les tests passent ({{ passCount }}/{{ results.length }}) — exercice validé !
+    </BaseCallout>
 
     <ul v-if="results" class="tests">
       <li v-for="(r, i) in results" :key="i" :class="r.pass ? 'ok' : 'ko'">
@@ -173,7 +176,7 @@ function onTab(e) {
   min-height: 220px;
   resize: vertical;
   background: var(--code);
-  color: #d7e0f0;
+  color: var(--code-txt);
   border: 1px solid var(--border);
   border-radius: 10px;
   padding: 14px 16px;
@@ -186,44 +189,8 @@ function onTab(e) {
   outline: none;
   border-color: var(--accent);
 }
-.primary {
-  background: var(--accent);
-  color: #0b0d13;
-  border: none;
-  border-radius: 8px;
-  padding: 9px 16px;
-  font-weight: 700;
-}
-.primary:disabled {
-  opacity: 0.5;
-}
-.ghost {
-  background: var(--panel);
-  border: 1px solid var(--border);
-  color: var(--txt);
-  border-radius: 8px;
-  padding: 9px 14px;
-}
-.ghost:hover {
-  border-color: var(--accent);
-}
-.gerr {
+.banner {
   margin-top: 12px;
-  color: var(--bad);
-  background: rgba(255, 138, 138, 0.1);
-  border: 1px solid var(--bad);
-  border-radius: 8px;
-  padding: 10px 14px;
-  font-size: 14px;
-}
-.win {
-  margin-top: 12px;
-  color: var(--good);
-  background: rgba(107, 227, 154, 0.1);
-  border: 1px solid var(--good);
-  border-radius: 8px;
-  padding: 10px 14px;
-  font-weight: 600;
 }
 .tests {
   list-style: none;

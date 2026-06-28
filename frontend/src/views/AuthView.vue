@@ -68,7 +68,7 @@ async function submit() {
 
         <p v-if="error" class="err">{{ error }}</p>
 
-        <button class="primary" type="submit" :disabled="loading">
+        <button class="btn btn-primary block" type="submit" :disabled="loading">
           {{ loading ? '…' : mode === 'register' ? 'Créer mon compte' : 'Se connecter' }}
         </button>
       </form>
@@ -131,18 +131,10 @@ form input:focus {
   outline: none;
   border-color: var(--accent);
 }
-.primary {
+.block {
   width: 100%;
   margin-top: 8px;
   padding: 12px;
-  border: none;
-  border-radius: 8px;
-  background: var(--accent);
-  color: #0b0d13;
-  font-weight: 700;
-}
-.primary:disabled {
-  opacity: 0.5;
 }
 .err {
   color: var(--bad);

@@ -1,5 +1,6 @@
 <script setup>
 import { ref, computed, watch } from 'vue'
+import BaseCallout from './BaseCallout.vue'
 
 const props = defineProps({
   cards: { type: Array, default: () => [] }, // [{ q_html, a_html }]
@@ -59,13 +60,13 @@ function resetAll() {
   <div class="cards">
     <div class="head">
       <span class="count">{{ ratedCount }}/{{ cards.length }} revues · {{ knownCount }} sues</span>
-      <button class="ghost" type="button" @click="resetAll">↻ Recommencer</button>
+      <button class="btn btn-ghost" type="button" @click="resetAll">↻ Recommencer</button>
     </div>
 
-    <div v-if="allRated" class="done">
+    <BaseCallout v-if="allRated" tone="good" class="done">
       ✅ Chapitre auto-évalué : {{ knownCount }}/{{ cards.length }} sues.
       <template v-if="knownCount < cards.length"> Revois les cartes « à revoir » 👆</template>
-    </div>
+    </BaseCallout>
 
     <ol class="list">
       <li
@@ -80,7 +81,7 @@ function resetAll() {
         </div>
 
         <div v-if="!revealed[i]" class="reveal">
-          <button class="primary" type="button" @click="reveal(i)">Révéler la réponse</button>
+          <button class="btn btn-primary" type="button" @click="reveal(i)">Révéler la réponse</button>
         </div>
         <template v-else>
           <div class="a prose" v-html="c.a_html"></div>
@@ -123,23 +124,8 @@ function resetAll() {
   color: var(--muted);
   font-size: 14px;
 }
-.ghost {
-  background: var(--panel);
-  border: 1px solid var(--border);
-  color: var(--txt);
-  border-radius: 8px;
-  padding: 7px 12px;
-}
-.ghost:hover {
-  border-color: var(--accent);
-}
 .done {
   margin-bottom: 16px;
-  color: var(--good);
-  background: rgba(107, 227, 154, 0.1);
-  border: 1px solid var(--good);
-  border-radius: 8px;
-  padding: 10px 14px;
   font-weight: 600;
 }
 .list {
@@ -178,14 +164,6 @@ function resetAll() {
 }
 .reveal {
   margin-top: 12px;
-}
-.primary {
-  background: var(--accent);
-  color: #0b0d13;
-  border: none;
-  border-radius: 8px;
-  padding: 9px 16px;
-  font-weight: 700;
 }
 .a {
   margin-top: 12px;

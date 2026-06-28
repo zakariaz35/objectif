@@ -101,10 +101,10 @@ function retry() {
     <p v-if="error" class="err">{{ error }}</p>
 
     <div class="actions">
-      <button v-if="!result" class="primary" :disabled="!allAnswered || submitting" @click="submit">
+      <button v-if="!result" class="btn btn-primary" :disabled="!allAnswered || submitting" @click="submit">
         {{ submitting ? 'Correction…' : 'Valider le quiz' }}
       </button>
-      <button v-else class="ghost" @click="retry">↻ Recommencer</button>
+      <button v-else class="btn btn-ghost" @click="retry">↻ Recommencer</button>
       <span v-if="!result && !allAnswered" class="hint">
         Réponds aux {{ questions.length }} questions pour valider.
       </span>
@@ -226,7 +226,7 @@ function retry() {
   border-left: 3px solid var(--accent);
   background: var(--panel2);
   border-radius: 6px;
-  color: #d2dae8;
+  color: var(--txt);
   font-size: 14px;
 }
 .actions {
@@ -234,28 +234,6 @@ function retry() {
   align-items: center;
   gap: 14px;
   margin-top: 22px;
-}
-.primary {
-  background: var(--accent);
-  color: #0b0d13;
-  border: none;
-  border-radius: 8px;
-  padding: 11px 20px;
-  font-weight: 700;
-}
-.primary:disabled {
-  opacity: 0.4;
-  cursor: default;
-}
-.ghost {
-  background: var(--panel);
-  border: 1px solid var(--border);
-  color: var(--txt);
-  border-radius: 8px;
-  padding: 11px 18px;
-}
-.ghost:hover {
-  border-color: var(--accent);
 }
 .hint {
   color: var(--muted);
