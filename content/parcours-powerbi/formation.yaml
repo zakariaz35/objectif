@@ -1,0 +1,11 @@
+title: Power BI & dataviz
+slug: parcours-powerbi
+order: 4
+stack: "Power BI"
+track: Data-Analyst
+description: >-
+  Brique hands-on du cursus Data-Analyst : passer de la théorie BI à la pratique
+  réelle de Power BI Desktop. Choisir le bon graphique, nettoyer ses données avec
+  Power Query, modéliser en étoile, écrire des mesures DAX correctes et publier un
+  dashboard. En amont, prépare tes données avec `parcours-sql` ; ce parcours est une
+  brique du hub `parcours-data-analyst`.
