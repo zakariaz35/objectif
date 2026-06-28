@@ -11,6 +11,8 @@ const routes = [
   { path: '/auth', name: 'auth', component: AuthView },
   // ⚠️ DEBUG / perso uniquement — liste des comptes. À retirer si non-perso.
   { path: '/comptes', name: 'accounts', component: AccountsView },
+  // ⚠️ TEMPORAIRE — comparateur de logos. À retirer une fois le logo choisi.
+  { path: '/logos', name: 'logos', component: () => import('../views/LogosView.vue') },
   {
     path: '/f/:formation',
     component: FormationView,
