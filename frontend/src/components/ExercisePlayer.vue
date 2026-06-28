@@ -2,6 +2,7 @@
 import { ref, computed, watch } from 'vue'
 import BaseCallout from './BaseCallout.vue'
 import { toJs } from '../lib/transpile'
+import { runPythonTests } from '../lib/runPython'
 
 const props = defineProps({
   starter: { type: String, default: '' },
@@ -135,6 +136,19 @@ async function run() {
   // Plain copy: a reactive proxy can't be structured-cloned by postMessage.
   let userCode = code.value
   let tests = props.tests.map((t) => ({ name: t.name, code: t.code }))
+  // Python exercises run via Pyodide (no transpile, separate runner).
+  if (props.language === 'python' || props.language === 'py') {
+    const out = await runPythonTests(userCode, tests)
+    running.value = false
+    if (out.error) {
+      globalError.value = 'Erreur : ' + out.error
+      return
+    }
+    logs.value = out.logs || []
+    results.value = out.results || []
+    if (out.runError) globalError.value = 'Erreur : ' + out.runError
+    return
+  }
   // TS / TSX / JSX exercises: transpile user code + tests to JS before running.
   if (['ts', 'tsx', 'jsx'].includes(props.language)) {
     try {

@@ -89,7 +89,7 @@ correction repliable.
 title: Mon exercice (JS)
 type: exercise
 exercise:
-  language: js                 # seul "js" est exécuté (dans le navigateur)
+  language: js                 # js / ts (transpilés) OU python (exécuté via Pyodide)
   starter: |                   # code pré-rempli dans l'éditeur
     function maFonction(x) {
       // TODO : à compléter
@@ -119,6 +119,20 @@ Correction…
 | `assert(condition, message)` | échoue si la condition est fausse |
 | `assertEqual(obtenu, attendu, message)` | compare en profondeur (objets/tableaux) ; message d'échec « attendu … obtenu … » automatique |
 | `console.log(...)` | **illustre** : la sortie s'affiche **sous le test** (ex. montrer entrée → sortie) |
+
+### Exercices Python (`language: python`)
+
+Le même gabarit marche en **Python**, exécuté dans le navigateur via **Pyodide**
+(`import pandas`/`numpy` fonctionne). Les helpers s'écrivent à la Python :
+
+| Helper | Rôle |
+|---|---|
+| `assert_(condition, message)` | échoue si la condition est fausse (`assert` est un mot-clé, d'où `assert_`) |
+| `assert_equal(obtenu, attendu, message)` | compare ; message « attendu … obtenu … » automatique (alias : `assertEqual`) |
+| `print(...)` | **illustre** : la sortie s'affiche **sous le test** |
+
+> Le 1ᵉʳ lancement Python charge Pyodide (puis les paquets `import`és) : c'est plus long
+> une seule fois. Pas de transpilation (contrairement à `ts`).
 
 ### À savoir
 
