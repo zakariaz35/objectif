@@ -1,9 +1,9 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import { Repl, useStore } from '@vue/repl'
 import CodeMirror from '@vue/repl/codemirror-editor'
 import '@vue/repl/style.css'
-import { vuePlay, closeVuePlayground } from '../lib/vuePlayground'
+import { vuePlay, closeVuePlayground, saveVueProject } from '../lib/vuePlayground'
 
 // Real Vue SFC playground (compiler + preview) provided by @vue/repl.
 const store = useStore()
@@ -12,6 +12,11 @@ const ready = ref(false)
 onMounted(async () => {
   await store.setFiles({ 'src/App.vue': vuePlay.code }, 'src/App.vue')
   ready.value = true
+  // Persist the personal project as it's edited.
+  watch(
+    () => store.getFiles()['src/App.vue'],
+    (code) => saveVueProject(code),
+  )
 })
 </script>
 

@@ -1,5 +1,7 @@
 import { reactive } from 'vue'
 
+const KEY = 'vue_project'
+
 const DEFAULT_SFC = `<script setup>
 import { ref, computed } from 'vue'
 
@@ -14,11 +16,22 @@ const double = computed(() => count.value * 2)
 `
 
 // Shared state for the Vue SFC playground modal.
-export const vuePlay = reactive({ open: false, code: DEFAULT_SFC })
+// persist = true for the personal project (floating button), false for a lesson try-out.
+export const vuePlay = reactive({ open: false, code: DEFAULT_SFC, persist: false })
 
 export function openVuePlayground(code) {
-  vuePlay.code = code && code.trim() ? code : DEFAULT_SFC
+  if (code && code.trim()) {
+    vuePlay.code = code
+    vuePlay.persist = false
+  } else {
+    vuePlay.code = localStorage.getItem(KEY) || DEFAULT_SFC
+    vuePlay.persist = true
+  }
   vuePlay.open = true
+}
+
+export function saveVueProject(code) {
+  if (vuePlay.persist && typeof code === 'string') localStorage.setItem(KEY, code)
 }
 
 export function closeVuePlayground() {

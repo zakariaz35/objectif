@@ -1,6 +1,6 @@
 <script setup>
 import { ref, watch } from 'vue'
-import { scratch, closeScratch } from '../lib/scratch'
+import { scratch, closeScratch, saveScratch } from '../lib/scratch'
 import { runCode } from '../lib/runJs'
 
 const logs = ref([])
@@ -29,6 +29,9 @@ watch(
     }
   }
 )
+
+// Persist the personal workspace as it's edited.
+watch(() => scratch.code, saveScratch)
 
 function onTab(e) {
   const el = e.target
