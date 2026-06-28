@@ -3,6 +3,7 @@ import { reactive } from 'vue'
 // Thèmes disponibles. Ajouter un thème = ajouter un bloc [data-theme] dans style.css
 // et son entrée ici.
 export const THEMES = [
+  { key: 'blue', label: 'Bleu' },
   { key: 'dark', label: 'Sombre' },
   { key: 'light', label: 'Clair' },
   { key: 'pink', label: 'Rose' },
@@ -10,7 +11,7 @@ export const THEMES = [
 
 const keys = THEMES.map((t) => t.key)
 const saved = localStorage.getItem('theme')
-const initial = keys.includes(saved) ? saved : 'dark'
+const initial = keys.includes(saved) ? saved : 'blue' // « blue » par défaut
 
 const state = reactive({ current: initial })
 

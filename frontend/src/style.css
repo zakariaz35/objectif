@@ -3,7 +3,27 @@
    Le thème actif est choisi via l'attribut data-theme sur <html> (cf. lib/theme.js).
    Ajouter un thème = ajouter un bloc [data-theme="..."] ci-dessous.
 --------------------------------------------------------------------------- */
+/* Thème par défaut : « blue » (inspiré de Coursera — bleu sur fond clair). */
 :root,
+[data-theme='blue'] {
+  --bg: #f5f7fb;
+  --panel: #ffffff;
+  --panel2: #eaf0fb;
+  --border: #d4ddee;
+  --txt: #1f2733;
+  --muted: #5a6b82;
+  --heading: #14274e;
+  --accent: #0056d2; /* bleu Coursera */
+  --accent2: #1c7ed6;
+  --accent-contrast: #ffffff; /* texte posé sur --accent */
+  --warn: #b8860b;
+  --bad: #e03131;
+  --good: #2f9e44;
+  --code: #eef2fb;
+  --code-txt: #1f2733; /* texte des blocs de code */
+  --code-inline: #0b5bd0; /* code inline */
+}
+
 [data-theme='dark'] {
   --bg: #0f1117;
   --panel: #171a23;
@@ -14,13 +34,13 @@
   --heading: #cdd6ec;
   --accent: #7c9cff;
   --accent2: #5be3c0;
-  --accent-contrast: #0b0d13; /* texte posé sur --accent */
+  --accent-contrast: #0b0d13;
   --warn: #ffcf6b;
   --bad: #ff8a8a;
   --good: #6be39a;
   --code: #0c0e14;
-  --code-txt: #d7e0f0; /* texte des blocs de code */
-  --code-inline: #aee0ff; /* code inline */
+  --code-txt: #d7e0f0;
+  --code-inline: #aee0ff;
 }
 
 [data-theme='light'] {
