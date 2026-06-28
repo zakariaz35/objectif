@@ -44,6 +44,8 @@ et suivi de progression par compte**.
 **Pour qui crée du contenu**
 - Tout en **Markdown** + front-matter YAML : aucune base de données à toucher.
 - **Multi-formations** : on importe autant de sujets que l'on veut (dépôt de ZIP ou CLI).
+- **Cursus** : un champ `track:` regroupe des formations en parcours ordonné dans le catalogue
+  (section « Cursus … » avec étapes numérotées) — voir `content/FORMAT.md`.
 - 4 types de leçon (`lesson`, `flashcards`, `quiz`, `exercise`) — voir le format ci-dessous.
 - Rendu riche : tables, blocs de code, encadrés, séparation énoncé / correction repliable.
 

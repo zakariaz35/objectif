@@ -50,6 +50,7 @@ class FormationImporter
                     'title' => $meta['title'],
                     'description' => $meta['description'] ?? null,
                     'stack' => $meta['stack'] ?? null,
+                    'track' => $meta['track'] ?? null,
                     'position' => $meta['position'] ?? 0,
                 ],
             );
@@ -289,6 +290,7 @@ class FormationImporter
             'slug' => $slug,
             'description' => $meta['description'] ?? null,
             'stack' => $meta['stack'] ?? $meta['framework'] ?? null,
+            'track' => $meta['track'] ?? null,
             'position' => (int) ($meta['order'] ?? $meta['position'] ?? 0),
         ];
     }

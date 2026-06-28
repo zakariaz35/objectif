@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import api from '../lib/api'
 
@@ -7,6 +7,33 @@ const router = useRouter()
 const formations = ref([])
 const loading = ref(true)
 const error = ref(null)
+
+// Group the catalog into "cursus" (tracks) + a trailing "Autres formations".
+// The API already returns formations sorted by position, so within a track the
+// arrival order is the recommended order (step number = index + 1), and the first
+// track encountered is the one with the lowest position.
+const groups = computed(() => {
+  const tracks = new Map()
+  const others = []
+  for (const f of formations.value) {
+    if (f.track) {
+      if (!tracks.has(f.track)) tracks.set(f.track, [])
+      tracks.get(f.track).push(f)
+    } else {
+      others.push(f)
+    }
+  }
+  const result = [...tracks.entries()].map(([name, items]) => ({
+    key: name,
+    title: `Cursus ${name}`,
+    track: true,
+    items,
+  }))
+  if (others.length) {
+    result.push({ key: '__others__', title: 'Autres formations', track: false, items: others })
+  }
+  return result
+})
 
 const uploading = ref(false)
 const uploadMsg = ref(null)
@@ -138,18 +165,28 @@ onMounted(load)
         puis recharge cette page.
       </div>
     </div>
-    <div v-else class="grid">
-      <article
-        v-for="f in formations"
-        :key="f.slug"
-        class="card"
-        @click="router.push(`/f/${f.slug}`)"
-      >
-        <span v-if="f.stack" class="stack">{{ f.stack }}</span>
-        <h3>{{ f.title }}</h3>
-        <p class="desc">{{ f.description }}</p>
-        <span class="badge">{{ f.modules_count }} module(s)</span>
-      </article>
+    <div v-else class="catalog">
+      <section v-for="g in groups" :key="g.key" class="track-section">
+        <div class="track-head">
+          <h2>{{ g.title }}</h2>
+          <span v-if="g.track" class="track-hint">Ordre conseillé</span>
+        </div>
+        <div class="grid">
+          <article
+            v-for="(f, i) in g.items"
+            :key="f.slug"
+            class="card"
+            :class="{ 'card--step': g.track }"
+            @click="router.push(`/f/${f.slug}`)"
+          >
+            <span v-if="g.track" class="step">Étape {{ i + 1 }}</span>
+            <span v-if="f.stack" class="stack">{{ f.stack }}</span>
+            <h3>{{ f.title }}</h3>
+            <p class="desc">{{ f.description }}</p>
+            <span class="badge">{{ f.modules_count }} module(s)</span>
+          </article>
+        </div>
+      </section>
     </div>
 
     <section class="docs" @click="onDocClick">
@@ -255,11 +292,51 @@ h1 {
   color: var(--code-txt);
   font-size: 13px;
 }
+.catalog {
+  margin-top: 28px;
+}
+.track-section {
+  margin-top: 32px;
+}
+.track-section:first-child {
+  margin-top: 0;
+}
+.track-head {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 8px;
+  margin-bottom: 4px;
+}
+.track-head h2 {
+  margin: 0;
+  font-size: 18px;
+}
+.track-hint {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--muted);
+}
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
   gap: 16px;
-  margin-top: 28px;
+  margin-top: 16px;
+}
+.card--step {
+  position: relative;
+}
+.step {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--accent-contrast);
+  background: var(--accent2);
+  padding: 2px 9px;
+  border-radius: 20px;
+  margin: 0 6px 8px 0;
 }
 .card {
   border: 1px solid var(--border);

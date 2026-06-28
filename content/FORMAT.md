@@ -30,12 +30,19 @@ title: JWT, Bearer, Hexagonal & DDD
 slug: jwt-hexagonal-ddd        # optionnel (déduit du titre sinon)
 description: Formation pour devs Laravel.
 stack: Laravel / PHP           # optionnel : techno/framework enseigné (badge affiché)
+track: Data-Analyst            # optionnel : regroupe la formation dans un "cursus"
 order: 0                       # optionnel
 ```
 
 > `stack` décrit le langage/framework de la formation (ex. `Vue 3 + TypeScript`,
 > `Python / FastAPI`, `React`). Il s'affiche comme badge dans le catalogue. C'est aussi
 > l'info qui permettra de router le bon playground par framework (cf. README).
+
+> `track` (optionnel) regroupe plusieurs formations en un **cursus** : dans le catalogue,
+> toutes les formations partageant le même `track` sont rassemblées sous une section
+> « Cursus &lt;track&gt; » et **numérotées dans l'ordre** donné par `order`. Les formations
+> sans `track` apparaissent dans « Autres formations ». Exemple : les 6 parcours du cursus
+> Data-Analyst portent `track: Data-Analyst` avec `order: 1..6`.
 
 ## Front-matter d'une leçon (.md)
 
