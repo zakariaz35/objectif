@@ -5,11 +5,14 @@ import { auth } from './lib/auth'
 import { theme } from './lib/theme'
 import { openScratch } from './lib/scratch'
 import { vuePlay, openVuePlayground } from './lib/vuePlayground'
-import { showVuePlayground, showJsPlayground } from './lib/playgroundContext'
+import { openPythonPlayground } from './lib/pythonPlayground'
+import { showVuePlayground, showJsPlayground, showPythonPlayground } from './lib/playgroundContext'
 import ScratchPad from './components/ScratchPad.vue'
 
 // Heavy (Vue SFC compiler) → loaded only when the playground is opened.
 const VuePlayground = defineAsyncComponent(() => import('./components/VuePlayground.vue'))
+// Heavy (Pyodide loaded from CDN inside its worker) → only mounted when relevant.
+const PythonPlayground = defineAsyncComponent(() => import('./components/PythonPlayground.vue'))
 
 const router = useRouter()
 
@@ -55,8 +58,10 @@ async function logout() {
 
     <button v-if="showVuePlayground" class="fab fab-vue" type="button" title="Playground Vue (SFC)" @click="openVuePlayground()">Vue</button>
     <button v-if="showJsPlayground" class="fab" type="button" title="Bac à sable JS / TS" @click="openScratch('')">⌗</button>
+    <button v-if="showPythonPlayground" class="fab fab-py" type="button" title="Bac à sable Python" @click="openPythonPlayground('')">🐍</button>
     <ScratchPad />
     <VuePlayground v-if="vuePlay.open" />
+    <PythonPlayground />
   </div>
 </template>
 
@@ -177,5 +182,8 @@ async function logout() {
   bottom: 84px;
   background: var(--accent2);
   font-size: 15px;
+}
+.fab-py {
+  background: #3a8a5f;
 }
 </style>

@@ -6,9 +6,12 @@
 > (éditeur + tests verts/rouges), notamment pour `parcours-python` et la partie
 > pandas de `parcours-data-analyst`.
 >
-> **Statut : plan détaillé, non implémenté.** Aucune ligne n'est écrite ; ce document
-> est le mode d'emploi pour le faire proprement, sans sur-ingénierie, en suivant les
-> conventions existantes du dépôt.
+> **Statut : Lot 1 IMPLÉMENTÉ** (playground Python). Le bouton « Tester » sur les blocs
+> ` ```python ` et le bac à sable Python (FAB 🐍) exécutent du Python dans le navigateur
+> via Pyodide (`frontend/src/lib/pyodideWorker.js`, `runPython.js`, `pythonPlayground.js`,
+> `components/PythonPlayground.vue`, registre `playgrounds.js`). `import pandas/numpy`
+> fonctionne (auto-chargé). Lots 2-4 (pandas piloté, exercices Python à tests, migration
+> de contenu) restent à faire — voir §5.
 
 ---
 

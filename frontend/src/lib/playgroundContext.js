@@ -18,3 +18,6 @@ export const showVuePlayground = computed(() => /vue/i.test(pgContext.stack))
 export const showJsPlayground = computed(() =>
   /vue|angular|react|javascript|typescript/i.test(pgContext.stack),
 )
+
+// Python sandbox (Pyodide): on Python / pandas courses.
+export const showPythonPlayground = computed(() => /python|pandas/i.test(pgContext.stack))

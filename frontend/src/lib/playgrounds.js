@@ -1,5 +1,6 @@
 import { openScratch } from './scratch'
 import { openVuePlayground } from './vuePlayground'
+import { openPythonPlayground } from './pythonPlayground'
 
 // Registry: code-block language → how to "test" it (which playground to open).
 // THIS is the single extension point for new frameworks. To add React/Angular:
@@ -20,3 +21,4 @@ export function playgroundFor(lang) {
 // Built-in runners.
 registerPlayground(['js', 'javascript', 'ts', 'typescript'], openScratch)
 registerPlayground(['vue'], openVuePlayground)
+registerPlayground(['python', 'py'], openPythonPlayground)

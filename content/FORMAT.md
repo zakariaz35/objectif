@@ -203,6 +203,20 @@ sequenceDiagram
 ```
 ````
 
+## Code exécutable (bouton « Tester »)
+
+Les blocs de code dont le langage a un *playground* enregistré affichent un bouton
+**« Tester »** qui ouvre un bac à sable pré-rempli, exécuté **dans le navigateur** :
+
+| Langage du bloc | Exécution |
+|---|---|
+| ` ```js ` / ` ```ts ` | bac à sable JS/TS (Web Worker) |
+| ` ```vue ` | playground Vue (SFC compilé) |
+| ` ```python ` / ` ```py ` | **Python via Pyodide** (CPython→WASM ; `import pandas`/`numpy` fonctionne) |
+
+> Le premier lancement Python télécharge Pyodide (quelques Mo) : c'est plus long une
+> seule fois, puis l'exécution est rapide. Aucun serveur requis (tout est côté client).
+
 ## Rendu
 Le Markdown est converti en HTML côté serveur (CommonMark + GitHub Flavored :
 tables, listes de tâches, autoliens). Le HTML inline est autorisé (callouts, etc.).
