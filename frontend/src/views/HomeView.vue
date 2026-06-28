@@ -47,6 +47,21 @@ function onDrop(e) {
   handleFile(e.dataTransfer.files[0])
 }
 
+// Docs (FORMAT / README) chargées à la première ouverture du panneau.
+const docs = ref({}) // { format: html, readme: html }
+const docLoading = ref({})
+async function loadDoc(name) {
+  if (docs.value[name] || docLoading.value[name]) return
+  docLoading.value = { ...docLoading.value, [name]: true }
+  try {
+    docs.value = { ...docs.value, [name]: await api.getDoc(name) }
+  } catch (e) {
+    docs.value = { ...docs.value, [name]: '<p>Impossible de charger ce document.</p>' }
+  } finally {
+    docLoading.value = { ...docLoading.value, [name]: false }
+  }
+}
+
 onMounted(load)
 </script>
 
@@ -113,6 +128,19 @@ onMounted(load)
         <span class="badge">{{ f.modules_count }} module(s)</span>
       </article>
     </div>
+
+    <section class="docs">
+      <details @toggle="$event.target.open && loadDoc('format')">
+        <summary>📐 Format d'une formation (arborescence du ZIP)</summary>
+        <div v-if="docLoading.format" class="muted">Chargement…</div>
+        <div v-else class="prose" v-html="docs.format"></div>
+      </details>
+      <details @toggle="$event.target.open && loadDoc('readme')">
+        <summary>📖 À propos du projet (README)</summary>
+        <div v-if="docLoading.readme" class="muted">Chargement…</div>
+        <div v-else class="prose" v-html="docs.readme"></div>
+      </details>
+    </section>
   </main>
 </template>
 
@@ -237,5 +265,37 @@ h1 {
   color: var(--accent2);
   padding: 3px 10px;
   border-radius: 20px;
+}
+.docs {
+  margin-top: 40px;
+  border-top: 1px solid var(--border);
+  padding-top: 16px;
+}
+.docs details {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--panel);
+  margin: 10px 0;
+  overflow: hidden;
+}
+.docs summary {
+  cursor: pointer;
+  padding: 14px 18px;
+  font-weight: 600;
+  list-style: none;
+}
+.docs summary::-webkit-details-marker {
+  display: none;
+}
+.docs details[open] summary {
+  border-bottom: 1px solid var(--border);
+}
+.docs .prose,
+.docs .muted {
+  padding: 4px 18px 18px;
+}
+.docs .prose {
+  max-height: 60vh;
+  overflow-y: auto;
 }
 </style>

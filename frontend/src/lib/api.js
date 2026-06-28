@@ -27,6 +27,7 @@ export default {
   register: (payload) => api.post('/auth/register', payload).then((r) => r.data),
   login: (payload) => api.post('/auth/login', payload).then((r) => r.data),
   logout: () => api.post('/auth/logout').then((r) => r.data),
+  getDoc: (name) => api.get(`/docs/${name}`).then((r) => r.data.html),
   // ⚠️ DEBUG / perso uniquement — à retirer si le projet n'est plus personnel.
   listUsers: () => api.get('/users').then((r) => r.data.data),
   listFormations: () => api.get('/formations').then((r) => r.data.data),

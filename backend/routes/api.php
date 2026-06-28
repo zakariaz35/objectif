@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\DocController;
 use App\Http\Controllers\FormationController;
 use App\Http\Controllers\ImportController;
 use App\Http\Controllers\LessonController;
@@ -20,6 +21,8 @@ Route::middleware('auth:sanctum')->group(function () {
 // ⚠️ DEBUG / perso uniquement — liste tous les comptes. À SUPPRIMER si le projet
 // n'est plus personnel (voir l'avertissement dans UserController).
 Route::get('/users', [UserController::class, 'index']);
+
+Route::get('/docs/{doc}', [DocController::class, 'show']);
 
 Route::post('/import', [ImportController::class, 'store']);
 
