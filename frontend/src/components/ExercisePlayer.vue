@@ -83,7 +83,9 @@ async function run() {
   results.value = null
   globalError.value = null
   emitted = allPass.value // avoid re-emitting if already passed
-  const out = await runInWorker(code.value, props.tests)
+  // Plain copy: a reactive proxy can't be structured-cloned by postMessage.
+  const tests = props.tests.map((t) => ({ name: t.name, code: t.code }))
+  const out = await runInWorker(code.value, tests)
   running.value = false
   if (out.timeout) {
     globalError.value = "Temps dépassé (boucle infinie ?). Exécution interrompue."
