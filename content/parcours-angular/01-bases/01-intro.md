@@ -19,4 +19,22 @@ Le point de départ d'Angular : le **composant**, son **template** et le lien en
 
 > **À noter —** les composants Angular **ne s'exécutent pas** dans le bac à sable des exercices (réservé à JS/TS pur, sans navigateur ni compilateur Angular). Les exercices interactifs porteront donc sur de la **logique TypeScript** ; le code propre aux composants sera présenté en **mode correction**.
 
-*(Contenu détaillé à venir — squelette de l'étape.)*
+## La mécanique d'Angular en une image
+
+Angular est un framework **à composants** : l'écran est un arbre de composants, chacun couplant une **classe TypeScript** (l'état, la logique) à un **template HTML** (l'affichage). Le lien entre les deux, dans les deux sens, c'est le **data binding**.
+
+```mermaid
+flowchart LR
+  subgraph Composant
+    C["Classe TS<br/>(état + méthodes)"]
+    T["Template HTML"]
+  end
+  C -- "interpolation {{ }} / [prop]" --> T
+  T -- "(event) → méthode" --> C
+```
+
+- La classe **pousse** ses données vers le template : interpolation `{{ }}`, liaison de propriété `[prop]`.
+- Le template **remonte** les actions de l'utilisateur vers la classe : liaison d'événement `(event)`.
+- `[(ngModel)]` combine les deux pour les champs de formulaire.
+
+On termine l'étape par la **communication entre composants** (`@Input` / `@Output`) — la même idée, mais entre un parent et son enfant.

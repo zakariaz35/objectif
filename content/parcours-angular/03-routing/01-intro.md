@@ -18,4 +18,13 @@ Une application Angular est une **single-page application** : le `Router` affich
 
 > **Rappel —** le `Router` Angular ne s'exécute pas dans le bac à sable (réservé JS/TS pur). Les exercices interactifs porteront sur de la **logique TypeScript** (ex. analyse d'URL) ; la configuration des routes sera présentée en **mode correction**.
 
-*(Contenu détaillé à venir — squelette de l'étape.)*
+## Le routing en une image
+
+L'URL est la **source de vérité** : le `Router` lit l'URL, trouve la route correspondante et affiche son composant dans le `<router-outlet>`. Naviguer, c'est changer l'URL — pas recharger la page.
+
+```mermaid
+flowchart LR
+  URL["URL /products/42"] --> R[Router]
+  R -- "route correspondante" --> C["ProductDetailComponent"]
+  C --> O["&lt;router-outlet&gt;"]
+```

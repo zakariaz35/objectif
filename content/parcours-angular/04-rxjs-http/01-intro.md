@@ -18,4 +18,13 @@ Angular communique avec une API via `HttpClient`, qui renvoie des **Observables*
 
 > **Rappel —** `HttpClient` et les Observables Angular ne s'exécutent pas dans le bac à sable (réservé JS/TS pur). Les exercices interactifs porteront sur de la **logique TypeScript** (transformation de données) ; les appels HTTP seront présentés en **mode correction**.
 
-*(Contenu détaillé à venir — squelette de l'étape.)*
+## Le flux de données en une image
+
+`HttpClient.get()` ne renvoie pas une donnée : il renvoie un **Observable**, un flux auquel on s'abonne. On enchaîne des opérateurs (`map`, `filter`, `catchError`) dans un `pipe`, puis on consomme — souvent via le pipe `async` dans le template.
+
+```mermaid
+flowchart LR
+  H["HttpClient.get()"] --> O[Observable]
+  O --> P["pipe(map, filter, catchError)"]
+  P --> A["async dans le template"]
+```
