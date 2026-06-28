@@ -6,6 +6,7 @@ use App\Models\Formation;
 use App\Models\Lesson;
 use App\Models\Module;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use RuntimeException;
 use Symfony\Component\Yaml\Yaml;
@@ -13,6 +14,9 @@ use ZipArchive;
 
 class FormationImporter
 {
+    /** Base URL of the current course's bundled assets (set during import). */
+    private string $assetBaseUrl = '';
+
     public function __construct(private readonly MarkdownService $markdown) {}
 
     /**
@@ -48,10 +52,16 @@ class FormationImporter
             // Clean re-import: start from scratch for this course.
             $formation->modules()->delete();
 
+            // Copy bundled images (assets/) and prepare their public base URL.
+            $this->importAssets($root, $formation->slug);
+
             $moduleDirs = $this->orderedChildren($root, true);
             $modulePos = 0;
 
             foreach ($moduleDirs as $dir) {
+                if (basename($dir) === 'assets') {
+                    continue; // not a module: it holds bundled images
+                }
                 $modulePos++;
                 $moduleMeta = $this->readModuleMeta($dir, $modulePos);
 
@@ -96,9 +106,9 @@ class FormationImporter
             'type' => $meta['type'] ?? 'lesson',
             'position' => (int) ($meta['order'] ?? $meta['position'] ?? $defaultPos),
             'body_md' => trim($body),
-            'body_html' => $this->markdown->toHtml($body),
+            'body_html' => $this->render($body),
             'correction_md' => $correctionMd ? trim($correctionMd) : null,
-            'correction_html' => $this->markdown->toHtml($correctionMd),
+            'correction_html' => $this->render($correctionMd),
             'meta' => $meta ?: null,
             'exercise' => $this->normalizeExercise($meta['exercise'] ?? null),
             'cards' => $this->normalizeCards($meta['cards'] ?? null),
@@ -165,8 +175,8 @@ class FormationImporter
                 continue;
             }
             $out[] = [
-                'q_html' => (string) $this->markdown->toHtml((string) $q),
-                'a_html' => (string) $this->markdown->toHtml((string) $a),
+                'q_html' => (string) $this->render((string) $q),
+                'a_html' => (string) $this->render((string) $a),
             ];
         }
 
@@ -192,7 +202,7 @@ class FormationImporter
                 'options' => $options,
                 'correct_index' => (int) ($q['answer'] ?? $q['correct'] ?? 0),
                 'explanation_html' => isset($q['explanation'])
-                    ? $this->markdown->toHtml((string) $q['explanation'])
+                    ? $this->render((string) $q['explanation'])
                     : null,
             ]);
         }
@@ -201,9 +211,56 @@ class FormationImporter
     /** Inline Markdown (without the wrapping <p>) for short prompts and options. */
     private function inlineHtml(string $text): string
     {
-        $html = (string) $this->markdown->toHtml($text);
+        $html = (string) $this->render($text);
 
         return preg_replace('/^<p>(.*)<\/p>\s*$/s', '$1', trim($html)) ?? $html;
+    }
+
+    // ---- Bundled image assets ----
+
+    /**
+     * Render Markdown to HTML and point bundled image URLs to public storage.
+     */
+    private function render(?string $markdown): ?string
+    {
+        $html = $this->markdown->toHtml($markdown);
+
+        return $html === null ? null : $this->rewriteAssetUrls($html);
+    }
+
+    /**
+     * Rewrite relative "assets/..." image sources to their public storage URL.
+     * Leaves absolute URLs (http, //, /) untouched.
+     */
+    private function rewriteAssetUrls(string $html): string
+    {
+        if ($this->assetBaseUrl === '') {
+            return $html;
+        }
+
+        return preg_replace_callback(
+            '/(src|href)="((?:\.\/|\.\.\/)*assets\/[^"]+)"/i',
+            function ($m) {
+                $path = ltrim(preg_replace('#^(?:\./|\.\./)+#', '', $m[2]), '/');
+
+                return $m[1].'="'.$this->assetBaseUrl.'/'.$path.'"';
+            },
+            $html,
+        ) ?? $html;
+    }
+
+    /** Copy the course's assets/ folder to public storage and set the base URL. */
+    private function importAssets(string $root, string $slug): void
+    {
+        $dest = storage_path("app/public/formations/{$slug}");
+        File::deleteDirectory($dest);
+
+        $source = $root.DIRECTORY_SEPARATOR.'assets';
+        if (is_dir($source)) {
+            File::copyDirectory($source, $dest.'/assets');
+        }
+
+        $this->assetBaseUrl = rtrim((string) config('app.url'), '/')."/storage/formations/{$slug}";
     }
 
     // ---- Reading metadata ----

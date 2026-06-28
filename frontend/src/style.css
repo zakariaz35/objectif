@@ -240,3 +240,24 @@ button {
   color: var(--muted);
   background: var(--panel);
 }
+.prose img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+}
+.prose figure {
+  margin: 18px 0;
+  text-align: center;
+}
+.prose figcaption {
+  color: var(--muted);
+  font-size: 13px;
+  margin-top: 6px;
+}
+/* Mermaid diagrams (rendered client-side from ```mermaid blocks) */
+.prose .mermaid {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+}

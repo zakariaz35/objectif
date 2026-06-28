@@ -1,7 +1,8 @@
 <script setup>
-import { ref, inject, watch, computed } from 'vue'
+import { ref, inject, watch, computed, nextTick } from 'vue'
 import { useRouter } from 'vue-router'
 import api from '../lib/api'
+import { theme } from '../lib/theme'
 import QuizPlayer from '../components/QuizPlayer.vue'
 import ExercisePlayer from '../components/ExercisePlayer.vue'
 import Flashcards from '../components/Flashcards.vue'
@@ -12,6 +13,7 @@ const { isDone, toggle } = inject('progress')
 
 const data = ref(null)
 const loading = ref(true)
+const articleEl = ref(null)
 
 const done = computed(() => isDone(props.module, props.lesson))
 
@@ -21,6 +23,22 @@ async function load() {
     data.value = await api.getLesson(props.formation, props.module, props.lesson)
   } finally {
     loading.value = false
+  }
+  await nextTick()
+  renderDiagrams()
+}
+
+// Render Mermaid diagrams (```mermaid blocks). Lazy-loaded: only pulled in when
+// the lesson actually contains a diagram.
+async function renderDiagrams() {
+  const nodes = articleEl.value?.querySelectorAll('.mermaid:not([data-processed])')
+  if (!nodes || nodes.length === 0) return
+  const mermaid = (await import('mermaid')).default
+  mermaid.initialize({ startOnLoad: false, theme: theme.state.current === 'dark' ? 'dark' : 'neutral' })
+  try {
+    await mermaid.run({ nodes })
+  } catch (e) {
+    /* invalid diagram: leave the raw text in place */
   }
 }
 
@@ -34,7 +52,7 @@ watch(() => [props.module, props.lesson], load, { immediate: true })
 </script>
 
 <template>
-  <article v-if="!loading && data">
+  <article v-if="!loading && data" ref="articleEl">
     <nav class="crumbs">
       {{ data.formation.title }} <span>/</span> {{ data.module.title }}
     </nav>

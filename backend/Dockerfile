@@ -22,6 +22,7 @@ RUN composer dump-autoload --optimize
 
 EXPOSE 8000
 
-# Migre puis sert l'API. Le site démarre VIDE : on importe une formation depuis
-# l'UI (dépôt d'un ZIP) ou via `php artisan formation:import /content/<dossier>`.
-CMD ["sh", "-c", "php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=8000"]
+# Migrate, link public storage (served at /storage), then serve the API. The site
+# starts EMPTY: import a course from the UI (ZIP upload) or via
+# `php artisan formation:import /content/<folder>`.
+CMD ["sh", "-c", "php artisan migrate --force && (php artisan storage:link || true) && php artisan serve --host=0.0.0.0 --port=8000"]

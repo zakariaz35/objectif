@@ -33,6 +33,22 @@ class MarkdownService
             return null;
         }
 
-        return (string) $this->converter->convert($markdown);
+        $html = (string) $this->converter->convert($markdown);
+
+        return $this->unwrapMermaid($html);
+    }
+
+    /**
+     * Turn ```mermaid fenced blocks into <div class="mermaid"> so the frontend
+     * can render them as diagrams. HTML entities are kept: Mermaid reads the
+     * element's (decoded) textContent.
+     */
+    private function unwrapMermaid(string $html): string
+    {
+        return preg_replace(
+            '#<pre><code class="language-mermaid">(.*?)</code></pre>#s',
+            '<div class="mermaid">$1</div>',
+            $html,
+        ) ?? $html;
     }
 }
