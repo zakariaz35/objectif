@@ -4,6 +4,8 @@ import { pyPlay, closePythonPlayground, savePythonPlayground } from '../lib/pyth
 import { runPython } from '../lib/runPython'
 
 const logs = ref([])
+const html = ref(null)
+const images = ref([])
 const error = ref(null)
 const running = ref(false)
 const ran = ref(false)
@@ -18,6 +20,8 @@ async function run() {
   running.value = false
   ran.value = true
   logs.value = out.logs || []
+  html.value = out.html || null
+  images.value = out.images || []
   error.value = out.error || null
 }
 
@@ -27,6 +31,8 @@ watch(
   (open) => {
     if (open) {
       logs.value = []
+      html.value = null
+      images.value = []
       error.value = null
       ran.value = false
     }
@@ -77,8 +83,18 @@ function onTab(e) {
         <div v-if="error" class="err">{{ error }}</div>
         <div v-else-if="ran" class="out">
           <div class="olabel">Sortie</div>
-          <pre v-if="logs.length" v-for="(l, i) in logs" :key="i" class="oline">{{ l }}</pre>
-          <p v-else class="empty">(aucune sortie — ajoute un <code>print(...)</code>)</p>
+          <pre v-for="(l, i) in logs" :key="i" class="oline">{{ l }}</pre>
+          <div v-if="html" class="rich" v-html="html"></div>
+          <img
+            v-for="(img, i) in images"
+            :key="'img' + i"
+            class="plot"
+            :src="`data:image/png;base64,${img}`"
+            alt="Figure matplotlib"
+          />
+          <p v-if="!logs.length && !html && !images.length" class="empty">
+            (aucune sortie — ajoute un <code>print(...)</code> ou affiche un DataFrame)
+          </p>
         </div>
       </div>
     </div>
@@ -198,5 +214,35 @@ function onTab(e) {
 }
 .empty code {
   color: var(--code-inline);
+}
+.rich {
+  margin-top: 10px;
+  overflow-x: auto;
+}
+.rich :deep(table) {
+  border-collapse: collapse;
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+}
+.rich :deep(th),
+.rich :deep(td) {
+  border: 1px solid var(--border);
+  padding: 4px 10px;
+  text-align: right;
+  white-space: nowrap;
+}
+.rich :deep(th) {
+  background: var(--panel2);
+  color: var(--accent2);
+  font-weight: 600;
+}
+.plot {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin-top: 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #fff;
 }
 </style>

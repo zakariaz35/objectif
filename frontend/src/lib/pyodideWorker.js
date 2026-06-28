@@ -1,19 +1,24 @@
 // Module Web Worker: runs Python in the browser via Pyodide (CPython → WebAssembly,
 // loaded from a CDN). Persistent: Pyodide is loaded once on the first message and
 // reused. Two message types:
-//   { id, code, packages? }                  → run a snippet  → { id, logs, error }
-//   { id, type:'test', userCode, tests }      → run an exercise suite
-//                                             → { id, type:'test', logs, runError, results }
-// Packages referenced by imports (pandas, numpy…) are auto-loaded.
+//   { id, code, packages? }                → run a snippet (playground)
+//        → { id, logs, html, images, error }   (rich: DataFrame→HTML, matplotlib→PNG)
+//   { id, type:'test', userCode, tests }   → run an exercise suite
+//        → { id, type:'test', logs, runError, results }
+// Packages referenced by imports (pandas, numpy, matplotlib…) are auto-loaded.
 const VERSION = 'v0.27.7'
 const INDEX_URL = `https://cdn.jsdelivr.net/pyodide/${VERSION}/full/`
 
-// Python harness defining run_suite() for exercises. Mirrors the JS ExercisePlayer:
-// phase 1 runs the user code once (captured output → "Sortie"); phase 2 runs each
-// test in its OWN namespace (user code silently, then the test with its own captured
-// output), with assert_/assert_equal helpers. assertEqual is an alias for comfort.
+// Python harness, defined once after load.
+//  - run_suite(): exercise runner (mirrors the JS ExercisePlayer: phase-1 user code,
+//    phase-2 each test in its own namespace, helpers assert_/assert_equal/assertEqual).
+//  - run_cell(): playground runner with notebook-like rich output — the value of the
+//    last expression is rendered (DataFrame/anything with _repr_html_ → HTML table),
+//    and any matplotlib figures are returned as base64 PNGs.
 const HARNESS = `
-import io, contextlib
+import os
+os.environ.setdefault("MPLBACKEND", "AGG")  # matplotlib renders off-screen (no DOM)
+import io, contextlib, base64, sys, ast, traceback
 
 _HELPERS = '''
 def assert_(cond, msg="Assertion echouee"):
@@ -53,6 +58,36 @@ def run_suite(user_code, tests):
                             "error": f"{type(e).__name__}: {e}", "output": out.getvalue().splitlines()})
 
     return {"logs": logs, "runError": run_error, "results": results}
+
+def run_cell(code):
+    buf = io.StringIO()
+    html = None
+    images = []
+    error = None
+    g = {}
+    try:
+        with contextlib.redirect_stdout(buf), contextlib.redirect_stderr(buf):
+            tree = ast.parse(code)
+            last_expr = None
+            if tree.body and isinstance(tree.body[-1], ast.Expr):
+                last_expr = ast.Expression(tree.body.pop().value)
+            exec(compile(tree, "<cell>", "exec"), g)
+            value = eval(compile(last_expr, "<cell>", "eval"), g) if last_expr is not None else None
+            if value is not None:
+                if hasattr(value, "_repr_html_"):
+                    html = value._repr_html_()
+                else:
+                    print(repr(value))
+            if "matplotlib" in sys.modules:
+                import matplotlib.pyplot as plt
+                for num in plt.get_fignums():
+                    bio = io.BytesIO()
+                    plt.figure(num).savefig(bio, format="png", bbox_inches="tight", dpi=110)
+                    images.append(base64.b64encode(bio.getvalue()).decode())
+                plt.close("all")
+    except Exception:
+        error = traceback.format_exc(limit=3)
+    return {"stdout": buf.getvalue(), "html": html, "images": images, "error": error}
 `
 
 let pyReady = null
@@ -62,11 +97,15 @@ function getPyodide() {
       // Loaded from the CDN at runtime — Vite must not try to resolve/bundle it.
       const { loadPyodide } = await import(/* @vite-ignore */ `${INDEX_URL}pyodide.mjs`)
       const py = await loadPyodide({ indexURL: INDEX_URL })
-      await py.runPythonAsync(HARNESS) // define run_suite once
+      await py.runPythonAsync(HARNESS) // define run_suite + run_cell once
       return py
     })()
   }
   return pyReady
+}
+
+function splitLines(s) {
+  return s ? s.replace(/\n+$/, '').split('\n') : []
 }
 
 self.onmessage = async (e) => {
@@ -82,25 +121,26 @@ self.onmessage = async (e) => {
       const out = proxy.toJs({ dict_converter: Object.fromEntries })
       proxy.destroy()
       runSuite.destroy()
-      self.postMessage({
-        id,
-        type: 'test',
-        logs: out.logs || [],
-        runError: out.runError || null,
-        results: out.results || [],
-      })
+      self.postMessage({ id, type: 'test', logs: out.logs || [], runError: out.runError || null, results: out.results || [] })
       return
     }
 
-    // Default: run a snippet (playground).
-    const logs = []
-    py.setStdout({ batched: (s) => logs.push(s) })
-    py.setStderr({ batched: (s) => logs.push(s) })
+    // Playground: run a snippet with rich output.
     if (packages && packages.length) await py.loadPackage(packages)
     await py.loadPackagesFromImports(code)
-    await py.runPythonAsync(code)
-    self.postMessage({ id, logs, error: null })
+    const runCell = py.globals.get('run_cell')
+    const proxy = runCell(code)
+    const out = proxy.toJs({ dict_converter: Object.fromEntries })
+    proxy.destroy()
+    runCell.destroy()
+    self.postMessage({
+      id,
+      logs: splitLines(out.stdout),
+      html: out.html || null,
+      images: out.images || [],
+      error: out.error || null,
+    })
   } catch (err) {
-    self.postMessage({ id, type, logs: [], error: String((err && err.message) || err) })
+    self.postMessage({ id, type, logs: [], images: [], error: String((err && err.message) || err) })
   }
 }

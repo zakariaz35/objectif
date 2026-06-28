@@ -50,10 +50,12 @@ function send(payload, timeoutMs) {
   })
 }
 
-// Playground: run a snippet → { logs, error }.
+// Playground: run a snippet → { logs, html, images, error }.
+// html = rich repr of the last expression (e.g. a DataFrame as an HTML table);
+// images = base64 PNGs of any matplotlib figures.
 export async function runPython(code, { packages = [], timeoutMs = 60000 } = {}) {
   const d = await send({ code, packages }, timeoutMs)
-  return { logs: d.logs || [], error: d.error || null }
+  return { logs: d.logs || [], html: d.html || null, images: d.images || [], error: d.error || null }
 }
 
 // Exercise: run user code + tests → { logs, runError, results, error }.
