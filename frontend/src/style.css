@@ -1,16 +1,64 @@
-:root {
+/* ---------------------------------------------------------------------------
+   Thèmes — tout est piloté par des variables CSS (design tokens).
+   Le thème actif est choisi via l'attribut data-theme sur <html> (cf. lib/theme.js).
+   Ajouter un thème = ajouter un bloc [data-theme="..."] ci-dessous.
+--------------------------------------------------------------------------- */
+:root,
+[data-theme='dark'] {
   --bg: #0f1117;
   --panel: #171a23;
   --panel2: #1e2230;
   --border: #2a3040;
   --txt: #e6e9ef;
   --muted: #9aa4b8;
+  --heading: #cdd6ec;
   --accent: #7c9cff;
   --accent2: #5be3c0;
+  --accent-contrast: #0b0d13; /* texte posé sur --accent */
   --warn: #ffcf6b;
   --bad: #ff8a8a;
   --good: #6be39a;
   --code: #0c0e14;
+  --code-txt: #d7e0f0; /* texte des blocs de code */
+  --code-inline: #aee0ff; /* code inline */
+}
+
+[data-theme='light'] {
+  --bg: #f6f7f9;
+  --panel: #ffffff;
+  --panel2: #eef1f6;
+  --border: #dde2ec;
+  --txt: #1b2330;
+  --muted: #5d6b82;
+  --heading: #243049;
+  --accent: #4263eb;
+  --accent2: #0ca678;
+  --accent-contrast: #ffffff;
+  --warn: #b8860b;
+  --bad: #e03131;
+  --good: #2f9e44;
+  --code: #f1f3f9;
+  --code-txt: #1f2733;
+  --code-inline: #0b5bd0;
+}
+
+[data-theme='pink'] {
+  --bg: #fff0f6;
+  --panel: #ffffff;
+  --panel2: #ffe3ef;
+  --border: #ffc9de;
+  --txt: #3a1f2c;
+  --muted: #9b6a80;
+  --heading: #7d2447;
+  --accent: #e64980;
+  --accent2: #c2255c;
+  --accent-contrast: #ffffff;
+  --warn: #b8860b;
+  --bad: #e03131;
+  --good: #2f9e44;
+  --code: #fff5f9;
+  --code-txt: #3a1f2c;
+  --code-inline: #c2185b;
 }
 
 * {
@@ -49,9 +97,47 @@ h4 {
   line-height: 1.25;
 }
 
+/* ---------------------------------------------------------------------------
+   Boutons partagés — utilisés dans tous les composants (évite la duplication).
+--------------------------------------------------------------------------- */
 button {
   font: inherit;
   cursor: pointer;
+}
+
+.btn {
+  font: inherit;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  padding: 9px 16px;
+  cursor: pointer;
+  transition: border-color 0.12s, background 0.12s, opacity 0.12s;
+}
+.btn:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+.btn-primary {
+  background: var(--accent);
+  color: var(--accent-contrast);
+  font-weight: 700;
+}
+.btn-ghost {
+  background: var(--panel);
+  border-color: var(--border);
+  color: var(--txt);
+}
+.btn-ghost:hover:not(:disabled) {
+  border-color: var(--accent);
+}
+.btn-link {
+  background: none;
+  border: none;
+  color: var(--muted);
+  padding: 0;
+}
+.btn-link:hover {
+  color: var(--txt);
 }
 
 /* Rendu du contenu Markdown (HTML venant de l'API) */
@@ -71,7 +157,7 @@ button {
 .prose h3 {
   font-size: 19px;
   margin: 26px 0 10px;
-  color: #cdd6ec;
+  color: var(--heading);
 }
 .prose h4 {
   font-size: 16px;
@@ -95,7 +181,7 @@ button {
   border-radius: 5px;
   font-family: 'SF Mono', Menlo, Consolas, monospace;
   font-size: 13.5px;
-  color: #aee0ff;
+  color: var(--code-inline);
 }
 .prose pre {
   background: var(--code);
@@ -109,7 +195,7 @@ button {
 .prose pre code {
   background: none;
   padding: 0;
-  color: #d7e0f0;
+  color: var(--code-txt);
 }
 .prose table {
   width: 100%;
