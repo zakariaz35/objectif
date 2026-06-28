@@ -9,6 +9,7 @@ Une formation est un dossier de fichiers Markdown que l'application importe via 
 ma-formation/
 ├─ formation.yaml          # métadonnées de la formation (optionnel mais recommandé)
 ├─ 01-premier-module/      # un DOSSIER = un module ; ordre par le préfixe numérique
+│  ├─ module.yaml          # titre du module (optionnel ; sinon déduit du dossier)
 │  ├─ 01-une-lecon.md      # un FICHIER .md = une leçon
 │  ├─ 02-autre-lecon.md
 │  └─ 90-exo-pratique.md   # un exercice (front-matter type: exercise)
@@ -19,6 +20,8 @@ ma-formation/
 - **Ordre** : déterminé par le préfixe numérique (`01-`, `02-`, `90-`). Le préfixe est
   retiré du slug final. À défaut, ordre alphabétique naturel.
 - **Slug** : dérivé du nom de fichier/dossier sans préfixe (surchargeable en front-matter).
+- **Titre de module** : déduit du nom de dossier, ou défini via un `module.yaml`
+  (`title:`) — c'est ce titre qui s'affiche comme **étape** dans la roadmap du parcours.
 
 ## formation.yaml
 
