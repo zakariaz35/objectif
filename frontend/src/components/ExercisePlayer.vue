@@ -11,6 +11,7 @@ const emit = defineEmits(['completed'])
 
 const code = ref(props.starter)
 const results = ref(null) // [{ name, pass, error }]
+const logs = ref([]) // console output captured from the code
 const running = ref(false)
 const globalError = ref(null)
 let emitted = false
@@ -27,22 +28,47 @@ watch(allPass, (ok) => {
   }
 })
 
-// Web Worker source: runs the user code + each test in isolation.
+// Web Worker source. First runs the user code once with a captured console
+// (so console.log output is shown), then runs each test in isolation (silent).
 // (concatenated string to avoid nested backticks)
 const WORKER_SRC = `
+function fmt(args) {
+  return Array.prototype.map.call(args, function (v) {
+    if (typeof v === 'string') return v;
+    try { return JSON.stringify(v); } catch (e) { return String(v); }
+  }).join(' ');
+}
+var SILENT = { log: function(){}, info: function(){}, warn: function(){}, error: function(){} };
+function assert(cond, msg) { if (!cond) throw new Error(msg || 'Assertion échouée'); }
+
 self.onmessage = function (e) {
-  var userCode = e.data.userCode, tests = e.data.tests, results = [];
-  function assert(cond, msg) { if (!cond) throw new Error(msg || 'Assertion échouée'); }
+  var userCode = e.data.userCode, tests = e.data.tests;
+  var logs = [], runError = null, results = [];
+
+  // 1) Run the user code once, capturing console output.
+  var captured = {
+    log: function(){ logs.push(fmt(arguments)); },
+    info: function(){ logs.push(fmt(arguments)); },
+    warn: function(){ logs.push(fmt(arguments)); },
+    error: function(){ logs.push(fmt(arguments)); }
+  };
+  try {
+    new Function('console', userCode)(captured);
+  } catch (err) {
+    runError = String((err && err.message) || err);
+  }
+
+  // 2) Run each test (silent console), collect pass/fail.
   for (var i = 0; i < tests.length; i++) {
     try {
-      var fn = new Function('assert', userCode + '\\n;\\n' + tests[i].code);
-      fn(assert);
+      new Function('assert', 'console', userCode + '\\n;\\n' + tests[i].code)(assert, SILENT);
       results.push({ name: tests[i].name, pass: true });
     } catch (err) {
       results.push({ name: tests[i].name, pass: false, error: String((err && err.message) || err) });
     }
   }
-  self.postMessage(results);
+
+  self.postMessage({ logs: logs, runError: runError, results: results });
 };
 `
 
@@ -62,7 +88,7 @@ function runInWorker(userCode, tests) {
         clearTimeout(timer)
         worker.terminate()
         URL.revokeObjectURL(url)
-        resolve({ results: e.data })
+        resolve({ data: e.data })
       }
       worker.onerror = (e) => {
         clearTimeout(timer)
@@ -81,6 +107,7 @@ function runInWorker(userCode, tests) {
 async function run() {
   running.value = true
   results.value = null
+  logs.value = []
   globalError.value = null
   emitted = allPass.value // avoid re-emitting if already passed
   // Plain copy: a reactive proxy can't be structured-cloned by postMessage.
@@ -88,17 +115,20 @@ async function run() {
   const out = await runInWorker(code.value, tests)
   running.value = false
   if (out.timeout) {
-    globalError.value = "Temps dépassé (boucle infinie ?). Exécution interrompue."
+    globalError.value = 'Temps dépassé (boucle infinie ?). Exécution interrompue.'
   } else if (out.error) {
     globalError.value = 'Erreur : ' + out.error
   } else {
-    results.value = out.results
+    logs.value = out.data.logs || []
+    results.value = out.data.results
+    if (out.data.runError) globalError.value = 'Erreur : ' + out.data.runError
   }
 }
 
 function reset() {
   code.value = props.starter
   results.value = null
+  logs.value = []
   globalError.value = null
   emitted = false
 }
@@ -136,6 +166,11 @@ function onTab(e) {
     ></textarea>
 
     <BaseCallout v-if="globalError" tone="bad" class="banner">{{ globalError }}</BaseCallout>
+
+    <div v-if="logs.length" class="console">
+      <div class="clabel">Sortie (console)</div>
+      <pre v-for="(line, i) in logs" :key="i" class="cline">{{ line }}</pre>
+    </div>
 
     <BaseCallout v-if="allPass" tone="good" class="banner">
       ✅ Tous les tests passent ({{ passCount }}/{{ results.length }}) — exercice validé !
@@ -193,6 +228,28 @@ function onTab(e) {
 }
 .banner {
   margin-top: 12px;
+}
+.console {
+  margin-top: 12px;
+  background: var(--code);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 14px;
+}
+.clabel {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+.cline {
+  margin: 0;
+  font-family: 'SF Mono', Menlo, Consolas, monospace;
+  font-size: 13px;
+  color: var(--code-txt);
+  white-space: pre-wrap;
+  word-break: break-word;
 }
 .tests {
   list-style: none;

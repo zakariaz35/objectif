@@ -10,6 +10,10 @@ exercise:
       // TODO : à compléter
       return null
     }
+
+    // Essaie ta fonction et regarde la « Sortie (console) » en cliquant sur Lancer :
+    const token = 'h.' + btoa('{"sub":"42","role":"admin"}') + '.sig'
+    console.log('payload =', decodePayload(token))
   tests:
     - name: "décode sub et role"
       code: |
