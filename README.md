@@ -14,14 +14,38 @@ et suivi de progression par compte**.
 
 ## Sommaire
 
+- [Fonctionnalités](#fonctionnalités)
 - [Architecture](#architecture)
 - [Démarrer (Docker)](#démarrer-docker)
 - [Charger une formation](#charger-une-formation)
 - [Écrire une formation (format)](#écrire-une-formation-format)
 - [Développement](#développement)
+- [Modèle de données](#modèle-de-données)
 - [API (résumé)](#api-résumé)
 - [Authentification & progression](#authentification--progression)
+- [Dépannage](#dépannage)
 - [Roadmap](#roadmap)
+
+---
+
+## Fonctionnalités
+
+**Pour qui apprend**
+- Navigation claire : sommaire (modules/leçons), fil d'Ariane, boutons précédent/suivant.
+- **Suivi de progression** : chaque leçon se coche (manuellement ou automatiquement) ;
+  barre d'avancement, persistance entre les sessions, rattachée au compte.
+- **Cartes mémo** : rappel actif (révéler la réponse + auto-évaluation « su / à revoir »).
+- **Quiz notés** : QCM avec score, explication par question, tentatives enregistrées.
+- **Exercices interactifs** : éditeur de code JS dans le navigateur, validé par des tests
+  exécutés en *Web Worker* isolé (feedback vert/rouge).
+- **Comptes** : inscription / connexion ; la progression faite en anonyme est récupérée à
+  la connexion.
+
+**Pour qui crée du contenu**
+- Tout en **Markdown** + front-matter YAML : aucune base de données à toucher.
+- **Multi-formations** : on importe autant de sujets que l'on veut (dépôt de ZIP ou CLI).
+- 4 types de leçon (`lesson`, `flashcards`, `quiz`, `exercise`) — voir le format ci-dessous.
+- Rendu riche : tables, blocs de code, encadrés, séparation énoncé / correction repliable.
 
 ---
 
@@ -138,6 +162,24 @@ cd frontend && npm install && npm run dev
 
 ---
 
+## Modèle de données
+
+```
+formations ──< modules ──< lessons ──< quiz_questions
+                                   └──< progress      (par user OU client_token anonyme)
+                                   └──< quiz_attempts  (score, total, réponses)
+users ──< progress, quiz_attempts, personal_access_tokens (Sanctum)
+```
+
+- **formation** : `slug`, `title`, `description`.
+- **module** : appartient à une formation, ordonné.
+- **lesson** : `type` (`lesson|flashcards|quiz|exercise`), `body_html`, `correction_html`,
+  et selon le type des colonnes JSON : `cards` (mémo), `exercise` (starter + tests),
+  les `quiz_questions` liées (énoncé, options, bonne réponse, explication).
+- **progress** : une ligne par (leçon, propriétaire) ; le propriétaire est un `user_id` si
+  connecté, sinon un `client_token` anonyme.
+- **quiz_attempts** : historique des tentatives de quiz (score / total / réponses).
+
 ## API (résumé)
 
 | Méthode | Route | Rôle |
@@ -166,6 +208,18 @@ cd frontend && npm install && npm run dev
   si non-perso` balisent le code à retirer avant tout usage public.
 
 ---
+
+## Dépannage
+
+| Symptôme | Cause probable / solution |
+|---|---|
+| `docker: command not found` (WSL) | Activer l'intégration WSL dans Docker Desktop (*Settings → Resources → WSL Integration*), puis *Apply & Restart*. |
+| Le front ne joint pas l'API | Vérifier que le backend tourne (`docker compose ps`) et que `frontend/.env` pointe sur `http://localhost:8000`. |
+| Port 8000 ou 5173 déjà pris | Arrêter le processus qui l'occupe, ou changer le mapping de ports dans `docker-compose.yml`. |
+| L'API lit la mauvaise base | La config DB du conteneur vient de `backend/.env.docker` (pas du bloc `environment`) — voir la note dans *Démarrer*. |
+| Le contenu modifié n'apparaît pas | Réimporter : `docker compose exec backend php artisan formation:import-all /content --force`. |
+| Repartir d'une base vide | `docker compose exec backend php artisan migrate:fresh --force` (⚠️ efface comptes + progression). |
+| Voir les logs de l'API | `docker compose logs -f backend`. |
 
 ## Roadmap
 
