@@ -45,13 +45,16 @@ self.onmessage = function (e) {
   var userCode = e.data.userCode, tests = e.data.tests;
   var logs = [], runError = null, results = [];
 
-  // 1) Run the user code once, capturing console output.
-  var captured = {
-    log: function(){ logs.push(fmt(arguments)); },
-    info: function(){ logs.push(fmt(arguments)); },
-    warn: function(){ logs.push(fmt(arguments)); },
-    error: function(){ logs.push(fmt(arguments)); }
-  };
+  // 1) Run the user code once, capturing console output (and forwarding it to
+  //    the worker's real console so it also shows in the browser devtools).
+  var REAL = self.console || {};
+  function cap(method) {
+    return function () {
+      logs.push(fmt(arguments));
+      if (REAL[method]) REAL[method].apply(REAL, arguments);
+    };
+  }
+  var captured = { log: cap('log'), info: cap('info'), warn: cap('warn'), error: cap('error') };
   try {
     new Function('console', userCode)(captured);
   } catch (err) {
