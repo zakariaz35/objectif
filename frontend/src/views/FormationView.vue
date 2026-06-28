@@ -1,7 +1,8 @@
 <script setup>
-import { ref, computed, provide, onMounted, watch } from 'vue'
+import { ref, computed, provide, onMounted, onUnmounted, watch } from 'vue'
 import { useRoute, RouterLink, RouterView } from 'vue-router'
 import api from '../lib/api'
+import { setPlaygroundStack } from '../lib/playgroundContext'
 
 const props = defineProps({ formation: String })
 const route = useRoute()
@@ -52,8 +53,10 @@ async function load() {
     ])
     tree.value = tree2
     completed.value = new Set(progress.completed)
+    setPlaygroundStack(tree2.stack)
   } catch (e) {
     error.value = 'Formation introuvable.'
+    setPlaygroundStack('')
   } finally {
     loading.value = false
   }
@@ -80,6 +83,7 @@ const roadmap = computed(() =>
 
 onMounted(load)
 watch(() => props.formation, load)
+onUnmounted(() => setPlaygroundStack(''))
 </script>
 
 <template>

@@ -5,6 +5,7 @@ import { auth } from './lib/auth'
 import { theme } from './lib/theme'
 import { openScratch } from './lib/scratch'
 import { vuePlay, openVuePlayground } from './lib/vuePlayground'
+import { showVuePlayground, showJsPlayground } from './lib/playgroundContext'
 import ScratchPad from './components/ScratchPad.vue'
 
 // Heavy (Vue SFC compiler) → loaded only when the playground is opened.
@@ -52,8 +53,8 @@ async function logout() {
     </header>
     <RouterView />
 
-    <button class="fab fab-vue" type="button" title="Playground Vue (SFC)" @click="openVuePlayground()">Vue</button>
-    <button class="fab" type="button" title="Bac à sable JS / TS" @click="openScratch('')">⌗</button>
+    <button v-if="showVuePlayground" class="fab fab-vue" type="button" title="Playground Vue (SFC)" @click="openVuePlayground()">Vue</button>
+    <button v-if="showJsPlayground" class="fab" type="button" title="Bac à sable JS / TS" @click="openScratch('')">⌗</button>
     <ScratchPad />
     <VuePlayground v-if="vuePlay.open" />
   </div>
