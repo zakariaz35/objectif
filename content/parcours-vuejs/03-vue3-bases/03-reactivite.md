@@ -44,3 +44,24 @@ const prixTTC = computed(() => prixHT.value * 1.2)   // 120, suit prixHT
 
 > **Règle d'or —** ne **duplique** jamais un état que tu peux **dériver**. Si une valeur
 > se calcule à partir d'une autre, c'est un `computed`, pas un second `ref` à maintenir.
+
+## À toi de jouer
+
+Survole le bloc ci-dessous et clique **« Tester »** : le composant s'exécute en direct dans
+le playground. Modifie `pas`, ajoute un `computed`…
+
+```vue
+<script setup>
+import { ref, computed } from 'vue'
+
+const compteur = ref(0)
+const pas = ref(1)
+const double = computed(() => compteur.value * 2)
+</script>
+
+<template>
+  <p>Compteur : {{ compteur }} — double : {{ double }}</p>
+  <button @click="compteur += pas">+{{ pas }}</button>
+  <button @click="pas++">Augmenter le pas</button>
+</template>
+```

@@ -53,3 +53,26 @@ Côté parent :
 > **À retenir —** props en **lecture seule** (on ne les mute pas), on **émet** pour
 > faire remonter l'info, et `v-model` est juste le sucre prop + événement pour les
 > champs de formulaire.
+
+## À toi de jouer
+
+Clique **« Tester »** : `v-model` lie l'input et la liste filtrée se met à jour à la frappe.
+
+```vue
+<script setup>
+import { ref, computed } from 'vue'
+
+const recherche = ref('')
+const fruits = ['Pomme', 'Banane', 'Cerise', 'Mangue', 'Poire']
+const filtres = computed(() =>
+  fruits.filter((f) => f.toLowerCase().includes(recherche.value.toLowerCase()))
+)
+</script>
+
+<template>
+  <input v-model="recherche" placeholder="Filtrer…" />
+  <ul>
+    <li v-for="f in filtres" :key="f">{{ f }}</li>
+  </ul>
+</template>
+```

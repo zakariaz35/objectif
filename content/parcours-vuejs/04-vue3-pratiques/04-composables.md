@@ -44,3 +44,28 @@ const { state: ouvert, toggle } = useToggle()
 > **Pourquoi c'est mieux —** au lieu de dupliquer la même logique (ou d'abuser de
 > `provide/inject`), on l'extrait une fois et on la réutilise. C'est l'équivalent moderne
 > et propre des anciens *mixins*, sans leurs pièges.
+
+## À toi de jouer
+
+Clique **« Tester »** : ici le composable est défini dans le même fichier (en vrai il serait
+dans `composables/useToggle.js`). On l'utilise **deux fois** indépendamment.
+
+```vue
+<script setup>
+import { ref } from 'vue'
+
+function useToggle(initial = false) {
+  const state = ref(initial)
+  const toggle = () => (state.value = !state.value)
+  return { state, toggle }
+}
+
+const { state: menu, toggle: toggleMenu } = useToggle()
+const { state: aide, toggle: toggleAide } = useToggle(true)
+</script>
+
+<template>
+  <button @click="toggleMenu">Menu : {{ menu ? 'ouvert' : 'fermé' }}</button>
+  <button @click="toggleAide">Aide : {{ aide ? 'visible' : 'cachée' }}</button>
+</template>
+```
