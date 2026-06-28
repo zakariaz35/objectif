@@ -1,4 +1,4 @@
-# Formation — plateforme d'apprentissage
+# Objectif — plateforme d'apprentissage
 
 Plateforme perso **multi-sujets** pour apprendre à partir de contenu écrit en **Markdown**.
 On rédige une formation (cours, cartes mémo, quiz, exercices) dans des fichiers `.md`, on

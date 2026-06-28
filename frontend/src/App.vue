@@ -15,7 +15,13 @@ async function logout() {
   <div class="shell">
     <header class="topbar">
       <RouterLink to="/" class="brand">
-        Formation<span>.</span>
+        <svg class="logo" viewBox="0 0 32 32" aria-hidden="true">
+          <circle class="ring ring1" cx="16" cy="16" r="13" />
+          <circle class="ring ring2" cx="16" cy="16" r="8.5" />
+          <path class="arc" d="M16 3 A13 13 0 0 1 29 16" />
+          <circle class="dot" cx="16" cy="16" r="3.4" />
+        </svg>
+        Objectif
       </RouterLink>
       <span class="tagline">apprends · pratique · progresse</span>
 
@@ -52,12 +58,39 @@ async function logout() {
   z-index: 20;
 }
 .brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
   font-weight: 800;
   font-size: 20px;
   color: var(--txt);
 }
-.brand span {
-  color: var(--accent);
+.brand:hover {
+  text-decoration: none;
+}
+.logo {
+  width: 26px;
+  height: 26px;
+}
+.logo .ring {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 2.4;
+}
+.logo .ring1 {
+  opacity: 0.3;
+}
+.logo .ring2 {
+  opacity: 0.55;
+}
+.logo .arc {
+  fill: none;
+  stroke: var(--accent2);
+  stroke-width: 2.6;
+  stroke-linecap: round;
+}
+.logo .dot {
+  fill: var(--accent2);
 }
 .tagline {
   color: var(--muted);
