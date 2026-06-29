@@ -40,10 +40,19 @@ function send(payload, timeoutMs) {
     const id = ++seq
     const timer = setTimeout(() => {
       if (!pending.has(id)) return
-      pending.delete(id)
+      // The worker is killed → every in-flight request on it is now void, not just
+      // this one. Fail them all so no Promise hangs forever.
       try { w.terminate() } catch (_) { /* ignore */ }
       worker = null
-      resolve({ error: 'Temps dépassé (boucle infinie ?). Exécution interrompue.' })
+      for (const [pid, p] of pending) {
+        clearTimeout(p.timer)
+        p.resolve({
+          error: pid === id
+            ? 'Temps dépassé (boucle infinie ?). Exécution interrompue.'
+            : 'Exécution interrompue (worker Python réinitialisé).',
+        })
+      }
+      pending.clear()
     }, timeoutMs)
     pending.set(id, { resolve, timer })
     w.postMessage({ id, ...payload })

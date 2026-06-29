@@ -290,7 +290,7 @@ class FormationImporter
             'slug' => $slug,
             'description' => $meta['description'] ?? null,
             'stack' => $meta['stack'] ?? $meta['framework'] ?? null,
-            'track' => $meta['track'] ?? null,
+            'track' => isset($meta['track']) ? (trim((string) $meta['track']) ?: null) : null,
             'position' => (int) ($meta['order'] ?? $meta['position'] ?? 0),
         ];
     }

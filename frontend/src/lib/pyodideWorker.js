@@ -117,10 +117,19 @@ self.onmessage = async (e) => {
       const allCode = (userCode || '') + '\n' + (tests || []).map((t) => t.code).join('\n')
       await py.loadPackagesFromImports(allCode)
       const runSuite = py.globals.get('run_suite')
-      const proxy = runSuite(userCode, py.toPy(tests || []))
-      const out = proxy.toJs({ dict_converter: Object.fromEntries })
-      proxy.destroy()
-      runSuite.destroy()
+      const argv = py.toPy(tests || [])
+      let out
+      try {
+        const proxy = runSuite(userCode, argv)
+        try {
+          out = proxy.toJs({ dict_converter: Object.fromEntries })
+        } finally {
+          proxy.destroy()
+        }
+      } finally {
+        argv.destroy()
+        runSuite.destroy()
+      }
       self.postMessage({ id, type: 'test', logs: out.logs || [], runError: out.runError || null, results: out.results || [] })
       return
     }
@@ -129,10 +138,17 @@ self.onmessage = async (e) => {
     if (packages && packages.length) await py.loadPackage(packages)
     await py.loadPackagesFromImports(code)
     const runCell = py.globals.get('run_cell')
-    const proxy = runCell(code)
-    const out = proxy.toJs({ dict_converter: Object.fromEntries })
-    proxy.destroy()
-    runCell.destroy()
+    let out
+    try {
+      const proxy = runCell(code)
+      try {
+        out = proxy.toJs({ dict_converter: Object.fromEntries })
+      } finally {
+        proxy.destroy()
+      }
+    } finally {
+      runCell.destroy()
+    }
     self.postMessage({
       id,
       logs: splitLines(out.stdout),

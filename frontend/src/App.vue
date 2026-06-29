@@ -5,7 +5,7 @@ import { auth } from './lib/auth'
 import { theme } from './lib/theme'
 import { openScratch } from './lib/scratch'
 import { vuePlay, openVuePlayground } from './lib/vuePlayground'
-import { openPythonPlayground } from './lib/pythonPlayground'
+import { pyPlay, openPythonPlayground } from './lib/pythonPlayground'
 import { showVuePlayground, showJsPlayground, showPythonPlayground } from './lib/playgroundContext'
 import ScratchPad from './components/ScratchPad.vue'
 
@@ -61,7 +61,7 @@ async function logout() {
     <button v-if="showPythonPlayground" class="fab fab-py" type="button" title="Bac à sable Python" @click="openPythonPlayground('')">🐍</button>
     <ScratchPad />
     <VuePlayground v-if="vuePlay.open" />
-    <PythonPlayground />
+    <PythonPlayground v-if="showPythonPlayground || pyPlay.open" />
   </div>
 </template>
 

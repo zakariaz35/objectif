@@ -42,7 +42,12 @@ async function toggle(moduleSlug, lessonSlug, value) {
 // Exposed to child LessonView components.
 provide('progress', { isDone, toggle })
 
+// Bumped on each load and on unmount: a stale in-flight load (formation switched
+// or component left) must not write back into the shared playground context.
+let reqId = 0
+
 async function load() {
+  const id = ++reqId
   loading.value = true
   error.value = null
   try {
@@ -51,14 +56,16 @@ async function load() {
       api.getFormation(props.formation),
       api.getProgress(props.formation),
     ])
+    if (id !== reqId) return // a newer load started, or the view was left
     tree.value = tree2
     completed.value = new Set(progress.completed)
     setPlaygroundStack(tree2.stack)
   } catch (e) {
+    if (id !== reqId) return
     error.value = 'Formation introuvable.'
     setPlaygroundStack('')
   } finally {
-    loading.value = false
+    if (id === reqId) loading.value = false
   }
 }
 
@@ -83,7 +90,10 @@ const roadmap = computed(() =>
 
 onMounted(load)
 watch(() => props.formation, load)
-onUnmounted(() => setPlaygroundStack(''))
+onUnmounted(() => {
+  reqId++ // invalidate any in-flight load so it won't restore the stack
+  setPlaygroundStack('')
+})
 </script>
 
 <template>
