@@ -2,6 +2,7 @@
 import { ref, watch } from 'vue'
 import { pyPlay, closePythonPlayground, savePythonPlayground } from '../lib/pythonPlayground'
 import { runPython } from '../lib/runPython'
+import CodeEditor from './CodeEditor.vue'
 
 const logs = ref([])
 const html = ref(null)
@@ -41,16 +42,6 @@ watch(
 
 // Persist the personal workspace as it's edited.
 watch(() => pyPlay.code, savePythonPlayground)
-
-function onTab(e) {
-  const el = e.target
-  const s = el.selectionStart
-  const end = el.selectionEnd
-  pyPlay.code = pyPlay.code.slice(0, s) + '    ' + pyPlay.code.slice(end)
-  requestAnimationFrame(() => {
-    el.selectionStart = el.selectionEnd = s + 4
-  })
-}
 </script>
 
 <template>
@@ -62,15 +53,7 @@ function onTab(e) {
           <button class="btn-link close" type="button" @click="closePythonPlayground">✕</button>
         </header>
 
-        <textarea
-          v-model="pyPlay.code"
-          class="editor"
-          spellcheck="false"
-          autocapitalize="off"
-          autocomplete="off"
-          placeholder="Écris du Python, puis Exécuter. Utilise print(...) pour voir la sortie. import pandas / numpy fonctionne."
-          @keydown.tab.prevent="onTab"
-        ></textarea>
+        <CodeEditor v-model="pyPlay.code" language="python" />
 
         <div class="actions">
           <button class="btn btn-primary" type="button" :disabled="running" @click="run">

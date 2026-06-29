@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed, watch } from 'vue'
 import BaseCallout from './BaseCallout.vue'
+import CodeEditor from './CodeEditor.vue'
 import { toJs } from '../lib/transpile'
 import { runPythonTests } from '../lib/runPython'
 
@@ -181,16 +182,6 @@ function reset() {
   emitted = false
 }
 
-// Tab inserts 2 spaces instead of moving to the next field.
-function onTab(e) {
-  const el = e.target
-  const s = el.selectionStart
-  const eend = el.selectionEnd
-  code.value = code.value.slice(0, s) + '  ' + code.value.slice(eend)
-  requestAnimationFrame(() => {
-    el.selectionStart = el.selectionEnd = s + 2
-  })
-}
 </script>
 
 <template>
@@ -204,14 +195,7 @@ function onTab(e) {
       </button>
     </div>
 
-    <textarea
-      v-model="code"
-      class="editor"
-      spellcheck="false"
-      autocapitalize="off"
-      autocomplete="off"
-      @keydown.tab.prevent="onTab"
-    ></textarea>
+    <CodeEditor v-model="code" :language="language" />
 
     <BaseCallout v-if="globalError" tone="bad" class="banner">{{ globalError }}</BaseCallout>
 

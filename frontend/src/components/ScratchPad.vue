@@ -2,6 +2,7 @@
 import { ref, watch } from 'vue'
 import { scratch, closeScratch, saveScratch } from '../lib/scratch'
 import { runCode } from '../lib/runJs'
+import CodeEditor from './CodeEditor.vue'
 
 const logs = ref([])
 const error = ref(null)
@@ -32,16 +33,6 @@ watch(
 
 // Persist the personal workspace as it's edited.
 watch(() => scratch.code, saveScratch)
-
-function onTab(e) {
-  const el = e.target
-  const s = el.selectionStart
-  const end = el.selectionEnd
-  scratch.code = scratch.code.slice(0, s) + '  ' + scratch.code.slice(end)
-  requestAnimationFrame(() => {
-    el.selectionStart = el.selectionEnd = s + 2
-  })
-}
 </script>
 
 <template>
@@ -53,15 +44,7 @@ function onTab(e) {
           <button class="btn-link close" type="button" @click="closeScratch">✕</button>
         </header>
 
-        <textarea
-          v-model="scratch.code"
-          class="editor"
-          spellcheck="false"
-          autocapitalize="off"
-          autocomplete="off"
-          placeholder="Colle ou écris du code, puis Exécuter. Utilise console.log(...) ou log(...) pour voir la sortie."
-          @keydown.tab.prevent="onTab"
-        ></textarea>
+        <CodeEditor v-model="scratch.code" language="js" />
 
         <div class="actions">
           <button class="btn btn-primary" type="button" :disabled="running" @click="run">
