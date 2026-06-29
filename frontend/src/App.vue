@@ -61,7 +61,7 @@ async function logout() {
     <button v-if="showPythonPlayground" class="fab fab-py" type="button" title="Bac à sable Python" @click="openPythonPlayground('')">🐍</button>
     <ScratchPad />
     <VuePlayground v-if="vuePlay.open" />
-    <PythonPlayground v-if="showPythonPlayground || pyPlay.open" />
+    <PythonPlayground v-if="pyPlay.open" />
   </div>
 </template>
 

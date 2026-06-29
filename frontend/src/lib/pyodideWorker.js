@@ -91,6 +91,12 @@ def run_cell(code):
 `
 
 let pyReady = null
+// Cached proxies for the two Python harness functions — fetched once after the
+// harness is loaded and reused across messages to avoid repeated WASM boundary
+// crossings. These live for the worker's lifetime, so no .destroy() needed.
+let cachedRunSuite = null
+let cachedRunCell = null
+
 function getPyodide() {
   if (!pyReady) {
     pyReady = (async () => {
@@ -98,6 +104,8 @@ function getPyodide() {
       const { loadPyodide } = await import(/* @vite-ignore */ `${INDEX_URL}pyodide.mjs`)
       const py = await loadPyodide({ indexURL: INDEX_URL })
       await py.runPythonAsync(HARNESS) // define run_suite + run_cell once
+      cachedRunSuite = py.globals.get('run_suite')
+      cachedRunCell = py.globals.get('run_cell')
       return py
     })()
   }
@@ -116,11 +124,10 @@ self.onmessage = async (e) => {
     if (type === 'test') {
       const allCode = (userCode || '') + '\n' + (tests || []).map((t) => t.code).join('\n')
       await py.loadPackagesFromImports(allCode)
-      const runSuite = py.globals.get('run_suite')
       const argv = py.toPy(tests || [])
       let out
       try {
-        const proxy = runSuite(userCode, argv)
+        const proxy = cachedRunSuite(userCode, argv)
         try {
           out = proxy.toJs({ dict_converter: Object.fromEntries })
         } finally {
@@ -128,7 +135,6 @@ self.onmessage = async (e) => {
         }
       } finally {
         argv.destroy()
-        runSuite.destroy()
       }
       self.postMessage({ id, type: 'test', logs: out.logs || [], runError: out.runError || null, results: out.results || [] })
       return
@@ -137,17 +143,14 @@ self.onmessage = async (e) => {
     // Playground: run a snippet with rich output.
     if (packages && packages.length) await py.loadPackage(packages)
     await py.loadPackagesFromImports(code)
-    const runCell = py.globals.get('run_cell')
     let out
-    try {
-      const proxy = runCell(code)
+    {
+      const proxy = cachedRunCell(code)
       try {
         out = proxy.toJs({ dict_converter: Object.fromEntries })
       } finally {
         proxy.destroy()
       }
-    } finally {
-      runCell.destroy()
     }
     self.postMessage({
       id,

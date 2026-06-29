@@ -125,24 +125,6 @@ watch(() => pyPlay.code, savePythonPlayground)
 .close {
   font-size: 16px;
 }
-.editor {
-  width: 100%;
-  min-height: 180px;
-  resize: vertical;
-  background: var(--code);
-  color: var(--code-txt);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 14px 16px;
-  font-family: 'SF Mono', Menlo, Consolas, monospace;
-  font-size: 13.5px;
-  line-height: 1.55;
-  tab-size: 4;
-}
-.editor:focus {
-  outline: none;
-  border-color: var(--accent);
-}
 .actions {
   display: flex;
   align-items: center;

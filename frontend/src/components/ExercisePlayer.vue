@@ -133,7 +133,6 @@ async function run() {
   results.value = null
   logs.value = []
   globalError.value = null
-  emitted = allPass.value // avoid re-emitting if already passed
   // Plain copy: a reactive proxy can't be structured-cloned by postMessage.
   let userCode = code.value
   let tests = props.tests.map((t) => ({ name: t.name, code: t.code }))
@@ -242,24 +241,6 @@ function reset() {
 }
 .spacer {
   flex: 1;
-}
-.editor {
-  width: 100%;
-  min-height: 220px;
-  resize: vertical;
-  background: var(--code);
-  color: var(--code-txt);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 14px 16px;
-  font-family: 'SF Mono', Menlo, Consolas, monospace;
-  font-size: 13.5px;
-  line-height: 1.55;
-  tab-size: 2;
-}
-.editor:focus {
-  outline: none;
-  border-color: var(--accent);
 }
 .banner {
   margin-top: 12px;

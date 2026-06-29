@@ -51,6 +51,7 @@ export async function fillEditor(scope, code) {
  * @returns {Promise<string>}
  */
 export async function getEditorValue(scope) {
+  await waitForEditor(scope) // don't read before the editor has mounted
   const fallback = scope.locator('.cm-fallback')
   const fallbackVisible = await fallback.isVisible().catch(() => false)
 

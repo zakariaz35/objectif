@@ -5,8 +5,10 @@ import { fillEditor, getEditorValue, waitForEditor } from './helpers/codemirror.
 test.describe('Playground Python (Pyodide)', () => {
   // On part de la page parcours-python pour que le FAB 🐍 soit disponible
 
-  test('exécution basique : print("Bonjour 👋") → sortie "Bonjour"', async ({ page }) => {
-    // Timeout propre à ce test — le 1er chargement Pyodide prend jusqu'à ~60-90s
+  let modal
+
+  test.beforeEach(async ({ page }) => {
+    // Timeout propre à chaque test — le 1er chargement Pyodide prend jusqu'à ~60-90s
     test.setTimeout(180_000)
 
     await page.goto('/f/parcours-python')
@@ -18,12 +20,14 @@ test.describe('Playground Python (Pyodide)', () => {
     await fabPy.click()
 
     // La modale doit s'ouvrir
-    const modal = page.locator('.modal')
+    modal = page.locator('.modal')
     await expect(modal).toBeVisible({ timeout: 5_000 })
 
     // Attendre que CodeMirror soit prêt dans la modale
     await waitForEditor(modal, 30_000)
+  })
 
+  test('exécution basique : print("Bonjour 👋") → sortie "Bonjour"', async ({ page }) => {
     // Vérifier que le code par défaut contient "Bonjour"
     const defaultCode = await getEditorValue(modal)
     expect(defaultCode, 'Le code par défaut devrait contenir "Bonjour"').toContain('Bonjour')
@@ -48,21 +52,6 @@ test.describe('Playground Python (Pyodide)', () => {
   })
 
   test('pandas auto-chargé : shape (2, 1) affiché', async ({ page }) => {
-    test.setTimeout(180_000)
-
-    await page.goto('/f/parcours-python')
-    await expect(page.locator('h1').first()).toBeVisible({ timeout: 15_000 })
-
-    const fabPy = page.locator('.fab-py')
-    await expect(fabPy).toBeVisible({ timeout: 10_000 })
-    await fabPy.click()
-
-    const modal = page.locator('.modal')
-    await expect(modal).toBeVisible({ timeout: 5_000 })
-
-    // Attendre que CodeMirror soit prêt
-    await waitForEditor(modal, 30_000)
-
     // Remplacer le code dans l'éditeur CodeMirror
     await fillEditor(modal, 'import pandas as pd\nprint(pd.DataFrame({"a": [1, 2]}).shape)')
 
@@ -70,7 +59,7 @@ test.describe('Playground Python (Pyodide)', () => {
     const runBtn = modal.locator('button', { hasText: '▶ Exécuter' })
     await runBtn.click()
 
-    // Attendre la fin (Pyodide chargé depuis le test précédent — plus rapide)
+    // Attendre la fin (timeout généreux : Pyodide + pandas se chargent à la 1ère exécution)
     await expect(modal.locator('button', { hasText: '▶ Exécuter' })).toBeVisible({ timeout: 120_000 })
 
     // Vérifier la sortie

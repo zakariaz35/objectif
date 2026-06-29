@@ -9,14 +9,12 @@ test.describe('Catalogue — page d\'accueil', () => {
 
   test('la première section est « Cursus Data-Analyst »', async ({ page }) => {
     const firstSection = page.locator('.track-section').first()
-    const title = firstSection.locator('.track-head h2')
-    await expect(title).toHaveText('Cursus Data-Analyst')
+    await expect(firstSection.locator('.track-head h2')).toHaveText('Cursus Data-Analyst')
   })
 
   test('le cursus Data-Analyst contient 6 cartes', async ({ page }) => {
     const firstSection = page.locator('.track-section').first()
-    const cards = firstSection.locator('.card')
-    await expect(cards).toHaveCount(6)
+    await expect(firstSection.locator('.card')).toHaveCount(6)
   })
 
   test('les 6 étapes sont dans le bon ordre (Python → Projet)', async ({ page }) => {

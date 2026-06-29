@@ -59,15 +59,18 @@ async function load() {
     if (id !== reqId) return // a newer load started, or the view was left
     tree.value = tree2
     completed.value = new Set(progress.completed)
-    setPlaygroundStack(tree2.stack)
   } catch (e) {
     if (id !== reqId) return
     error.value = 'Formation introuvable.'
-    setPlaygroundStack('')
   } finally {
     if (id === reqId) loading.value = false
   }
 }
+
+// Keep the global playground context in sync with the loaded formation stack.
+// Separating this from load() keeps the data fetch pure and co-locates the full
+// lifecycle (load → update, error → clear, unmount → clear) in one watcher.
+watch(tree, (t) => setPlaygroundStack(t?.stack ?? ''), { immediate: true })
 
 const typeIcon = { lesson: '🥄', exercise: '🛠️', quiz: '🎯', flashcards: '🃏' }
 

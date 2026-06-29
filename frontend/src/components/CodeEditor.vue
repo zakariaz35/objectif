@@ -31,6 +31,9 @@ function loadCM() {
       s.onload = () => (window.CMBundle ? resolve(window.CMBundle) : reject(new Error('bundle CodeMirror vide')))
       s.onerror = () => reject(new Error('bundle CodeMirror introuvable'))
       document.head.appendChild(s)
+    }).catch((e) => {
+      cmPromise = null // a transient failure shouldn't degrade every editor for the session
+      throw e
     })
   }
   return cmPromise
@@ -122,6 +125,17 @@ watch(
 onBeforeUnmount(() => {
   if (view) view.destroy()
 })
+
+// Tab → 2 spaces in the fallback textarea (CodeMirror's own path handles Tab itself).
+function onFallbackTab(e) {
+  const el = e.target
+  const s = el.selectionStart
+  const end = el.selectionEnd
+  emit('update:modelValue', props.modelValue.slice(0, s) + '  ' + props.modelValue.slice(end))
+  requestAnimationFrame(() => {
+    el.selectionStart = el.selectionEnd = s + 2
+  })
+}
 </script>
 
 <template>
@@ -133,6 +147,7 @@ onBeforeUnmount(() => {
     autocapitalize="off"
     autocomplete="off"
     @input="emit('update:modelValue', $event.target.value)"
+    @keydown.tab.prevent="onFallbackTab"
   ></textarea>
   <div v-else ref="host" class="cm-host">
     <div v-if="loading" class="cm-loading">Chargement de l'éditeur…</div>

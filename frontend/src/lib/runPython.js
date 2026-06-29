@@ -36,7 +36,15 @@ function getWorker() {
 // call also downloads Pyodide (several MB) + any package (pandas…).
 function send(payload, timeoutMs) {
   return new Promise((resolve) => {
-    const w = getWorker()
+    let w
+    try {
+      w = getWorker()
+    } catch (e) {
+      // Worker creation blocked (e.g. CSP) → resolve with an error instead of
+      // throwing, so callers never stay stuck on "running".
+      resolve({ error: String((e && e.message) || e) })
+      return
+    }
     const id = ++seq
     const timer = setTimeout(() => {
       if (!pending.has(id)) return
