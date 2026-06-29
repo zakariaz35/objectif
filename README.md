@@ -154,6 +154,20 @@ Quatre **types de leçon** (champ `type` du front-matter) :
 
 📄 **Format complet et exemples** : voir **[content/FORMAT.md](content/FORMAT.md)**.
 
+### Réutiliser un module entre parcours (parcours composés)
+
+Un module peut être **mutualisé** entre plusieurs formations via une bibliothèque
+`content/_modules/` + une **playlist** `modules:` dans le `formation.yaml` (`shared:` /
+`local:`). On **assemble** avant d'importer :
+
+```bash
+node content/_tools/build.mjs                                  # content/ -> content/_dist/
+docker compose exec backend php artisan formation:import-all /content/_dist
+```
+
+> ⚠️ Pour un parcours **composé**, importer depuis `content/_dist` (pas `content/`),
+> sinon ses modules partagés manquent. Détails : [content/FORMAT.md](content/FORMAT.md).
+
 ---
 
 ## Développement
@@ -275,5 +289,7 @@ L'appli est **agnostique du framework enseigné**. Pour ajouter un parcours Reac
 - [x] **Python exécutable** dans le navigateur (Pyodide) : playground + exercices à tests + sorties riches (DataFrame/matplotlib) — voir `docs/pyodide-runner-plan.md`
 - [x] **Éditeur de code riche** (CodeMirror : coloration + n° de lignes) — voir `docs/editeur-code.md`
 - [x] **Tests E2E** Playwright (`frontend/e2e/`, `npm run test:e2e`)
+- [x] **Tags + filtre** du catalogue (recherche plein-texte côté liste + facettes de tags)
+- [x] **Parcours composés** : modules réutilisables (`content/_modules/` + playlist `modules:`) assemblés par `content/_tools/build.mjs`
 - [ ] Tests automatisés backend (Pest) des parcours auth / progression / quiz
 - [ ] Déploiement (build statique du front, image de prod)

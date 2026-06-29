@@ -2,3 +2,13 @@ title: Parcours Vue.js
 slug: parcours-vuejs
 description: De « juste ce qu'il faut » de JavaScript jusqu'à Vue 3 avancé, étape par étape.
 stack: Vue 3 + TypeScript
+tags: ["langage", "web", "frontend", "TypeScript", "intermédiaire"]
+# Playlist de modules : `shared:` pioche dans content/_modules/, `local:` un module
+# propre au parcours. L'ordre ici = l'ordre final. Assemblé par content/_tools/build.mjs.
+modules:
+  - shared: js-essentiel
+  - shared: typescript
+  - local: vue3-bases
+  - local: vue3-pratiques
+  - local: vue3-avance
+  - local: projet-todolist

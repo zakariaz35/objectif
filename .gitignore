@@ -21,5 +21,11 @@ content/demo.zip
 # Captures d'écran / galeries de tests (artefacts générés par Playwright)
 screenshots/
 
+# Override Docker local (ports spécifiques à la machine) — ne pas versionner
+docker-compose.override.yml
+
+# Contenu assemblé par content/_tools/build.mjs (sortie générée, source = content/)
+content/_dist/
+
 # Divers
 .DS_Store

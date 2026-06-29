@@ -231,6 +231,41 @@ Les blocs de code dont le langage a un *playground* enregistré affichent un bou
 > Le premier lancement Python télécharge Pyodide (quelques Mo) : c'est plus long une
 > seule fois, puis l'exécution est rapide. Aucun serveur requis (tout est côté client).
 
+## Réutiliser un module dans plusieurs parcours
+
+Un même module (ex. « JavaScript essentiel ») peut servir dans plusieurs formations,
+**sans copier-coller**, via une **bibliothèque** de modules + une **playlist**.
+
+1. Place le module réutilisable dans **`content/_modules/<slug>/`** (un `module.yaml` +
+   ses leçons). Le dossier `_modules/` n'est **pas** importé directement (préfixe `_`).
+2. Dans le `formation.yaml`, déclare l'ordre des modules avec une playlist `modules:` —
+   `shared:` pioche dans `_modules/`, `local:` désigne un module propre au parcours
+   (préfixe numérique ignoré) :
+
+```yaml
+title: Parcours Angular
+slug: parcours-angular
+modules:
+  - shared: js-essentiel     # mutualisé (content/_modules/js-essentiel)
+  - shared: typescript
+  - local: bases             # propre au parcours (dossier 01-bases/)
+  - local: services-di
+```
+
+3. **Assemble** puis **importe** (le build inline les modules partagés dans `content/_dist/`,
+   qui reste autonome) :
+
+```bash
+node content/_tools/build.mjs                                  # content/ -> content/_dist/
+docker compose exec backend php artisan formation:import-all /content/_dist
+```
+
+- **Rétro-compatible** : sans playlist `modules:`, la formation est importée telle quelle.
+- La **progression reste indépendante** par parcours (chaque parcours reçoit sa copie du
+  module ; finir un module dans l'un ne le coche pas dans l'autre).
+- `content/_dist/` est **généré** (gitignoré) ; la source de vérité reste `content/`.
+- Tests de l'assembleur : `node --test content/_tools/build.test.mjs`.
+
 ## Rendu
 Le Markdown est converti en HTML côté serveur (CommonMark + GitHub Flavored :
 tables, listes de tâches, autoliens). Le HTML inline est autorisé (callouts, etc.).

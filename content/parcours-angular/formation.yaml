@@ -2,3 +2,14 @@ title: Parcours Angular
 slug: parcours-angular
 description: Les fondamentaux d'Angular avec TypeScript, étape par étape.
 stack: Angular + TypeScript
+tags: ["langage", "web", "frontend", "TypeScript", "intermédiaire"]
+# Playlist : réutilise les modules partagés js-essentiel + typescript (cf. Vue),
+# puis les modules propres à Angular. Assemblé par content/_tools/build.mjs.
+modules:
+  - shared: js-essentiel
+  - shared: typescript
+  - local: bases
+  - local: services-di
+  - local: routing
+  - local: rxjs-http
+  - local: projet
