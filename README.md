@@ -271,6 +271,9 @@ L'appli est **agnostique du framework enseigné**. Pour ajouter un parcours Reac
 - [x] Cartes mémo + quiz notés (questions structurées, tentatives)
 - [x] Auth utilisateur (Sanctum) + progression par compte
 - [x] Exercices interactifs (éditeur JS + validation par tests en Web Worker)
-- [ ] Éditeur de code riche (CodeMirror : coloration syntaxique)
+- [x] **Cursus** : regroupement des formations en parcours ordonné (champ `track`)
+- [x] **Python exécutable** dans le navigateur (Pyodide) : playground + exercices à tests + sorties riches (DataFrame/matplotlib) — voir `docs/pyodide-runner-plan.md`
+- [x] **Éditeur de code riche** (CodeMirror : coloration + n° de lignes) — voir `docs/editeur-code.md`
+- [x] **Tests E2E** Playwright (`frontend/e2e/`, `npm run test:e2e`)
 - [ ] Tests automatisés backend (Pest) des parcours auth / progression / quiz
 - [ ] Déploiement (build statique du front, image de prod)

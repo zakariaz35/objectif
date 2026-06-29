@@ -6,12 +6,20 @@
 > (éditeur + tests verts/rouges), notamment pour `parcours-python` et la partie
 > pandas de `parcours-data-analyst`.
 >
-> **Statut : Lot 1 IMPLÉMENTÉ** (playground Python). Le bouton « Tester » sur les blocs
-> ` ```python ` et le bac à sable Python (FAB 🐍) exécutent du Python dans le navigateur
-> via Pyodide (`frontend/src/lib/pyodideWorker.js`, `runPython.js`, `pythonPlayground.js`,
-> `components/PythonPlayground.vue`, registre `playgrounds.js`). `import pandas/numpy`
-> fonctionne (auto-chargé). Lots 2-4 (pandas piloté, exercices Python à tests, migration
-> de contenu) restent à faire — voir §5.
+> **Statut : Lots 1, 2 et 3 IMPLÉMENTÉS.**
+> - **Lot 1** — playground Python : bouton « Tester » sur les blocs ` ```python ` + bac à
+>   sable 🐍 (`lib/pyodideWorker.js`, `runPython.js`, `pythonPlayground.js`,
+>   `components/PythonPlayground.vue`, registre `playgrounds.js`).
+> - **Lot 2** — pandas/numpy auto-chargés (`loadPackagesFromImports`) ; **sorties riches** :
+>   un DataFrame (dernière expression) s'affiche en **table HTML**, les figures
+>   **matplotlib** en **PNG** (backend AGG) — voir `run_cell()` dans `pyodideWorker.js`.
+> - **Lot 3** — **exercices Python interactifs** (`exercise.language: python`) à tests
+>   verts/rouges : `ExercisePlayer` branche un harnais Pyodide (`run_suite()`, helpers
+>   `assert_`/`assert_equal`/`assertEqual`, exécution en 2 phases) via `runPythonTests`.
+> - **Lot 4** (migration : convertir les exos reveal Python en interactifs) : à faire au fil
+>   de l'eau. Un 1ᵉʳ exercice Python interactif existe déjà dans `parcours-python`.
+>
+> Vérifié de bout en bout par la suite E2E Playwright (`frontend/e2e/`, 23/23).
 
 ---
 
