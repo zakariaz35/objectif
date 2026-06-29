@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test'
+import { fillEditor, getEditorValue, waitForEditor } from './helpers/codemirror.js'
 
 // Timeout très généreux pour Pyodide (1er chargement = téléchargement WASM ~10MB)
 test.describe('Playground Python (Pyodide)', () => {
@@ -20,12 +21,11 @@ test.describe('Playground Python (Pyodide)', () => {
     const modal = page.locator('.modal')
     await expect(modal).toBeVisible({ timeout: 5_000 })
 
-    // L'éditeur doit contenir du code par défaut (print("Bonjour 👋"))
-    const editor = modal.locator('.editor')
-    await expect(editor).toBeVisible()
+    // Attendre que CodeMirror soit prêt dans la modale
+    await waitForEditor(modal, 30_000)
 
     // Vérifier que le code par défaut contient "Bonjour"
-    const defaultCode = await editor.inputValue()
+    const defaultCode = await getEditorValue(modal)
     expect(defaultCode, 'Le code par défaut devrait contenir "Bonjour"').toContain('Bonjour')
 
     // Cliquer sur "▶ Exécuter"
@@ -60,9 +60,11 @@ test.describe('Playground Python (Pyodide)', () => {
     const modal = page.locator('.modal')
     await expect(modal).toBeVisible({ timeout: 5_000 })
 
-    // Remplacer le code dans l'éditeur (fill remplace tout le contenu)
-    const editor = modal.locator('.editor')
-    await editor.fill('import pandas as pd\nprint(pd.DataFrame({"a": [1, 2]}).shape)')
+    // Attendre que CodeMirror soit prêt
+    await waitForEditor(modal, 30_000)
+
+    // Remplacer le code dans l'éditeur CodeMirror
+    await fillEditor(modal, 'import pandas as pd\nprint(pd.DataFrame({"a": [1, 2]}).shape)')
 
     // Exécuter
     const runBtn = modal.locator('button', { hasText: '▶ Exécuter' })

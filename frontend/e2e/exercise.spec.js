@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test'
+import { fillEditor, waitForEditor } from './helpers/codemirror.js'
 
 // Exercice TypeScript interactif : parcours-sql / interroger / exo-filtrer-ts
 // - starter : fonction filterAndSort qui retourne [] (tests KO)
@@ -33,16 +34,18 @@ test.describe('Exercice interactif TypeScript (parcours-sql)', () => {
     await page.goto(`/f/${FORMATION}/${MODULE}/${LESSON}`)
     // Attendre que la page soit chargée et l'exercice visible
     await expect(page.locator('.exo')).toBeVisible({ timeout: 20_000 })
+    // Attendre que CodeMirror soit prêt (chargement depuis esm.sh)
+    await waitForEditor(page.locator('.exo'), 30_000)
   })
 
-  test('les boutons de l\'exercice sont présents', async ({ page }) => {
+  test("les boutons de l'exercice sont présents", async ({ page }) => {
     await expect(page.locator('button', { hasText: '▶ Lancer les tests' })).toBeVisible()
     await expect(page.locator('button', { hasText: '↻ Réinitialiser' })).toBeVisible()
     // Badge de langage
     await expect(page.locator('.exo .lang')).toContainText('ts')
   })
 
-  test('lancer les tests avec le code starter → des résultats de test s\'affichent', async ({ page }) => {
+  test("lancer les tests avec le code starter → des résultats de test s'affichent", async ({ page }) => {
     const runBtn = page.locator('button', { hasText: '▶ Lancer les tests' })
     await runBtn.click()
 
@@ -51,7 +54,7 @@ test.describe('Exercice interactif TypeScript (parcours-sql)', () => {
 
     const testItems = page.locator('.tests li')
     const count = await testItems.count()
-    expect(count, 'Au moins un résultat de test doit s\'afficher').toBeGreaterThan(0)
+    expect(count, "Au moins un résultat de test doit s'afficher").toBeGreaterThan(0)
 
     // Avec le code starter (return []), tous les tests devraient être KO
     const koItems = page.locator('.tests li.ko')
@@ -60,9 +63,9 @@ test.describe('Exercice interactif TypeScript (parcours-sql)', () => {
   })
 
   test('BONUS : injecter la solution correcte → bandeau « Tous les tests passent »', async ({ page }) => {
-    // Remplir l'éditeur avec la correction (fill remplace tout le contenu)
-    const editor = page.locator('.exo .editor')
-    await editor.fill(CORRECTION_CODE)
+    // Injecter la correction dans l'éditeur CodeMirror
+    const exo = page.locator('.exo')
+    await fillEditor(exo, CORRECTION_CODE)
 
     // Lancer les tests
     const runBtn = page.locator('button', { hasText: '▶ Lancer les tests' })

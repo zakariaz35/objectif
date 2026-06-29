@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test'
+import { fillEditor, getEditorValue, waitForEditor } from './helpers/codemirror.js'
 
 // Exercice Python interactif : parcours-python / collections / exo-revenue-by-category
 // Validation cle : Pyodide execute le code Python dans le navigateur et valide les tests.
@@ -18,9 +19,10 @@ const CORRECTION_CODE = `def revenue_by_category(rows):
 test.describe('Exercice Python interactif (parcours-python / collections)', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto(`/f/${FORMATION}/${MODULE}/${LESSON}`)
-    // Attendre que l'exercice soit visible — pas besoin de timeout Pyodide ici,
-    // le rendu du composant est rapide.
+    // Attendre que l'exercice soit visible
     await expect(page.locator('.exo')).toBeVisible({ timeout: 20_000 })
+    // Attendre que CodeMirror soit prêt (chargement depuis esm.sh)
+    await waitForEditor(page.locator('.exo'), 30_000)
   })
 
   test("les elements de l'exercice Python sont presents (editeur, boutons, badge py)", async ({ page }) => {
@@ -30,10 +32,16 @@ test.describe('Exercice Python interactif (parcours-python / collections)', () =
     await expect(page.locator('button', { hasText: '▶ Lancer les tests' })).toBeVisible()
     // Bouton reset
     await expect(page.locator('button', { hasText: '↻ Réinitialiser' })).toBeVisible()
-    // L'editeur contient le starter (TODO)
-    const editor = page.locator('.exo .editor')
-    await expect(editor).toBeVisible()
-    const starterCode = await editor.inputValue()
+    // L'éditeur CodeMirror doit être visible
+    const exo = page.locator('.exo')
+    const cmEditor = exo.locator('.cm-editor')
+    const fallback = exo.locator('.cm-fallback')
+    const editorVisible =
+      (await cmEditor.isVisible().catch(() => false)) ||
+      (await fallback.isVisible().catch(() => false))
+    expect(editorVisible, "L'éditeur (CM ou fallback) doit être visible").toBe(true)
+    // Le starter doit contenir "TODO"
+    const starterCode = await getEditorValue(exo)
     expect(starterCode, 'Le starter doit contenir "TODO"').toContain('TODO')
   })
 
@@ -63,9 +71,9 @@ test.describe('Exercice Python interactif (parcours-python / collections)', () =
   test('VALIDATION PYTHON : injecter la correction → bandeau vert "Tous les tests passent"', async ({ page }) => {
     test.setTimeout(180_000)
 
-    // Injecter la correction dans l'editeur
-    const editor = page.locator('.exo .editor')
-    await editor.fill(CORRECTION_CODE)
+    // Injecter la correction dans l'éditeur CodeMirror
+    const exo = page.locator('.exo')
+    await fillEditor(exo, CORRECTION_CODE)
 
     // Lancer les tests
     const runBtn = page.locator('button', { hasText: '▶ Lancer les tests' })
