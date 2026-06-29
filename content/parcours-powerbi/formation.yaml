@@ -9,3 +9,4 @@ description: >-
   Power Query, modéliser en étoile, écrire des mesures DAX correctes et publier un
   dashboard. En amont, prépare tes données avec `parcours-sql` ; ce parcours est une
   brique du hub `parcours-data-analyst`.
+tags: ["data", "BI", "dataviz", "intermédiaire"]

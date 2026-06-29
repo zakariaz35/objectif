@@ -8,6 +8,46 @@ const formations = ref([])
 const loading = ref(true)
 const error = ref(null)
 
+// --- Recherche & filtre par tags (catalogue) -------------------------------------------
+const query = ref('')
+const activeTags = ref([]) // tags sélectionnés (ET : la formation doit tous les porter)
+
+// Tags distincts présents dans le catalogue, triés (fr).
+const allTags = computed(() => {
+  const s = new Set()
+  for (const f of formations.value) for (const t of f.tags || []) s.add(t)
+  return [...s].sort((a, b) => a.localeCompare(b, 'fr'))
+})
+
+function toggleTag(t) {
+  const i = activeTags.value.indexOf(t)
+  if (i === -1) activeTags.value.push(t)
+  else activeTags.value.splice(i, 1)
+}
+
+function clearFilters() {
+  query.value = ''
+  activeTags.value = []
+}
+
+const hasFilters = computed(() => query.value.trim() !== '' || activeTags.value.length > 0)
+
+// Liste filtrée : tags (ET) puis recherche plein-texte sur titre/description/stack/track/tags.
+const filtered = computed(() => {
+  const q = query.value.trim().toLowerCase()
+  return formations.value.filter((f) => {
+    if (activeTags.value.length && !activeTags.value.every((t) => (f.tags || []).includes(t))) {
+      return false
+    }
+    if (!q) return true
+    const hay = [f.title, f.description, f.stack, f.track, ...(f.tags || [])]
+      .filter(Boolean)
+      .join(' ')
+      .toLowerCase()
+    return hay.includes(q)
+  })
+})
+
 // Group the catalog into "cursus" (tracks) + a trailing "Autres formations".
 // The API already returns formations sorted by position, so within a track the
 // arrival order is the recommended order (step number = index + 1), and the first
@@ -15,7 +55,7 @@ const error = ref(null)
 const groups = computed(() => {
   const tracks = new Map()
   const others = []
-  for (const f of formations.value) {
+  for (const f of filtered.value) {
     if (f.track) {
       if (!tracks.has(f.track)) tracks.set(f.track, [])
       tracks.get(f.track).push(f)
@@ -166,6 +206,34 @@ onMounted(load)
       </div>
     </div>
     <div v-else class="catalog">
+      <div class="filters">
+        <input
+          v-model="query"
+          type="search"
+          class="search"
+          placeholder="🔍 Rechercher une formation…"
+          aria-label="Rechercher une formation"
+        />
+        <div v-if="allTags.length" class="tagbar" role="group" aria-label="Filtrer par tag">
+          <button
+            v-for="t in allTags"
+            :key="t"
+            class="tag"
+            :class="{ active: activeTags.includes(t) }"
+            :aria-pressed="activeTags.includes(t)"
+            @click="toggleTag(t)"
+          >
+            {{ t }}
+          </button>
+        </div>
+        <div v-if="hasFilters" class="filter-meta">
+          <span>{{ filtered.length }} formation(s)</span>
+          <button class="clear" @click="clearFilters">✕ Réinitialiser</button>
+        </div>
+      </div>
+
+      <p v-if="filtered.length === 0" class="muted">Aucune formation ne correspond aux filtres.</p>
+
       <section v-for="g in groups" :key="g.key" class="track-section">
         <div class="track-head">
           <h2>{{ g.title }}</h2>
@@ -184,6 +252,17 @@ onMounted(load)
             <h3>{{ f.title }}</h3>
             <p class="desc">{{ f.description }}</p>
             <span class="badge">{{ f.modules_count }} module(s)</span>
+            <div v-if="f.tags?.length" class="card-tags">
+              <button
+                v-for="t in f.tags"
+                :key="t"
+                class="card-tag"
+                :class="{ active: activeTags.includes(t) }"
+                @click.stop="toggleTag(t)"
+              >
+                {{ t }}
+              </button>
+            </div>
           </article>
         </div>
       </section>
@@ -294,6 +373,98 @@ h1 {
 }
 .catalog {
   margin-top: 28px;
+}
+.filters {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+.search {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 11px 14px;
+  font-size: 15px;
+  color: inherit;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  transition: border-color 0.15s;
+}
+.search:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+.tagbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.tag {
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+  padding: 4px 12px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: var(--panel);
+  color: var(--muted);
+  transition: all 0.12s;
+}
+.tag:hover {
+  border-color: var(--accent);
+  color: inherit;
+}
+.tag.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-contrast);
+  font-weight: 600;
+}
+.filter-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 13px;
+  color: var(--muted);
+}
+.clear {
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+  background: none;
+  border: none;
+  color: var(--accent);
+  padding: 0;
+}
+.clear:hover {
+  text-decoration: underline;
+}
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 12px;
+}
+.card-tag {
+  font: inherit;
+  font-size: 11px;
+  cursor: pointer;
+  padding: 2px 8px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: var(--panel2);
+  color: var(--muted);
+  transition: all 0.12s;
+}
+.card-tag:hover {
+  border-color: var(--accent);
+  color: inherit;
+}
+.card-tag.active {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: var(--accent-contrast);
 }
 .track-section {
   margin-top: 32px;

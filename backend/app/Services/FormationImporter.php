@@ -51,6 +51,7 @@ class FormationImporter
                     'description' => $meta['description'] ?? null,
                     'stack' => $meta['stack'] ?? null,
                     'track' => $meta['track'] ?? null,
+                    'tags' => $meta['tags'] ?? [],
                     'position' => $meta['position'] ?? 0,
                 ],
             );
@@ -291,8 +292,22 @@ class FormationImporter
             'description' => $meta['description'] ?? null,
             'stack' => $meta['stack'] ?? $meta['framework'] ?? null,
             'track' => isset($meta['track']) ? (trim((string) $meta['track']) ?: null) : null,
+            'tags' => $this->normalizeTags($meta['tags'] ?? null),
             'position' => (int) ($meta['order'] ?? $meta['position'] ?? 0),
         ];
+    }
+
+    /** Normalise les tags : liste de chaînes non vides (sinon tableau vide). */
+    private function normalizeTags(mixed $tags): array
+    {
+        if (! is_array($tags)) {
+            return [];
+        }
+
+        return array_values(array_filter(array_map(
+            static fn ($t) => trim((string) $t),
+            $tags,
+        )));
     }
 
     private function readModuleMeta(string $dir, int $defaultPos): array

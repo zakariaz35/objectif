@@ -7,3 +7,4 @@ description: >-
   Refresher appliqué et orienté data-analyst : interroger, agréger, joindre,
   sous-requêtes & CTE, fonctions fenêtre. SQL idiomatique + exercices interactifs
   TypeScript qui rejouent la même logique sur des tableaux d'objets.
+tags: ["data", "base-de-données", "débutant", "interactif"]

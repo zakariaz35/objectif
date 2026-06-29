@@ -10,3 +10,4 @@ description: >-
   transformer les chiffres en insights présentables en entretien. La logique
   est montrée en SQL et pandas (réalisme métier) et implémentée en exercices
   interactifs TypeScript.
+tags: ["data", "projet", "BI", "avancé"]
