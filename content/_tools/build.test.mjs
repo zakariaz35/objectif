@@ -11,7 +11,7 @@ import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, existsSync, rmSync
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 
-import { build, parsePlaylist } from './build.mjs'
+import { build, parsePlaylist, stripPlaylist } from './build.mjs'
 
 /** Construit une arborescence de contenu jouet dans un dossier temporaire. */
 function makeFixture() {
@@ -54,6 +54,27 @@ test('parsePlaylist lit shared/local et ignore commentaires', () => {
 
 test('parsePlaylist renvoie null sans bloc modules', () => {
   assert.equal(parsePlaylist('title: x\nslug: y\n'), null)
+})
+
+test('stripPlaylist retire le bloc modules: (et son commentaire)', () => {
+  const out = stripPlaylist(
+    'title: X\ntags: [a]\n# Playlist\nmodules:\n  - shared: m1\n  - local: m2\n',
+  )
+  assert.ok(!/modules:/.test(out))
+  assert.ok(!/shared:/.test(out))
+  assert.ok(/title: X/.test(out) && /tags: \[a\]/.test(out))
+})
+
+test('le formation.yaml généré ne contient plus de playlist', () => {
+  const root = makeFixture()
+  try {
+    const out = join(root, '_dist')
+    build({ contentRoot: root, outRoot: out })
+    const fy = readFileSync(join(out, 'alpha/formation.yaml'), 'utf8')
+    assert.ok(!/^modules:/m.test(fy))
+  } finally {
+    rmSync(root, { recursive: true, force: true })
+  }
 })
 
 test('assemble la playlist : shared piochés + local, dans l’ordre', () => {

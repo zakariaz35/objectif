@@ -158,15 +158,15 @@ Quatre **types de leçon** (champ `type` du front-matter) :
 
 Un module peut être **mutualisé** entre plusieurs formations via une bibliothèque
 `content/_modules/` + une **playlist** `modules:` dans le `formation.yaml` (`shared:` /
-`local:`). On **assemble** avant d'importer :
+`local:`). L'**import résout la playlist** directement — rien de plus à faire :
 
 ```bash
-node content/_tools/build.mjs                                  # content/ -> content/_dist/
-docker compose exec backend php artisan formation:import-all /content/_dist
+docker compose exec backend php artisan formation:import-all /content
 ```
 
-> ⚠️ Pour un parcours **composé**, importer depuis `content/_dist` (pas `content/`),
-> sinon ses modules partagés manquent. Détails : [content/FORMAT.md](content/FORMAT.md).
+> Pour un **ZIP autonome** (drag-and-drop), inliner d'abord les modules partagés :
+> `node content/_tools/build.mjs` puis zipper `content/_dist`. Détails :
+> [content/FORMAT.md](content/FORMAT.md).
 
 ---
 

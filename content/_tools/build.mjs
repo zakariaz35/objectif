@@ -11,7 +11,7 @@
  *
  * Usage : node content/_tools/build.mjs
  */
-import { cpSync, existsSync, mkdirSync, readdirSync, readFileSync, rmSync } from 'node:fs'
+import { cpSync, existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
@@ -35,6 +35,23 @@ export function parsePlaylist(text) {
     }
   }
   return items.length ? items : null
+}
+
+/** Retire le bloc `modules:` (playlist) d'un formation.yaml : la sortie _dist a déjà
+ *  les vrais dossiers, et l'import-time ne doit pas re-résoudre une playlist absente
+ *  de _modules. Supprime aussi le bloc de commentaires qui précède immédiatement. */
+export function stripPlaylist(text) {
+  const lines = text.split('\n')
+  const start = lines.findIndex((l) => /^modules:\s*$/.test(l))
+  if (start === -1) return text
+  let end = start + 1
+  while (end < lines.length && /^(\s*-\s*(shared|local):\s*\S+\s*|\s*#.*|\s*)$/.test(lines[end])) {
+    end++
+  }
+  let begin = start
+  while (begin > 0 && /^\s*#/.test(lines[begin - 1])) begin--
+  lines.splice(begin, end - begin)
+  return lines.join('\n').replace(/\n{3,}/g, '\n\n')
 }
 
 /** Trouve le dossier d'un module local par son slug (préfixe numérique ignoré). */
@@ -82,7 +99,11 @@ export function build({ contentRoot, outRoot, modulesDir }) {
     }
 
     mkdirSync(dest, { recursive: true })
-    cpSync(join(src, 'formation.yaml'), join(dest, 'formation.yaml'))
+    // formation.yaml sans la playlist (le _dist contient déjà les modules inline).
+    writeFileSync(
+      join(dest, 'formation.yaml'),
+      stripPlaylist(readFileSync(join(src, 'formation.yaml'), 'utf8')),
+    )
     if (existsSync(join(src, 'assets'))) {
       cpSync(join(src, 'assets'), join(dest, 'assets'), { recursive: true })
     }

@@ -62,36 +62,72 @@ class FormationImporter
             // Copy bundled images (assets/) and prepare their public base URL.
             $this->importAssets($root, $formation->slug);
 
-            $moduleDirs = $this->orderedChildren($root, true);
-            $modulePos = 0;
-
-            foreach ($moduleDirs as $dir) {
-                if (basename($dir) === 'assets') {
-                    continue; // not a module: it holds bundled images
+            if ($meta['modules']) {
+                // Parcours composé : on suit la playlist (shared piochés dans le
+                // dossier voisin _modules/, local pris dans le parcours).
+                $pos = 0;
+                foreach ($meta['modules'] as $item) {
+                    $this->importModuleDir($formation, $this->resolvePlaylistModule($root, $item), ++$pos);
                 }
-                $modulePos++;
-                $moduleMeta = $this->readModuleMeta($dir, $modulePos);
-
-                $module = $formation->modules()->create([
-                    'slug' => $moduleMeta['slug'],
-                    'title' => $moduleMeta['title'],
-                    'position' => $moduleMeta['position'],
-                ]);
-
-                $lessonFiles = $this->orderedChildren($dir, false);
-                $lessonPos = 0;
-
-                foreach ($lessonFiles as $file) {
-                    if (! str_ends_with(strtolower($file), '.md')) {
-                        continue;
+            } else {
+                // Cas classique : un dossier = un module, ordonné par préfixe.
+                $pos = 0;
+                foreach ($this->orderedChildren($root, true) as $dir) {
+                    if (basename($dir) === 'assets') {
+                        continue; // not a module: it holds bundled images
                     }
-                    $lessonPos++;
-                    $this->importLesson($module, $file, $lessonPos);
+                    $this->importModuleDir($formation, $dir, ++$pos);
                 }
             }
 
             return $formation->load('modules.lessons');
         });
+    }
+
+    /** Importe un dossier de module (méta + leçons) à la position donnée. */
+    private function importModuleDir(Formation $formation, string $dir, int $position): void
+    {
+        $moduleMeta = $this->readModuleMeta($dir, $position);
+
+        $module = $formation->modules()->create([
+            'slug' => $moduleMeta['slug'],
+            'title' => $moduleMeta['title'],
+            'position' => $moduleMeta['position'],
+        ]);
+
+        $lessonPos = 0;
+        foreach ($this->orderedChildren($dir, false) as $file) {
+            if (! str_ends_with(strtolower($file), '.md')) {
+                continue;
+            }
+            $this->importLesson($module, $file, ++$lessonPos);
+        }
+    }
+
+    /** Résout une entrée de playlist (`shared:` / `local:`) en chemin de dossier de module. */
+    private function resolvePlaylistModule(string $root, mixed $item): string
+    {
+        if (is_array($item) && isset($item['shared'])) {
+            $name = (string) $item['shared'];
+            $path = dirname($root).DIRECTORY_SEPARATOR.'_modules'.DIRECTORY_SEPARATOR.$name;
+            if (! is_dir($path)) {
+                throw new \RuntimeException("Module partagé introuvable : _modules/{$name} (référencé par « ".basename($root)." »).");
+            }
+
+            return $path;
+        }
+
+        if (is_array($item) && isset($item['local'])) {
+            $slug = (string) $item['local'];
+            foreach ($this->orderedChildren($root, true) as $dir) {
+                if ($this->stripPrefix(basename($dir)) === $slug) {
+                    return $dir;
+                }
+            }
+            throw new \RuntimeException("Module local introuvable : {$slug} (dans « ".basename($root)." »).");
+        }
+
+        throw new \RuntimeException('Entrée de playlist invalide (attendu « shared: » ou « local: »).');
     }
 
     private function importLesson(Module $module, string $file, int $defaultPos): void
@@ -294,6 +330,10 @@ class FormationImporter
             'track' => isset($meta['track']) ? (trim((string) $meta['track']) ?: null) : null,
             'tags' => $this->normalizeTags($meta['tags'] ?? null),
             'position' => (int) ($meta['order'] ?? $meta['position'] ?? 0),
+            // Playlist de composition (clé `modules:`) — résolue à l'import si présente.
+            'modules' => (isset($meta['modules']) && is_array($meta['modules']) && $meta['modules'])
+                ? $meta['modules']
+                : null,
         ];
     }
 

@@ -252,17 +252,25 @@ modules:
   - local: services-di
 ```
 
-3. **Assemble** puis **importe** (le build inline les modules partagés dans `content/_dist/`,
-   qui reste autonome) :
+3. **Importe normalement** — l'importer **résout la playlist** (les `shared:` sont pris
+   dans le `_modules/` voisin, les `local:` dans le parcours) :
 
 ```bash
-node content/_tools/build.mjs                                  # content/ -> content/_dist/
-docker compose exec backend php artisan formation:import-all /content/_dist
+docker compose exec backend php artisan formation:import-all /content
 ```
 
 - **Rétro-compatible** : sans playlist `modules:`, la formation est importée telle quelle.
 - La **progression reste indépendante** par parcours (chaque parcours reçoit sa copie du
   module ; finir un module dans l'un ne le coche pas dans l'autre).
+
+**Export ZIP autonome (optionnel)** — pour produire un `.zip` partageable (drag-and-drop),
+on doit d'abord *inliner* les modules partagés (un ZIP n'a pas de `_modules/` voisin) :
+
+```bash
+node content/_tools/build.mjs        # content/ -> content/_dist/ (modules inline, playlist retirée)
+php content/make-zips.php            # zips depuis content/_dist
+```
+
 - `content/_dist/` est **généré** (gitignoré) ; la source de vérité reste `content/`.
 - Tests de l'assembleur : `node --test content/_tools/build.test.mjs`.
 
