@@ -1,0 +1,5 @@
+title: "Crash course FastAPI"
+slug: crash-course-fastapi
+description: "Construire une API moderne en Python : routes typées, modèles Pydantic, validation 422, injection de dépendances et structure de projet."
+stack: "Python / FastAPI"
+tags: ["API", "web", "intermédiaire", "interactif"]
