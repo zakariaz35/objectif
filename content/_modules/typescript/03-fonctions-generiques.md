@@ -5,6 +5,8 @@ type: lesson
 
 # Typer les fonctions, et les génériques
 
+> **Passerelle PHP/Python.** Typer une fonction, c'est exactement le `function sum(int $a, int $b): int` de PHP ou le `def sum(a: int, b: int) -> int` de Python. On décrit ce qui **entre** (paramètres) et ce qui **sort** (retour) — le contrat de la fonction.
+
 ## Typer une fonction
 
 On type les **paramètres** et le **retour** :
@@ -15,7 +17,12 @@ function sum(a: number, b: number): number {
 }
 
 const double = (x: number): number => x * 2
+
+console.log(sum(20, 22))   // 42
+// sum(20, 'oups')  // ❌ TS refuse : 'oups' n'est pas un number
 ```
+
+> **Pourquoi typer le retour aussi ?** Parce que ça vérifie que la fonction renvoie bien ce qu'elle promet : si un `return` oublie un cas ou renvoie le mauvais type, l'éditeur te le signale **tout de suite**, avant même d'exécuter.
 
 Retour `void` quand la fonction ne renvoie rien :
 

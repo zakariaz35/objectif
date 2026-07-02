@@ -30,6 +30,8 @@ exercise:
         assertEqual(totalCents([]), 0, 'an empty cart costs 0')
 ---
 
+> ⏱️ **Durée conseillée : ~15 min.** Prends ton temps — comprendre plutôt qu'aller vite.
+
 ## Énoncé
 
 Complète `totalCents` pour qu'elle renvoie la **somme** de `priceCents × quantity` de

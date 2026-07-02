@@ -18,5 +18,8 @@ Avant Vue, il faut le **strict nécessaire** de JavaScript moderne. Pas tout le 
 - Tableaux : `map`, `filter`, `reduce`, `find`
 - Promesses et `async` / `await`
 - Optional chaining `?.` et nullish `??`
+- Où **écrire** ce JavaScript : une page HTML qui l'inclut
 
-*(Contenu détaillé à venir — ceci est le squelette de l'étape.)*
+> **Passerelle PHP/Python.** Tu as déjà écrit des scripts qui tournent côté **serveur** (PHP qui génère une page, Python qui traite un fichier). Ici, le JavaScript s'exécute surtout **dans le navigateur**, côté client — c'est le principal changement de repère. Le langage lui-même (variables, fonctions, tableaux) te sera très familier.
+
+Chaque leçon contient des blocs de code que tu peux **exécuter** directement (bouton « Tester ») : n'hésite pas à modifier les valeurs pour voir ce qui change — c'est comme ça qu'on apprend le plus vite.

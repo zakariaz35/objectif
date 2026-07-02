@@ -27,6 +27,8 @@ exercise:
         assertEqual(adminEmails([]), [], 'no users → empty array')
 ---
 
+> ⏱️ **Durée conseillée : ~15 min.** Prends ton temps — comprendre plutôt qu'aller vite.
+
 ## Énoncé
 
 On te donne une liste d'utilisateurs `{ email, role, active }`. Renvoie un tableau
