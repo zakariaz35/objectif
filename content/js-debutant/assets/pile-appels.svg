@@ -1,0 +1,23 @@
+<svg viewBox="0 0 470 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="tp dp">
+  <title id="tp">La pile d'appels (call stack)</title>
+  <desc id="dp">Chaque appel de fonction empile un cadre ; le dernier appelé est le premier à se terminer (LIFO).</desc>
+  <style>
+    .ttl{font-family:system-ui,-apple-system,sans-serif;font-size:14px;font-weight:600;fill:#0f172a}
+    .frame{fill:#eef2ff;stroke:#6366f1;stroke-width:1.5}
+    .top{fill:#e0e7ff;stroke:#4f46e5;stroke-width:2}
+    .fn{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:15px;fill:#0f172a}
+    .note{font-family:system-ui,-apple-system,sans-serif;font-size:12px;fill:#64748b}
+    .cap{font-family:system-ui,-apple-system,sans-serif;font-size:13px;fill:#334155}
+    .base{stroke:#94a3b8;stroke-width:2}
+  </style>
+  <text class="ttl" x="24" y="28">La pile d'appels (call stack)</text>
+  <rect class="top" x="110" y="52" width="210" height="44" rx="8"/>
+  <text class="fn" x="128" y="80">double()</text>
+  <text class="note" x="332" y="79">← sommet (en cours)</text>
+  <rect class="frame" x="110" y="100" width="210" height="44" rx="8"/>
+  <text class="fn" x="128" y="128">calculer()</text>
+  <rect class="frame" x="110" y="148" width="210" height="44" rx="8"/>
+  <text class="fn" x="128" y="176">main()</text>
+  <line class="base" x1="104" y1="196" x2="326" y2="196"/>
+  <text class="cap" x="24" y="228">LIFO : le dernier appelé (double) se termine en premier.</text>
+</svg>

@@ -1,0 +1,24 @@
+<svg viewBox="0 0 520 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="ta da">
+  <title id="ta">Un tableau : des cases numérotées à partir de 0</title>
+  <desc id="da">Un tableau range des valeurs dans des cases contiguës, numérotées par un index qui commence à 0.</desc>
+  <style>
+    .ttl{font-family:system-ui,-apple-system,sans-serif;font-size:14px;font-weight:600;fill:#0f172a}
+    .idx{font-family:system-ui,-apple-system,sans-serif;font-size:13px;fill:#64748b;text-anchor:middle}
+    .val{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:15px;fill:#0f172a;text-anchor:middle}
+    .cell{fill:#eef2ff;stroke:#6366f1;stroke-width:1.5}
+    .cap{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;fill:#334155}
+    .lbl{font-family:system-ui,-apple-system,sans-serif;font-size:12px;fill:#94a3b8}
+  </style>
+  <text class="ttl" x="24" y="28">Un tableau : les cases sont numérotées à partir de 0</text>
+  <text class="lbl" x="24" y="76">index :</text>
+  <text class="idx" x="150" y="76">0</text>
+  <text class="idx" x="286" y="76">1</text>
+  <text class="idx" x="422" y="76">2</text>
+  <rect class="cell" x="90" y="86" width="120" height="56" rx="8"/>
+  <text class="val" x="150" y="121">"Paris"</text>
+  <rect class="cell" x="226" y="86" width="120" height="56" rx="8"/>
+  <text class="val" x="286" y="121">"Lyon"</text>
+  <rect class="cell" x="362" y="86" width="120" height="56" rx="8"/>
+  <text class="val" x="422" y="121">"Nice"</text>
+  <text class="cap" x="90" y="178">villes[0] = "Paris"   ·   villes.length = 3</text>
+</svg>

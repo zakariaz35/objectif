@@ -1,0 +1,32 @@
+<svg viewBox="0 0 560 210" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="tf df">
+  <title id="tf">Une fonction : une machine entrée → sortie</title>
+  <desc id="df">Une fonction reçoit des entrées (paramètres), applique un traitement, et renvoie une sortie.</desc>
+  <style>
+    .ttl{font-family:system-ui,-apple-system,sans-serif;font-size:14px;font-weight:600;fill:#0f172a}
+    .tag{fill:#fff7ed;stroke:#f59e0b;stroke-width:1.5}
+    .box{fill:#eef2ff;stroke:#6366f1;stroke-width:2}
+    .out{fill:#ecfdf5;stroke:#10b981;stroke-width:1.5}
+    .t{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:14px;fill:#0f172a;text-anchor:middle}
+    .name{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:16px;font-weight:700;fill:#0f172a;text-anchor:middle}
+    .sub{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;fill:#64748b;text-anchor:middle}
+    .arrow{stroke:#475569;stroke-width:1.8;fill:none}
+  </style>
+  <defs>
+    <marker id="af" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#475569"/>
+    </marker>
+  </defs>
+  <text class="ttl" x="24" y="28">Une fonction : une machine entrée → sortie</text>
+  <rect class="tag" x="20" y="70" width="140" height="34" rx="8"/>
+  <text class="t" x="90" y="93">ht = 100</text>
+  <rect class="tag" x="20" y="126" width="140" height="34" rx="8"/>
+  <text class="t" x="90" y="149">taux = 0.2</text>
+  <path class="arrow" marker-end="url(#af)" d="M160 87 L206 105"/>
+  <path class="arrow" marker-end="url(#af)" d="M160 143 L206 125"/>
+  <rect class="box" x="210" y="72" width="150" height="90" rx="10"/>
+  <text class="name" x="285" y="108">prixTTC</text>
+  <text class="sub" x="285" y="132">ht × (1 + taux)</text>
+  <path class="arrow" marker-end="url(#af)" d="M360 117 L432 117"/>
+  <rect class="out" x="436" y="100" width="96" height="34" rx="8"/>
+  <text class="t" x="484" y="123">120</text>
+</svg>
