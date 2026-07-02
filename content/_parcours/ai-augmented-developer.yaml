@@ -1,0 +1,22 @@
+title: AI-Augmented Developer
+objectif: >-
+  Consolider un profil senior « dev + IA » : d'abord valider les certifications
+  cloud et IA, puis décrocher le diplôme d'architecte. Ordre choisi :
+  AWS d'abord, puis Claude, puis Architecte.
+# Étapes ordonnées. type: jalon (externe, statut manuel) | formation (interne, progression auto via `ref`).
+etapes:
+  - titre: "AWS Solutions Architect – Associate (SAA-C03)"
+    type: jalon
+    duree_h: 40
+    url: https://aws.amazon.com/certification/certified-solutions-architect-associate/
+    note: "Ancre cloud reconnue. Reprendre la formation AWS en pause (~4-8 semaines)."
+  - titre: "Claude Certified Architect – Foundations"
+    type: jalon
+    duree_h: 20
+    url: https://anthropic-partners.skilljar.com/claude-certified-architect-foundations-certification
+    note: "Bonus IA on-brand. Réviser surtout Agent SDK + MCP (45 % de l'examen)."
+  - titre: "OpenClassrooms — Architecte logiciel (RNCP41330, bac+5)"
+    type: jalon
+    duree_h: 603
+    url: https://openclassrooms.com/fr/paths
+    note: "Diplôme cible. ~9 mois (~125 h nettes pour toi : surtout de la formalisation)."

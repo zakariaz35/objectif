@@ -5,6 +5,7 @@ use App\Http\Controllers\DocController;
 use App\Http\Controllers\FormationController;
 use App\Http\Controllers\ImportController;
 use App\Http\Controllers\LessonController;
+use App\Http\Controllers\ParcoursController;
 use App\Http\Controllers\ProgressController;
 use App\Http\Controllers\QuizController;
 use App\Http\Controllers\UserController;
@@ -25,6 +26,10 @@ Route::get('/users', [UserController::class, 'index']);
 Route::get('/docs/{doc}', [DocController::class, 'show']);
 
 Route::post('/import', [ImportController::class, 'store']);
+
+// Parcours (roadmaps : étapes « formation » interne + « jalon » externe)
+Route::get('/parcours', [ParcoursController::class, 'index']);
+Route::get('/parcours/{slug}', [ParcoursController::class, 'show']);
 
 Route::get('/formations', [FormationController::class, 'index']);
 Route::get('/formations/{formation}', [FormationController::class, 'show']);

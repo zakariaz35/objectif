@@ -14,6 +14,12 @@ const routes = [
   // ⚠️ TEMPORARY — logo comparator. Remove once the logo is chosen.
   { path: '/logos', name: 'logos', component: () => import('../views/LogosView.vue') },
   {
+    path: '/parcours/:slug',
+    name: 'parcours',
+    component: () => import('../views/ParcoursView.vue'),
+    props: true,
+  },
+  {
     path: '/f/:formation',
     component: FormationView,
     props: true,

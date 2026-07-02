@@ -158,6 +158,10 @@ onMounted(load)
   <main class="home">
     <h1>Mes formations</h1>
 
+    <router-link to="/parcours/ai-augmented-developer" class="parcours-banner">
+      🧭 Mon parcours : <b>AI-Augmented Developer</b> — voir la roadmap →
+    </router-link>
+
     <div
       class="dropzone"
       :class="{ dragging }"
@@ -291,6 +295,20 @@ onMounted(load)
 }
 h1 {
   margin: 8px 0 24px;
+}
+.parcours-banner {
+  display: block;
+  margin: 0 0 20px;
+  padding: 12px 16px;
+  border: 1px solid var(--accent);
+  border-radius: 12px;
+  background: var(--panel2);
+  color: inherit;
+  text-decoration: none;
+  font-size: 15px;
+}
+.parcours-banner:hover {
+  background: var(--panel);
 }
 .dropzone {
   border: 2px dashed var(--border);
