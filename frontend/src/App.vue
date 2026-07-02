@@ -72,7 +72,9 @@ async function logout() {
   gap: 14px;
   padding: 14px 24px;
   border-bottom: 1px solid var(--border);
-  background: var(--panel);
+  background: color-mix(in srgb, var(--panel) 82%, transparent);
+  backdrop-filter: saturate(1.4) blur(10px);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
   position: sticky;
   top: 0;
   z-index: 20;

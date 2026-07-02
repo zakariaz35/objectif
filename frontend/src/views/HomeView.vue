@@ -173,7 +173,10 @@ onMounted(load)
 
 <template>
   <main class="home">
-    <h1>Mes formations</h1>
+    <header class="hero">
+      <h1>Mes formations</h1>
+      <p>Choisis un <b>parcours</b>, importe un <b>cours</b>, et avance à ton rythme.</p>
+    </header>
 
     <section v-if="parcours.length" class="parcours-list">
       <h2>Parcours</h2>
@@ -345,6 +348,33 @@ onMounted(load)
 }
 h1 {
   margin: 8px 0 24px;
+}
+.hero {
+  margin: 0 0 26px;
+  padding: 26px 28px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, var(--panel2), var(--panel));
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+}
+.hero h1 {
+  margin: 0 0 6px;
+  color: var(--heading);
+  font-size: 30px;
+}
+.hero p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 16px;
+}
+.card,
+.pcard,
+.ic-card {
+  box-shadow: var(--shadow);
+}
+.card:hover,
+.pcard:hover {
+  box-shadow: var(--shadow-lg);
 }
 .parcours-list {
   margin: 4px 0 28px;

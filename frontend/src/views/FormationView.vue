@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, provide, onMounted, onUnmounted, watch } from 'vue'
+import { ref, computed, provide, onMounted, onUnmounted, watch, nextTick } from 'vue'
 import { useRoute, RouterLink, RouterView } from 'vue-router'
 import api from '../lib/api'
 import { setPlaygroundStack } from '../lib/playgroundContext'
@@ -11,6 +11,8 @@ const tree = ref(null)
 const completed = ref(new Set())
 const loading = ref(true)
 const error = ref(null)
+const tocEl = ref(null)
+const openModules = ref(new Set()) // modules dépliés dans le menu
 
 const totalLessons = computed(
   () => tree.value?.modules.reduce((n, m) => n + m.lessons.length, 0) || 0
@@ -42,6 +44,28 @@ async function toggle(moduleSlug, lessonSlug, value) {
 // Exposed to child LessonView components.
 provide('progress', { isDone, toggle })
 
+// --- Menu latéral : accordéon + suivi de la leçon courante ---
+function toggleModule(slug) {
+  const s = new Set(openModules.value)
+  s.has(slug) ? s.delete(slug) : s.add(slug)
+  openModules.value = s
+}
+function moduleDone(m) {
+  return m.lessons.filter((l) => isDone(m.slug, l.slug)).length
+}
+// Déplie le module courant et fait défiler le menu jusqu'à la leçon active (« le menu suit »).
+async function followCurrent() {
+  const m = route.params.module
+  if (m && !openModules.value.has(m)) {
+    const s = new Set(openModules.value)
+    s.add(m)
+    openModules.value = s
+  }
+  await nextTick()
+  tocEl.value?.querySelector('.lnk.router-link-active')?.scrollIntoView({ block: 'nearest' })
+}
+watch(() => [route.params.module, route.params.lesson], followCurrent)
+
 // Bumped on each load and on unmount: a stale in-flight load (formation switched
 // or component left) must not write back into the shared playground context.
 let reqId = 0
@@ -59,6 +83,7 @@ async function load() {
     if (id !== reqId) return // a newer load started, or the view was left
     tree.value = tree2
     completed.value = new Set(progress.completed)
+    followCurrent()
   } catch (e) {
     if (id !== reqId) return
     error.value = 'Formation introuvable.'
@@ -101,7 +126,7 @@ onUnmounted(() => {
 
 <template>
   <div class="layout">
-    <nav class="toc">
+    <nav class="toc" ref="tocEl">
       <RouterLink to="/" class="back">← Toutes les formations</RouterLink>
       <h2 class="ftitle">{{ tree?.title }}</h2>
 
@@ -110,19 +135,30 @@ onUnmounted(() => {
         <span class="pct">{{ doneCount }}/{{ totalLessons }} · {{ percent }}%</span>
       </div>
 
-      <template v-for="m in tree?.modules || []" :key="m.slug">
-        <h3 class="mod">{{ m.title }}</h3>
-        <RouterLink
-          v-for="l in m.lessons"
-          :key="l.slug"
-          :to="`/f/${formation}/${m.slug}/${l.slug}`"
-          class="lnk"
-          :class="{ done: isDone(m.slug, l.slug) }"
+      <div v-for="m in tree?.modules || []" :key="m.slug" class="mod-group">
+        <button
+          type="button"
+          class="mod-head"
+          :class="{ open: openModules.has(m.slug) }"
+          @click="toggleModule(m.slug)"
         >
-          <span class="ic">{{ isDone(m.slug, l.slug) ? '✓' : typeIcon[l.type] || '•' }}</span>
-          {{ l.title }}
-        </RouterLink>
-      </template>
+          <span class="chev">{{ openModules.has(m.slug) ? '▾' : '▸' }}</span>
+          <span class="mtitle">{{ m.title }}</span>
+          <span class="mprog">{{ moduleDone(m) }}/{{ m.lessons.length }}</span>
+        </button>
+        <div v-show="openModules.has(m.slug)" class="mod-lessons">
+          <RouterLink
+            v-for="l in m.lessons"
+            :key="l.slug"
+            :to="`/f/${formation}/${m.slug}/${l.slug}`"
+            class="lnk"
+            :class="{ done: isDone(m.slug, l.slug) }"
+          >
+            <span class="ic">{{ isDone(m.slug, l.slug) ? '✓' : typeIcon[l.type] || '•' }}</span>
+            {{ l.title }}
+          </RouterLink>
+        </div>
+      </div>
     </nav>
 
     <main class="content">
@@ -202,12 +238,47 @@ onUnmounted(() => {
   font-size: 12px;
   color: var(--muted);
 }
-.mod {
+.mod-group {
+  margin: 4px 0;
+}
+.mod-head {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: none;
+  border: none;
+  padding: 8px;
+  border-radius: 7px;
+  color: var(--muted);
   font-size: 12px;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 0.8px;
+  cursor: pointer;
+  text-align: left;
+}
+.mod-head:hover {
+  background: var(--panel2);
+  color: var(--txt);
+}
+.mod-head.open {
+  color: var(--txt);
+}
+.mod-head .chev {
+  flex: 0 0 12px;
+  font-size: 11px;
+}
+.mod-head .mtitle {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.mod-head .mprog {
+  flex: 0 0 auto;
+  font-size: 11px;
   color: var(--muted);
-  margin: 18px 0 6px;
+}
+.mod-lessons {
+  margin: 2px 0 8px;
 }
 .lnk {
   display: flex;
