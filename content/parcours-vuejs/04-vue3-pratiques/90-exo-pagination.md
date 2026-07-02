@@ -31,6 +31,10 @@ exercise:
 
 ## Énoncé
 
+> ⏱️ **Durée conseillée : ~15 min.** On écrit la logique pure (testable en TS) qu'un
+> composable `usePagination` envelopperait. Réflexe data : penser « découper une collection
+> en tranches », comme un `LIMIT ... OFFSET ...` en SQL.
+
 Écris la logique **pure** d'une pagination (celle qu'on extrairait dans un composable
 `usePagination`). `paginate(items, page, perPage)` doit renvoyer :
 

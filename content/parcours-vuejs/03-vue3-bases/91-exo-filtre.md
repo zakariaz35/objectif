@@ -23,6 +23,10 @@ exercise:
 
 ## Énoncé
 
+> ⏱️ **Durée conseillée : ~10 min.** On isole la logique d'un `computed` filtré pour la
+> tester en TypeScript pur — sans Vue autour. Réflexe data : penser « transformation de
+> données », pas « manipulation de DOM ».
+
 Écris la logique **pure** d'un filtre de recherche (celle qu'on mettrait dans un
 `computed`). `search(items, q)` renvoie les chaînes qui **contiennent** `q`, **sans
 tenir compte de la casse**.

@@ -5,6 +5,10 @@ type: exercise
 
 ## Énoncé
 
+> ⏱️ **Durée conseillée : ~15 min.** Un store Pinia minimal — volontairement calqué sur le
+> compteur du module 3. Le but : voir que c'est **la même API** qu'un `<script setup>`, mais
+> avec un état **partagé**.
+
 Écris un store Pinia `useCounter` (style Composition) qui expose :
 
 1. un état `count` (départ à 0) ;
