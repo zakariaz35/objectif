@@ -35,6 +35,7 @@ export default {
   listParcours: () => api.get('/parcours').then((r) => r.data.data),
   getParcours: (slug) => api.get(`/parcours/${slug}`).then((r) => r.data),
   importFormation: (slug) => api.post(`/formations/${slug}/import`).then((r) => r.data),
+  listContentFormations: () => api.get('/content/formations').then((r) => r.data.data),
   getLesson: (slug, module, lesson) =>
     api.get(`/formations/${slug}/lessons/${module}/${lesson}`).then((r) => r.data),
   gradeQuiz: (slug, module, lesson, answers) =>

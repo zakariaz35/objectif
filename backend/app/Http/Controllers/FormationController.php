@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Formation;
 use App\Services\FormationImporter;
 use Illuminate\Http\JsonResponse;
+use Symfony\Component\Yaml\Yaml;
 
 class FormationController extends Controller
 {
@@ -69,5 +70,29 @@ class FormationController extends Controller
             'title' => $formation->title,
             'modules_count' => $formation->modules()->count(),
         ]);
+    }
+
+    /** Liste les formations disponibles dans content/ (importables) avec leur statut. */
+    public function availableContent(): JsonResponse
+    {
+        $imported = Formation::query()->pluck('slug')->all();
+        $items = [];
+        foreach (glob('/content/*', GLOB_ONLYDIR) ?: [] as $dir) {
+            $name = basename($dir);
+            if (str_starts_with($name, '_') || ! is_file($dir.'/formation.yaml')) {
+                continue;
+            }
+            $meta = Yaml::parseFile($dir.'/formation.yaml') ?: [];
+            $slug = $meta['slug'] ?? $name;
+            $items[] = [
+                'slug' => $name, // identifiant d'import (dossier)
+                'title' => $meta['title'] ?? $name,
+                'stack' => $meta['stack'] ?? null,
+                'imported' => in_array($slug, $imported, true) || in_array($name, $imported, true),
+            ];
+        }
+        usort($items, static fn ($a, $b) => strcmp($a['title'], $b['title']));
+
+        return response()->json(['data' => $items]);
     }
 }

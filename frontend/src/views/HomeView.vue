@@ -6,6 +6,8 @@ import api from '../lib/api'
 const router = useRouter()
 const formations = ref([])
 const parcours = ref([])
+const contentFormations = ref([]) // formations disponibles dans content/ (importables)
+const importing = ref(null)
 const loading = ref(true)
 const error = ref(null)
 
@@ -88,10 +90,23 @@ async function load() {
   try {
     formations.value = await api.listFormations()
     parcours.value = await api.listParcours().catch(() => [])
+    contentFormations.value = await api.listContentFormations().catch(() => [])
   } catch (e) {
     error.value = "Impossible de joindre l'API. Le backend est-il démarré ?"
   } finally {
     loading.value = false
+  }
+}
+
+async function importCourse(f) {
+  importing.value = f.slug
+  try {
+    await api.importFormation(f.slug)
+    await load() // rafraîchit catalogue + statut "importé"
+  } catch (e) {
+    error.value = `Échec de l'import de « ${f.slug} ».`
+  } finally {
+    importing.value = null
   }
 }
 
@@ -173,6 +188,27 @@ onMounted(load)
           <p class="pdesc">{{ p.objectif }}</p>
           <span class="badge">{{ p.etapes_count }} étape(s) · {{ p.total_duree_h }} h</span>
         </router-link>
+      </div>
+    </section>
+
+    <section v-if="contentFormations.length" class="import-catalog">
+      <h2>Catalogue — cours à importer</h2>
+      <div class="pgrid">
+        <div v-for="f in contentFormations" :key="f.slug" class="ic-card">
+          <h3>{{ f.title }}</h3>
+          <span v-if="f.stack" class="stack">{{ f.stack }}</span>
+          <div class="ic-actions">
+            <span v-if="f.imported" class="ic-done">✓ importé</span>
+            <button
+              v-else
+              class="import-btn"
+              :disabled="importing === f.slug"
+              @click="importCourse(f)"
+            >
+              {{ importing === f.slug ? '⏳ Import…' : '📥 Importer' }}
+            </button>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -342,6 +378,47 @@ h1 {
   color: var(--muted);
   font-size: 14px;
   margin: 0 0 12px;
+}
+.import-catalog {
+  margin: 4px 0 24px;
+}
+.import-catalog h2 {
+  font-size: 18px;
+  margin: 0 0 12px;
+}
+.ic-card {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 16px;
+  background: var(--panel);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.ic-card h3 {
+  margin: 0;
+  font-size: 15px;
+}
+.ic-actions {
+  margin-top: auto;
+}
+.ic-done {
+  font-size: 13px;
+  color: var(--good);
+}
+.import-btn {
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+  border: 1px solid var(--accent);
+  border-radius: 20px;
+  padding: 4px 14px;
+  background: var(--accent);
+  color: var(--accent-contrast);
+}
+.import-btn:disabled {
+  opacity: 0.6;
+  cursor: default;
 }
 .dropzone {
   border: 2px dashed var(--border);

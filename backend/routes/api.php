@@ -32,6 +32,7 @@ Route::get('/parcours', [ParcoursController::class, 'index']);
 Route::get('/parcours/{slug}', [ParcoursController::class, 'show']);
 
 Route::get('/formations', [FormationController::class, 'index']);
+Route::get('/content/formations', [FormationController::class, 'availableContent']);
 Route::post('/formations/{slug}/import', [FormationController::class, 'import']);
 Route::get('/formations/{formation}', [FormationController::class, 'show']);
 Route::get('/formations/{formation}/lessons/{moduleSlug}/{lessonSlug}', [LessonController::class, 'show']);
