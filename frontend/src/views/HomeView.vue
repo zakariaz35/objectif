@@ -5,6 +5,7 @@ import api from '../lib/api'
 
 const router = useRouter()
 const formations = ref([])
+const parcours = ref([])
 const loading = ref(true)
 const error = ref(null)
 
@@ -86,6 +87,7 @@ async function load() {
   error.value = null
   try {
     formations.value = await api.listFormations()
+    parcours.value = await api.listParcours().catch(() => [])
   } catch (e) {
     error.value = "Impossible de joindre l'API. Le backend est-il démarré ?"
   } finally {
@@ -158,9 +160,21 @@ onMounted(load)
   <main class="home">
     <h1>Mes formations</h1>
 
-    <router-link to="/parcours/ai-augmented-developer" class="parcours-banner">
-      🧭 Mon parcours : <b>AI-Augmented Developer</b> — voir la roadmap →
-    </router-link>
+    <section v-if="parcours.length" class="parcours-list">
+      <h2>Parcours</h2>
+      <div class="pgrid">
+        <router-link
+          v-for="p in parcours"
+          :key="p.slug"
+          :to="`/parcours/${p.slug}`"
+          class="pcard"
+        >
+          <h3>🧭 {{ p.title }}</h3>
+          <p class="pdesc">{{ p.objectif }}</p>
+          <span class="badge">{{ p.etapes_count }} étape(s) · {{ p.total_duree_h }} h</span>
+        </router-link>
+      </div>
+    </section>
 
     <div
       class="dropzone"
@@ -296,19 +310,38 @@ onMounted(load)
 h1 {
   margin: 8px 0 24px;
 }
-.parcours-banner {
+.parcours-list {
+  margin: 4px 0 28px;
+}
+.parcours-list h2 {
+  font-size: 18px;
+  margin: 0 0 12px;
+}
+.pgrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px;
+}
+.pcard {
   display: block;
-  margin: 0 0 20px;
-  padding: 12px 16px;
   border: 1px solid var(--accent);
   border-radius: 12px;
+  padding: 16px;
   background: var(--panel2);
   color: inherit;
   text-decoration: none;
-  font-size: 15px;
+  transition: transform 0.12s;
 }
-.parcours-banner:hover {
-  background: var(--panel);
+.pcard:hover {
+  transform: translateY(-2px);
+}
+.pcard h3 {
+  margin: 0 0 6px;
+}
+.pcard .pdesc {
+  color: var(--muted);
+  font-size: 14px;
+  margin: 0 0 12px;
 }
 .dropzone {
   border: 2px dashed var(--border);

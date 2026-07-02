@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Formation;
+use App\Services\FormationImporter;
 use Illuminate\Http\JsonResponse;
 
 class FormationController extends Controller
@@ -51,6 +52,22 @@ class FormationController extends Controller
                     'type' => $l->type,
                 ]),
             ]),
+        ]);
+    }
+
+    /** Importe une formation du dossier content/ par son slug (côté serveur, en un clic). */
+    public function import(string $slug): JsonResponse
+    {
+        abort_unless(preg_match('/^[a-z0-9-]+$/', $slug), 422, 'Identifiant invalide.');
+        $dir = '/content/'.$slug;
+        abort_unless(is_dir($dir), 404, "Aucun contenu « {$slug} » à importer.");
+
+        $formation = app(FormationImporter::class)->importDirectory($dir);
+
+        return response()->json([
+            'slug' => $formation->slug,
+            'title' => $formation->title,
+            'modules_count' => $formation->modules()->count(),
         ]);
     }
 }

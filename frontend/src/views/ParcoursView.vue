@@ -7,6 +7,7 @@ const props = defineProps({ slug: { type: String, required: true } })
 const data = ref(null)
 const loading = ref(true)
 const error = ref(null)
+const importing = ref(null) // slug de la formation en cours d'import
 
 // Statut manuel des jalons externes, persisté localement : 'todo' | 'wip' | 'done'.
 const jalonStatus = ref({})
@@ -37,6 +38,18 @@ async function load() {
     loading.value = false
   }
 }
+async function importFormation(e) {
+  importing.value = e.ref
+  try {
+    await api.importFormation(e.ref)
+    await load() // recharge : la formation passe en "importée" + progression active
+  } catch (err) {
+    error.value = `Échec de l'import de « ${e.ref} ».`
+  } finally {
+    importing.value = null
+  }
+}
+
 onMounted(load)
 watch(() => props.slug, load)
 
@@ -80,11 +93,18 @@ const remainingH = computed(() => Math.max(0, Math.round(totalH.value - doneH.va
             <p v-if="e.note" class="note">{{ e.note }}</p>
 
             <div v-if="e.type === 'formation'">
-              <div class="bar sm"><div class="fill" :style="{ width: (e.progress || 0) + '%' }"></div></div>
-              <div class="row">
-                <span class="small">{{ e.progress || 0 }}%</span>
-                <router-link v-if="e.formation_exists" :to="`/f/${e.ref}`" class="link">Ouvrir le cours →</router-link>
-                <span v-else class="small warn">formation absente ({{ e.ref }})</span>
+              <template v-if="e.formation_exists">
+                <div class="bar sm"><div class="fill" :style="{ width: (e.progress || 0) + '%' }"></div></div>
+                <div class="row">
+                  <span class="small">{{ e.progress || 0 }}%</span>
+                  <router-link :to="`/f/${e.ref}`" class="link">Ouvrir le cours →</router-link>
+                </div>
+              </template>
+              <div v-else class="row">
+                <button class="import-btn" :disabled="importing === e.ref" @click="importFormation(e)">
+                  {{ importing === e.ref ? '⏳ Import…' : '📥 Importer ce cours' }}
+                </button>
+                <span class="small">pas encore importé</span>
               </div>
             </div>
 
@@ -137,4 +157,10 @@ h1 { margin: 12px 0 6px; }
 }
 .status.wip { border-color: var(--accent2); color: var(--accent2); }
 .status.done { background: var(--good); border-color: var(--good); color: #fff; }
+.import-btn {
+  font: inherit; font-size: 13px; cursor: pointer;
+  border: 1px solid var(--accent); border-radius: 20px; padding: 4px 14px;
+  background: var(--accent); color: var(--accent-contrast);
+}
+.import-btn:disabled { opacity: 0.6; cursor: default; }
 </style>
