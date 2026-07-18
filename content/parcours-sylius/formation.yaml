@@ -1,0 +1,10 @@
+title: "Sylius pour développeur Symfony — Certification"
+slug: parcours-sylius
+description: >-
+  Maîtrisez Sylius 2.x avec vos bases Symfony : ResourceBundle, State Machine,
+  Grid, personnalisation Shop/Admin, plugins, Behat. Préparez la certification
+  Sylius Certified Developer.
+stack: "Sylius 2.x / PHP 8.4 / Symfony 7"
+track: "PHP-Agence"
+order: 4
+tags: [sylius, php, symfony, ecommerce, doctrine, behat]

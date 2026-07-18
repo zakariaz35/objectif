@@ -1,0 +1,10 @@
+title: "Laravel pour développeur Symfony senior"
+slug: parcours-laravel
+description: >-
+  Maîtrisez Laravel 13 avec vos bases Symfony : mapping systématique DI, routing,
+  Eloquent vs Doctrine, middleware, Blade, Artisan, queues, Sanctum et tests Pest.
+  Angle « missions d'agence » — pièges, bonnes pratiques, gains de productivité.
+stack: "Laravel 13 / PHP 8.4"
+track: "PHP-Agence"
+order: 1
+tags: [laravel, php, symfony, eloquent, pest, sanctum]

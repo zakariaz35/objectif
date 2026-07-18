@@ -1,0 +1,10 @@
+title: "Spring Boot pour un développeur Symfony"
+slug: parcours-spring
+description: >-
+  Spring Boot expliqué à un développeur Symfony : conteneur IoC & injection de
+  dépendances, contrôleurs REST, données avec Spring Data JPA (mapping Doctrine),
+  validation, configuration & profils, sécurité, tests. Pont Symfony permanent.
+stack: "Spring Boot 3 / Java 21"
+track: "Java & Spring"
+order: 2
+tags: ["Spring", "Spring Boot", "Java", "backend", "Symfony", "JPA"]

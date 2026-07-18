@@ -1,0 +1,15 @@
+title: Parcours React
+slug: parcours-react
+description: De la logique JavaScript jusqu'à React 19 avancé — composants fonction, hooks, context, routing et TypeScript.
+stack: React 19 + TypeScript
+tags: ["langage", "web", "frontend", "TypeScript", "intermédiaire"]
+# Playlist de modules : `shared:` pioche dans content/_modules/, `local:` un module
+# propre au parcours. Assemblé par content/_tools/build.mjs.
+modules:
+  - shared: js-essentiel
+  - shared: typescript
+  - local: react-bases
+  - local: react-hooks
+  - local: react-avance
+  - local: react-routing-data
+  - local: projet-react

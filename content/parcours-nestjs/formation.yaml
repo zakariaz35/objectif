@@ -1,0 +1,21 @@
+title: NestJS pour développeurs Symfony
+slug: parcours-nestjs
+description: >-
+  NestJS expliqué à un développeur Symfony : modules, providers et injection de
+  dépendances, contrôleurs et décorateurs de routing, DTO & validation, pipes/guards/
+  interceptors/filters, persistance avec TypeORM (mapping Doctrine), tests. Pont
+  permanent avec Symfony.
+stack: "NestJS 11 / TypeScript"
+track: "Node.js & NestJS"
+order: 2
+tags: ["NestJS", "TypeScript", "backend", "Symfony", "décorateurs", "DI", "TypeORM"]
+modules:
+  - shared: typescript
+  - local: pourquoi-nestjs
+  - local: modules-providers-di
+  - local: controllers-routing
+  - local: dto-validation
+  - local: pipes-guards-interceptors
+  - local: persistance-typeorm
+  - local: tests
+  - local: config-projet-reel

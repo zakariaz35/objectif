@@ -1,0 +1,10 @@
+title: "Spring AI — intégrer des LLM en Java"
+slug: parcours-spring-ai
+description: >-
+  Spring AI pour un dev qui a déjà intégré des LLM (Symfony AI, Python) : ChatClient
+  et prompts, embeddings et bases vectorielles (pgvector), RAG, function/tool calling.
+  Porter son expertise IA (Claude, OCR, RAG) dans l'écosystème Spring.
+stack: "Spring AI / Java 21"
+track: "Java & Spring"
+order: 3
+tags: ["Spring AI", "LLM", "RAG", "IA", "Java", "embeddings"]

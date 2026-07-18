@@ -1,0 +1,13 @@
+title: "Kubernetes — de docker compose au cluster"
+slug: parcours-kubernetes
+stack: "Kubernetes"
+track: "Cloud-DevOps"
+order: 3
+description: >-
+  Tu maîtrises Docker et docker compose : ce parcours part de cet acquis pour construire
+  le modèle mental de Kubernetes (control plane, API déclarative, reconciliation), les
+  objets qui remplacent tes services compose (Pod, Deployment, Service), la configuration
+  et l'état (ConfigMap, Secret, volumes, StatefulSet, probes), le réseau (Ingress —
+  Traefik en est un — et NetworkPolicy), les opérations du quotidien (requests/limits,
+  HPA, débogage) et un projet fil rouge : migrer une stack compose réaliste vers K8s.
+tags: [kubernetes, k8s, docker, cloud, devops]

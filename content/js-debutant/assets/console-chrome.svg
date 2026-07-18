@@ -1,0 +1,31 @@
+<svg viewBox="0 -30 560 280" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="tc dc">
+  <title id="tc">La console JavaScript de Chrome (DevTools)</title>
+  <desc id="dc">Onglet Console des outils de développement : on tape une instruction après le chevron, le résultat s'affiche juste en dessous.</desc>
+  <style>
+    .win{fill:#ffffff;stroke:#cbd5e1;stroke-width:1.5}
+    .bar{fill:#f1f5f9}
+    .tab{font-family:system-ui,-apple-system,sans-serif;font-size:12px;fill:#64748b}
+    .tabact{font-family:system-ui,-apple-system,sans-serif;font-size:12px;fill:#0f172a;font-weight:600}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:14px;fill:#0f172a}
+    .out{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:14px;fill:#334155}
+    .chev{fill:#2563eb;font-family:ui-monospace,monospace;font-size:14px;font-weight:700}
+    .sep{stroke:#e2e8f0;stroke-width:1}
+  </style>
+  <text x="8" y="-10" font-family="system-ui,-apple-system,sans-serif" font-size="14" font-weight="600" fill="#0f172a">Console JavaScript (Chrome DevTools)</text>
+  <rect class="win" x="8" y="8" width="544" height="234" rx="10"/>
+  <rect class="bar" x="9" y="9" width="542" height="33" rx="9"/>
+  <text class="tab" x="26" y="31">Elements</text>
+  <text class="tabact" x="96" y="31">Console</text>
+  <rect x="92" y="39" width="62" height="3" fill="#2563eb"/>
+  <text class="tab" x="172" y="31">Sources</text>
+  <text class="tab" x="240" y="31">Network</text>
+  <line class="sep" x1="9" y1="42" x2="551" y2="42"/>
+  <text class="chev" x="24" y="80">&gt;</text>
+  <text class="mono" x="44" y="80">console.log("Bonjour !")</text>
+  <text class="out" x="44" y="106">Bonjour !</text>
+  <text class="chev" x="24" y="142">&gt;</text>
+  <text class="mono" x="44" y="142">console.log(2 + 3)</text>
+  <text class="out" x="44" y="168">5</text>
+  <text class="chev" x="24" y="204">&gt;</text>
+  <rect x="44" y="193" width="8" height="16" fill="#0f172a"/>
+</svg>

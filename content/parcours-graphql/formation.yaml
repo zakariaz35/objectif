@@ -1,0 +1,9 @@
+title: "GraphQL — du schéma au client (NestJS + React)"
+slug: parcours-graphql
+description: >-
+  GraphQL pour un dev qui a déjà touché API Platform : le paradigme (vs REST), le
+  schéma SDL et les types, un serveur GraphQL avec NestJS (code-first, resolvers,
+  DataLoader/N+1), un client React/Next (Apollo Client, cache), puis subscriptions,
+  erreurs et sécurité. Passerelles API Platform/Symfony permanentes.
+stack: "GraphQL / NestJS / React"
+tags: ["GraphQL", "NestJS", "React", "Apollo", "API", "backend", "schema"]

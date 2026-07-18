@@ -1,0 +1,53 @@
+<svg viewBox="0 -28 640 358" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="t2 d2">
+  <title id="t2">Valeur vs référence</title>
+  <desc id="d2">À gauche, les primitifs sont copiés (deux cases indépendantes). À droite, les objets sont partagés : deux étiquettes pointent vers la même boîte.</desc>
+  <style>
+    .h{font-family:system-ui,-apple-system,sans-serif;font-size:14px;font-weight:600;fill:#0f172a}
+    .lbl{font-family:system-ui,-apple-system,sans-serif;font-size:14px;fill:#0f172a}
+    .small{font-family:system-ui,-apple-system,sans-serif;font-size:12px;fill:#64748b}
+    .code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;fill:#334155}
+    .val{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:15px;fill:#0f172a}
+    .cellA{fill:#ecfdf5;stroke:#10b981;stroke-width:1.5}
+    .cellB{fill:#eff6ff;stroke:#3b82f6;stroke-width:1.5}
+    .tag{fill:#fff7ed;stroke:#f59e0b;stroke-width:1.5}
+    .arrow{stroke:#475569;stroke-width:1.8;fill:none}
+    .div{stroke:#e2e8f0;stroke-width:1.5}
+  </style>
+  <defs>
+    <marker id="ah2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#475569"/>
+    </marker>
+  </defs>
+  <text x="20" y="-8" font-family="system-ui,-apple-system,sans-serif" font-size="14" font-weight="600" fill="#0f172a">Valeur vs référence</text>
+  <line class="div" x1="320" y1="20" x2="320" y2="300"/>
+
+  <!-- Gauche : primitifs -->
+  <text class="h" x="20" y="32">Primitif — copie de la valeur</text>
+  <text class="code" x="20" y="58">let a = 3 ; let b = a</text>
+  <rect class="tag" x="24" y="78" width="64" height="32" rx="7"/>
+  <text class="lbl" x="46" y="99">a</text>
+  <rect class="cellA" x="170" y="74" width="90" height="40" rx="7"/>
+  <text class="val" x="208" y="99">3</text>
+  <path class="arrow" marker-end="url(#ah2)" d="M88 94 L168 94"/>
+  <rect class="tag" x="24" y="142" width="64" height="32" rx="7"/>
+  <text class="lbl" x="46" y="163">b</text>
+  <rect class="cellA" x="170" y="138" width="90" height="40" rx="7"/>
+  <text class="val" x="208" y="163">3</text>
+  <path class="arrow" marker-end="url(#ah2)" d="M88 158 L168 158"/>
+  <text class="small" x="24" y="214">Deux cases distinctes.</text>
+  <text class="small" x="24" y="232">b = 9 ne change pas a.</text>
+
+  <!-- Droite : objets -->
+  <text class="h" x="344" y="32">Objet / tableau — copie de la référence</text>
+  <text class="code" x="344" y="58">const o1 = { x: 1 } ; const o2 = o1</text>
+  <rect class="tag" x="348" y="86" width="74" height="32" rx="7"/>
+  <text class="lbl" x="366" y="107">o1</text>
+  <rect class="tag" x="348" y="170" width="74" height="32" rx="7"/>
+  <text class="lbl" x="366" y="191">o2</text>
+  <rect class="cellB" x="510" y="118" width="104" height="52" rx="7"/>
+  <text class="val" x="528" y="149">{ x: 1 }</text>
+  <path class="arrow" marker-end="url(#ah2)" d="M422 102 L508 138"/>
+  <path class="arrow" marker-end="url(#ah2)" d="M422 186 L508 154"/>
+  <text class="small" x="344" y="232">Même boîte partagée.</text>
+  <text class="small" x="344" y="250">o2.x = 9 change aussi o1.</text>
+</svg>

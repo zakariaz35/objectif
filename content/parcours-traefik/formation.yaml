@@ -1,0 +1,10 @@
+title: "Traefik — reverse proxy par labels Docker"
+slug: parcours-traefik
+stack: "Traefik / Docker"
+track: "Cloud-DevOps"
+order: 2
+description: >-
+  Traefik v3 de zéro à la prod : le modèle mental (entrypoints, routers, services,
+  middlewares), la configuration par labels Docker, HTTPS Let's Encrypt, et un projet
+  fil rouge multi-services.
+tags: [traefik, docker, reverse-proxy, devops]

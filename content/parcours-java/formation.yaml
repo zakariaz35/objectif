@@ -1,0 +1,10 @@
+title: "Java pour un développeur PHP/Symfony senior"
+slug: parcours-java
+description: >-
+  Le langage Java et sa plateforme pour un dev PHP/Symfony confirmé : typage statique,
+  JVM, collections & génériques, streams & lambdas, gestion des exceptions et de la
+  mémoire, build Maven/Gradle, tests JUnit. Passerelles PHP permanentes.
+stack: "Java 21 (LTS)"
+track: "Java & Spring"
+order: 1
+tags: ["Java", "JVM", "backend", "POO", "reconversion"]

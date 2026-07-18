@@ -1,0 +1,140 @@
+---
+title: "Contexte & agrégats de base"
+type: lesson
+---
+
+# Le contexte : la clé de DAX
+
+La notion qui déroute tout le monde au début, mais qui rend DAX limpide une fois comprise : **une mesure se calcule toujours dans un contexte**. Le même `Total Sales` donne des résultats différents selon *où* il s'affiche, parce que le contexte filtre les lignes prises en compte.
+
+## Contexte de filtre
+
+Le **contexte de filtre** = l'ensemble des filtres actifs sur la cellule où la mesure s'évalue. Il vient :
+
+- de la **ligne/colonne** du visuel (un tableau par `category`) ;
+- des **slicers** et filtres de la page ;
+- des relations (filtrer une dimension filtre le fait).
+
+```mermaid
+flowchart LR
+    SL["Slicer<br/>(ex. region = Paris)"] --> CTX
+    AX["Axe du visuel<br/>(ex. category)"] --> CTX
+    PG["Filtres de page"] --> CTX
+    CTX["Contexte de filtre"] -->|propagé via les relations| DIM["Dimensions<br/>Products, Customers, Date"]
+    DIM -->|"1 → *"| FACT["Sales (fait)"]
+    FACT --> MES["Mesure : agrège<br/>les lignes restantes"]
+```
+
+Trois sources (slicer, axe du visuel, filtres de page) se combinent en un seul contexte, qui **se propage** des dimensions vers le fait via les relations `1 → *`. La mesure n'agrège alors que les lignes de `Sales` qui ont survécu à ce filtrage.
+
+```text
+Measure:  Total Sales = SUM ( Sales[amount] )
+
+In a table grouped by category:
+| category    | Total Sales |
+| Electronics |     120 000 |   ← context = "category = Electronics"
+| Furniture   |      78 000 |   ← context = "category = Furniture"
+| Total       |     198 000 |   ← context = no category filter → everything
+```
+
+Une seule formule, autant de résultats que de cellules : chaque cellule **filtre** `Sales` selon son contexte, puis somme.
+
+## Contexte de ligne
+
+Le **contexte de ligne** existe quand on évalue ligne par ligne : c'est le cas d'une **colonne calculée** (chaque ligne « sait » qui elle est) ou des fonctions itératives (`SUMX`, `AVERAGEX`). Pour l'essentiel des mesures, c'est le **contexte de filtre** qui compte.
+
+## Les agrégats de base
+
+Le socle des mesures, à connaître par cœur :
+
+```text
+Total Sales   = SUM ( Sales[amount] )
+Total Qty     = SUM ( Sales[quantity] )
+Avg Ticket    = AVERAGE ( Sales[amount] )
+Order Count   = COUNTROWS ( Sales )
+Distinct Cust = DISTINCTCOUNT ( Sales[customer_id] )
+```
+
+- `SUM` / `AVERAGE` / `MIN` / `MAX` agrègent **une colonne** numérique.
+- `COUNTROWS` compte les **lignes** d'une table (idéal pour « nombre de ventes »).
+- `DISTINCTCOUNT` compte les **valeurs distinctes** (clients uniques).
+
+## Les itérateurs (X) : agréger une expression
+
+Quand la valeur à agréger n'existe pas en colonne, on calcule **ligne par ligne** puis on agrège :
+
+```text
+// Sum of (quantity * unit_price) computed row by row, then summed
+Revenue = SUMX ( Sales, Sales[quantity] * Sales[unit_price] )
+```
+
+`SUMX` ouvre un contexte de ligne sur `Sales`, évalue l'expression pour chaque ligne, puis somme le tout. Déroulé sur 4 lignes :
+
+| `quantity` | `unit_price` | `quantity × unit_price` |
+|---|---|---|
+| 3 | 25 | 75 |
+| 1 | 120 | 120 |
+| 5 | 8 | 40 |
+| 2 | 60 | 120 |
+| **`SUMX` (somme des lignes)** | | **355** |
+
+`SUMX` calcule `75 + 120 + 40 + 120 = 355` : chaque ligne est évaluée séparément (contexte de ligne), puis les résultats sont additionnés (l'agrégat `SUM`). C'est exactement ce que ferait une boucle qui parcourt les lignes une à une.
+
+## Pièges du contexte de filtre
+
+### Le total faux avec une mesure divisée
+
+Ce piège arrive souvent avec les ratios. Imagine :
+
+```text
+// BAD: this computes a ratio per row, then sums the ratios — WRONG
+Avg Margin BAD = AVERAGE ( Sales[amount] ) / AVERAGE ( Sales[quantity] )
+```
+
+Dans un tableau par `category`, chaque cellule donne le ratio moyen de la catégorie — mais la **ligne Total** calcule le ratio sur l'ensemble de la table, pas la moyenne des ratios par catégorie. C'est cohérent mathématiquement mais souvent inattendu.
+
+**Solution** : décomposer en mesures atomiques et combiner :
+
+```text
+// GOOD: atomic measures, then combine
+Total Revenue = SUMX ( Sales, Sales[quantity] * Sales[unit_price] )
+Total Qty     = SUM ( Sales[quantity] )
+Revenue per Unit = DIVIDE ( [Total Revenue], [Total Qty] )
+```
+
+### `COUNTROWS` vs `COUNT`
+
+- `COUNTROWS(Sales)` — compte les **lignes** de la table (même si la colonne est null).
+- `COUNT(Sales[amount])` — compte les valeurs **non null** de la colonne.
+
+Pour « nombre de commandes », `COUNTROWS(Sales)` est presque toujours le bon choix.
+
+### Filtrer plusieurs colonnes dans `CALCULATE`
+
+On peut passer plusieurs filtres séparés par des virgules — ils s'appliquent comme un `AND` :
+
+```text
+// Electronics in Paris only
+Electronics Paris =
+CALCULATE (
+    [Total Sales],
+    Products[category] = "Electronics",
+    Customers[region]  = "Paris"
+)
+```
+
+Pour un `OR`, on utilise `FILTER` avec une table :
+
+```text
+// Electronics OR Furniture
+Electronics Or Furniture =
+CALCULATE (
+    [Total Sales],
+    FILTER (
+        Products,
+        Products[category] = "Electronics" || Products[category] = "Furniture"
+    )
+)
+```
+
+> **À retenir —** Une mesure se lit **toujours dans son contexte de filtre**. Agrégats de base : `SUM`, `AVERAGE`, `COUNTROWS`, `DISTINCTCOUNT`. Itérateurs `…X` pour agréger une expression ligne à ligne. Attention aux totaux faux avec les ratios : préfère des mesures atomiques combinées.

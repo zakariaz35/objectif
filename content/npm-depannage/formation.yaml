@@ -1,0 +1,9 @@
+title: "npm : le guide de dépannage"
+slug: npm-depannage
+description: >-
+  Guide pratique symptôme → cause → fix pour les vraies galères npm : conflits de
+  versions et peer dependencies (ERESOLVE), lockfiles et node_modules, cache et
+  permissions (EACCES), npm vs yarn vs pnpm, sécurité et supply chain. Pour un dev
+  Composer qui bute sur npm. Passerelles Composer permanentes.
+stack: "npm / Node.js"
+tags: ["npm", "yarn", "pnpm", "dépannage", "dependencies", "semver", "lockfile", "Node.js"]

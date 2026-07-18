@@ -1,0 +1,336 @@
+/* ---------------------------------------------------------------------------
+   Themes — everything is driven by CSS variables (design tokens).
+   The active theme is selected via the data-theme attribute on <html> (see lib/theme.js).
+   Add a theme = add a [data-theme="..."] block below.
+--------------------------------------------------------------------------- */
+/* Default theme: « blue » (inspired by Coursera — blue on a light background). */
+:root,
+[data-theme='blue'] {
+  --bg: #f5f7fb;
+  --panel: #ffffff;
+  --panel2: #eaf0fb;
+  --border: #d4ddee;
+  --txt: #1f2733;
+  --muted: #5a6b82;
+  --heading: #14274e;
+  --accent: #0056d2; /* Coursera blue */
+  --accent2: #1c7ed6;
+  --accent-contrast: #ffffff; /* text placed on --accent */
+  --warn: #b8860b;
+  --bad: #e03131;
+  --good: #2f9e44;
+  --code: #eef2fb;
+  --code-txt: #1f2733; /* code block text */
+  --code-inline: #0b5bd0; /* inline code */
+  --shadow: 0 1px 2px rgba(20, 30, 60, 0.05), 0 10px 26px rgba(20, 30, 60, 0.06);
+  --shadow-lg: 0 16px 38px rgba(20, 30, 60, 0.14);
+}
+
+[data-theme='dark'] {
+  --bg: #0f1117;
+  --panel: #171a23;
+  --panel2: #1e2230;
+  --border: #2a3040;
+  --txt: #e6e9ef;
+  --muted: #9aa4b8;
+  --heading: #cdd6ec;
+  --accent: #7c9cff;
+  --accent2: #5be3c0;
+  --accent-contrast: #0b0d13;
+  --warn: #ffcf6b;
+  --bad: #ff8a8a;
+  --good: #6be39a;
+  --code: #0c0e14;
+  --code-txt: #d7e0f0;
+  --code-inline: #aee0ff;
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 10px 26px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 18px 40px rgba(0, 0, 0, 0.55);
+}
+
+[data-theme='light'] {
+  --bg: #f6f7f9;
+  --panel: #ffffff;
+  --panel2: #eef1f6;
+  --border: #dde2ec;
+  --txt: #1b2330;
+  --muted: #5d6b82;
+  --heading: #243049;
+  --accent: #4263eb;
+  --accent2: #0ca678;
+  --accent-contrast: #ffffff;
+  --warn: #b8860b;
+  --bad: #e03131;
+  --good: #2f9e44;
+  --code: #f1f3f9;
+  --code-txt: #1f2733;
+  --code-inline: #0b5bd0;
+}
+
+[data-theme='pink'] {
+  --bg: #fff0f6;
+  --panel: #ffffff;
+  --panel2: #ffe3ef;
+  --border: #ffc9de;
+  --txt: #3a1f2c;
+  --muted: #9b6a80;
+  --heading: #7d2447;
+  --accent: #e64980;
+  --accent2: #c2255c;
+  --accent-contrast: #ffffff;
+  --warn: #b8860b;
+  --bad: #e03131;
+  --good: #2f9e44;
+  --code: #fff5f9;
+  --code-txt: #3a1f2c;
+  --code-inline: #c2185b;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--txt);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  line-height: 1.65;
+  font-size: 16px;
+}
+
+#app {
+  min-height: 100vh;
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+::selection {
+  background: var(--accent);
+  color: var(--accent-contrast);
+}
+
+h1,
+h2,
+h3,
+h4 {
+  line-height: 1.25;
+}
+
+/* ---------------------------------------------------------------------------
+   Shared buttons — used across all components (avoids duplication).
+--------------------------------------------------------------------------- */
+button {
+  font: inherit;
+  cursor: pointer;
+}
+
+.btn {
+  font: inherit;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  padding: 9px 16px;
+  cursor: pointer;
+  transition: border-color 0.12s, background 0.12s, opacity 0.12s;
+}
+.btn:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+.btn-primary {
+  background: var(--accent);
+  color: var(--accent-contrast);
+  font-weight: 700;
+}
+.btn-ghost {
+  background: var(--panel);
+  border-color: var(--border);
+  color: var(--txt);
+}
+.btn-ghost:hover:not(:disabled) {
+  border-color: var(--accent);
+}
+.btn-link {
+  background: none;
+  border: none;
+  color: var(--muted);
+  padding: 0;
+}
+.btn-link:hover {
+  color: var(--txt);
+}
+
+/* Rendering of Markdown content (HTML coming from the API) */
+.prose {
+  font-size: 16px;
+}
+.prose h1 {
+  font-size: 28px;
+  margin: 0 0 18px;
+}
+.prose h2 {
+  font-size: 23px;
+  border-left: 4px solid var(--accent);
+  padding-left: 12px;
+  margin: 36px 0 14px;
+}
+.prose h3 {
+  font-size: 19px;
+  margin: 26px 0 10px;
+  color: var(--heading);
+}
+.prose h4 {
+  font-size: 16px;
+  margin: 20px 0 8px;
+  color: var(--accent2);
+}
+.prose p {
+  margin: 12px 0;
+}
+.prose ul,
+.prose ol {
+  margin: 12px 0;
+  padding-left: 24px;
+}
+.prose li {
+  margin: 5px 0;
+}
+.prose code {
+  background: var(--code);
+  padding: 2px 6px;
+  border-radius: 5px;
+  font-family: 'SF Mono', Menlo, Consolas, monospace;
+  font-size: 13.5px;
+  color: var(--code-inline);
+}
+.prose pre {
+  position: relative;
+  background: var(--code);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px 18px;
+  overflow-x: auto;
+  font-size: 13.5px;
+  line-height: 1.55;
+}
+/* Extra top padding so the language label doesn't overlap the first code line */
+.prose pre.has-lang {
+  padding-top: 30px;
+}
+/* Language label injected top-left when a code block declares a language */
+.prose pre .code-lang {
+  position: absolute;
+  top: 8px;
+  left: 14px;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  color: var(--muted);
+  opacity: 0.7;
+  user-select: none;
+  pointer-events: none;
+}
+/* Actions bar (top-right): "Tester" and/or "Copier" — revealed on hover */
+.prose pre .code-actions {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  display: flex;
+  gap: 6px;
+  opacity: 0;
+  transition: opacity 0.12s;
+}
+.prose pre:hover .code-actions,
+.prose pre:focus-within .code-actions {
+  opacity: 1;
+}
+.prose pre .scratch-btn,
+.prose pre .copy-btn {
+  font: inherit;
+  font-size: 11px;
+  padding: 3px 9px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--panel);
+  color: var(--muted);
+  cursor: pointer;
+}
+.prose pre .scratch-btn:hover,
+.prose pre .copy-btn:hover {
+  color: var(--txt);
+  border-color: var(--accent);
+}
+.prose pre .copy-btn.done {
+  color: var(--good);
+  border-color: var(--good);
+}
+.prose pre code {
+  background: none;
+  padding: 0;
+  color: var(--code-txt);
+}
+/* Shiki dual-theme highlighting: each token carries --shiki-light/--shiki-dark;
+   CSS picks the right one from the active theme. No re-highlight on theme switch.
+   Backgrounds are neutralized so our --code panel color is kept. */
+.prose pre code.shiki,
+.prose pre code.shiki span {
+  color: var(--shiki-light);
+  background: transparent !important;
+}
+[data-theme='dark'] .prose pre code.shiki,
+[data-theme='dark'] .prose pre code.shiki span {
+  color: var(--shiki-dark);
+}
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 18px 0;
+  font-size: 14px;
+}
+.prose th,
+.prose td {
+  border: 1px solid var(--border);
+  padding: 10px 12px;
+  text-align: left;
+}
+.prose th {
+  background: var(--panel2);
+  color: var(--accent2);
+}
+.prose blockquote {
+  border-left: 4px solid var(--accent);
+  margin: 16px 0;
+  padding: 4px 16px;
+  color: var(--muted);
+  background: var(--panel);
+}
+.prose img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+}
+.prose figure {
+  margin: 18px 0;
+  text-align: center;
+}
+.prose figcaption {
+  color: var(--muted);
+  font-size: 13px;
+  margin-top: 6px;
+}
+/* Mermaid diagrams (rendered client-side from ```mermaid blocks) */
+.prose .mermaid {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+}

@@ -1,0 +1,335 @@
+<script setup>
+import { ref, inject, watch, computed, nextTick } from 'vue'
+import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
+import api from '../lib/api'
+import { theme } from '../lib/theme'
+import { playgroundFor } from '../lib/playgrounds'
+import { highlight } from '../lib/highlight'
+import QuizPlayer from '../components/QuizPlayer.vue'
+import ExercisePlayer from '../components/ExercisePlayer.vue'
+import Flashcards from '../components/Flashcards.vue'
+import Matching from '../components/Matching.vue'
+import Cloze from '../components/Cloze.vue'
+
+const props = defineProps({ formation: String, module: String, lesson: String })
+const router = useRouter()
+const { t } = useI18n()
+const { isDone, toggle } = inject('progress')
+
+const data = ref(null)
+const loading = ref(true)
+const articleEl = ref(null)
+
+const done = computed(() => isDone(props.module, props.lesson))
+
+async function load() {
+  loading.value = true
+  try {
+    data.value = await api.getLesson(props.formation, props.module, props.lesson)
+  } finally {
+    loading.value = false
+  }
+  await nextTick()
+  renderDiagrams()
+  decorateCodeBlocks()
+}
+
+// Decorate every code block: language label, Copy button, a "Tester" button on
+// runnable languages (JS/TS/Vue/Python), and Shiki syntax highlighting.
+function decorateCodeBlocks() {
+  const pres = articleEl.value?.querySelectorAll('.prose pre:not([data-scratch])')
+  if (!pres) return
+  pres.forEach((pre) => {
+    pre.dataset.scratch = '1'
+    const codeEl = pre.querySelector('code')
+    const lang = ((codeEl?.className || '').match(/language-(\w+)/) || [])[1]
+    // Capture the raw text BEFORE highlighting rewrites <code> into token spans.
+    const codeText = (codeEl || pre).innerText
+
+    // Language label (top-left), only when a language is declared.
+    if (lang) {
+      pre.classList.add('has-lang')
+      const label = document.createElement('span')
+      label.className = 'code-lang'
+      label.textContent = lang
+      pre.appendChild(label)
+    }
+
+    // Actions bar (top-right): Tester (if runnable) then Copier (always).
+    const actions = document.createElement('div')
+    actions.className = 'code-actions'
+
+    const open = playgroundFor(lang)
+    if (open) {
+      const test = document.createElement('button')
+      test.type = 'button'
+      test.className = 'scratch-btn'
+      test.textContent = t('lesson.test')
+      test.addEventListener('click', () => open(codeText))
+      actions.appendChild(test)
+    }
+
+    const copy = document.createElement('button')
+    copy.type = 'button'
+    copy.className = 'copy-btn'
+    copy.textContent = t('lesson.copy')
+    let resetTimer = null
+    copy.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(codeText)
+      } catch (e) {
+        return // clipboard unavailable (insecure context / denied)
+      }
+      copy.textContent = t('lesson.copied')
+      copy.classList.add('done')
+      clearTimeout(resetTimer)
+      resetTimer = setTimeout(() => {
+        copy.textContent = t('lesson.copy')
+        copy.classList.remove('done')
+      }, 1500)
+    })
+    actions.appendChild(copy)
+    pre.appendChild(actions)
+
+    // Syntax highlighting (lazy, async). Replaces the <code> content with Shiki
+    // dual-theme token spans; theme switching is handled purely by CSS.
+    highlight(codeText, lang).then((html) => {
+      if (!html || !codeEl) return
+      const tmp = document.createElement('div')
+      tmp.innerHTML = html
+      const shikiPre = tmp.querySelector('pre')
+      const shikiCode = tmp.querySelector('code')
+      if (!shikiCode) return
+      codeEl.innerHTML = shikiCode.innerHTML
+      codeEl.classList.add('shiki')
+      // Carry the root --shiki-light/--shiki-dark vars (default text color).
+      if (shikiPre) codeEl.setAttribute('style', shikiPre.getAttribute('style') || '')
+    })
+  })
+}
+
+// Render Mermaid diagrams (```mermaid blocks). Lazy-loaded: only pulled in when
+// the lesson actually contains a diagram.
+async function renderDiagrams() {
+  const nodes = articleEl.value?.querySelectorAll('.mermaid:not([data-processed])')
+  if (!nodes || nodes.length === 0) return
+  const mermaid = (await import('mermaid')).default
+  mermaid.initialize({ startOnLoad: false, theme: theme.state.current === 'dark' ? 'dark' : 'neutral' })
+  try {
+    await mermaid.run({ nodes })
+  } catch (e) {
+    /* invalid diagram: leave the raw text in place */
+  }
+}
+
+function go(nav) {
+  if (nav) router.push(`/f/${props.formation}/${nav.module}/${nav.lesson}`)
+}
+
+watch(() => [props.module, props.lesson], load, { immediate: true })
+</script>
+
+<template>
+  <article v-if="!loading && data" ref="articleEl">
+    <nav class="crumbs">
+      {{ data.formation.title }} <span>/</span> {{ data.module.title }}
+    </nav>
+
+    <div class="head">
+      <span class="tag" :class="data.lesson.type">{{ $t('lesson.type.' + data.lesson.type) }}</span>
+      <h1>{{ data.lesson.title }}</h1>
+    </div>
+
+    <div v-if="data.lesson.body_html" class="prose" v-html="data.lesson.body_html"></div>
+
+    <QuizPlayer
+      v-if="data.lesson.type === 'quiz' && data.lesson.quiz"
+      :formation="props.formation"
+      :module="props.module"
+      :lesson="props.lesson"
+      :questions="data.lesson.quiz"
+      :strategy="data.lesson.strategy"
+      :draw="data.lesson.draw"
+      @completed="toggle(props.module, props.lesson, true)"
+    />
+
+    <ExercisePlayer
+      v-if="data.lesson.type === 'exercise' && data.lesson.exercise"
+      :starter="data.lesson.exercise.starter"
+      :tests="data.lesson.exercise.tests"
+      :language="data.lesson.exercise.language"
+      @completed="toggle(props.module, props.lesson, true)"
+    />
+
+    <Flashcards
+      v-if="data.lesson.type === 'flashcards' && data.lesson.cards"
+      :cards="data.lesson.cards"
+      :formation="props.formation"
+      :module="props.module"
+      :lesson="props.lesson"
+      @completed="toggle(props.module, props.lesson, true)"
+    />
+
+    <Matching
+      v-if="data.lesson.type === 'matching' && data.lesson.matching"
+      :formation="props.formation"
+      :module="props.module"
+      :lesson="props.lesson"
+      :left="data.lesson.matching.left"
+      :right="data.lesson.matching.right"
+      @completed="toggle(props.module, props.lesson, true)"
+    />
+
+    <Cloze
+      v-if="data.lesson.type === 'cloze' && data.lesson.cloze"
+      :formation="props.formation"
+      :module="props.module"
+      :lesson="props.lesson"
+      :items="data.lesson.cloze.items"
+      @completed="toggle(props.module, props.lesson, true)"
+    />
+
+    <details v-if="data.lesson.has_correction" class="correction">
+      <summary>{{ $t('lesson.showCorrection') }}</summary>
+      <div class="prose" v-html="data.lesson.correction_html"></div>
+    </details>
+
+    <label class="markdone">
+      <input
+        type="checkbox"
+        :checked="done"
+        @change="toggle(props.module, props.lesson, $event.target.checked)"
+      />
+      {{ $t('lesson.markDone') }}
+    </label>
+
+    <nav class="pager">
+      <button :disabled="!data.prev" @click="go(data.prev)" class="prev">
+        <template v-if="data.prev">← {{ data.prev.title }}</template>
+        <template v-else>—</template>
+      </button>
+      <button :disabled="!data.next" @click="go(data.next)" class="next">
+        <template v-if="data.next">{{ data.next.title }} →</template>
+        <template v-else>—</template>
+      </button>
+    </nav>
+  </article>
+  <div v-else class="muted">{{ $t('lesson.loading') }}</div>
+</template>
+
+<style scoped>
+.crumbs {
+  color: var(--muted);
+  font-size: 13px;
+  margin-bottom: 8px;
+}
+.crumbs span {
+  opacity: 0.5;
+  margin: 0 4px;
+}
+.head {
+  margin-bottom: 18px;
+}
+.tag {
+  display: inline-block;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 20px;
+  background: var(--panel2);
+  color: var(--accent);
+}
+.tag.exercise {
+  color: var(--accent2);
+}
+.tag.quiz {
+  color: var(--warn);
+}
+.tag.flashcards {
+  color: var(--accent);
+}
+.tag.matching {
+  color: var(--accent2);
+}
+.tag.cloze {
+  color: var(--warn);
+}
+.head h1 {
+  margin: 10px 0 0;
+  font-size: 28px;
+}
+.correction {
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--good);
+  border-radius: 10px;
+  margin: 24px 0;
+  background: var(--panel);
+  overflow: hidden;
+}
+.correction > summary {
+  cursor: pointer;
+  padding: 14px 18px;
+  font-weight: 600;
+  color: var(--good);
+  list-style: none;
+}
+.correction > summary::-webkit-details-marker {
+  display: none;
+}
+.correction[open] > summary {
+  border-bottom: 1px solid var(--border);
+}
+.correction .prose {
+  padding: 4px 18px 16px;
+}
+.markdone {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 28px 0;
+  color: var(--muted);
+  cursor: pointer;
+  user-select: none;
+}
+.markdone input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--good);
+}
+.pager {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 40px;
+  border-top: 1px solid var(--border);
+  padding-top: 20px;
+}
+.pager button {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  color: var(--txt);
+  border-radius: 8px;
+  padding: 10px 16px;
+  max-width: 48%;
+  text-align: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.pager button:hover:not(:disabled) {
+  border-color: var(--accent);
+}
+.pager button:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+.pager .next {
+  text-align: right;
+}
+.muted {
+  color: var(--muted);
+}
+</style>

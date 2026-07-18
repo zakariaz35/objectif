@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 360" width="720" height="360"
+     font-family="'Segoe UI', Arial, sans-serif" font-size="13">
+
+  <!-- background -->
+  <rect width="720" height="360" fill="#f8fafc" rx="10"/>
+
+  <!-- Title -->
+  <text x="360" y="30" text-anchor="middle" font-size="15" font-weight="bold" fill="#1e293b">INNER JOIN vs LEFT JOIN</text>
+
+  <!-- ===== INNER JOIN (left half) ===== -->
+  <text x="180" y="60" text-anchor="middle" font-size="13" font-weight="bold" fill="#0f172a">INNER JOIN</text>
+
+  <!-- customers circle -->
+  <ellipse cx="140" cy="175" rx="80" ry="95" fill="#dbeafe" stroke="#3b82f6" stroke-width="2"/>
+  <text x="95" y="155" font-size="11" fill="#1e3a5f">customers</text>
+  <text x="95" y="170" font-size="10" fill="#1e3a5f">Alice (1)</text>
+  <text x="95" y="184" font-size="10" fill="#1e3a5f">Bob   (2)</text>
+  <text x="95" y="198" font-size="10" fill="#1e3a5f">Carol (3)</text>
+
+  <!-- orders circle -->
+  <ellipse cx="220" cy="175" rx="80" ry="95" fill="#dcfce7" stroke="#22c55e" stroke-width="2"/>
+  <text x="225" y="155" font-size="11" fill="#14532d">orders</text>
+  <text x="222" y="170" font-size="10" fill="#14532d">ord 10 (1)</text>
+  <text x="222" y="184" font-size="10" fill="#14532d">ord 20 (1)</text>
+  <text x="222" y="198" font-size="10" fill="#14532d">ord 30 (3)</text>
+
+  <!-- intersection highlight -->
+  <ellipse cx="180" cy="175" rx="40" ry="80" fill="#a7f3d0" fill-opacity="0.55" stroke="none"/>
+  <text x="180" y="260" text-anchor="middle" font-size="11" fill="#065f46">lignes communes</text>
+  <text x="180" y="275" text-anchor="middle" font-size="11" fill="#065f46">(Alice + Carol)</text>
+  <!-- Bob has no order => excluded arrow note -->
+  <text x="75" y="230" font-size="10" fill="#dc2626" text-anchor="middle">Bob exclu</text>
+  <text x="75" y="243" font-size="10" fill="#dc2626" text-anchor="middle">(pas d'ordre)</text>
+
+  <!-- JOIN key label -->
+  <text x="180" y="310" text-anchor="middle" font-size="11" fill="#6b7280">ON o.customer_id = c.customer_id</text>
+
+  <!-- legend inner -->
+  <rect x="110" y="328" width="12" height="12" fill="#a7f3d0" stroke="#22c55e" stroke-width="1" rx="2"/>
+  <text x="126" y="339" font-size="11" fill="#374151">résultat INNER JOIN</text>
+
+  <!-- divider -->
+  <line x1="360" y1="45" x2="360" y2="335" stroke="#cbd5e1" stroke-width="1" stroke-dasharray="6,3"/>
+
+  <!-- ===== LEFT JOIN (right half) ===== -->
+  <text x="540" y="60" text-anchor="middle" font-size="13" font-weight="bold" fill="#0f172a">LEFT JOIN</text>
+
+  <!-- customers circle (LEFT table) -->
+  <ellipse cx="500" cy="175" rx="80" ry="95" fill="#dbeafe" stroke="#3b82f6" stroke-width="2"/>
+  <text x="455" y="155" font-size="11" fill="#1e3a5f">customers (gauche)</text>
+  <text x="460" y="170" font-size="10" fill="#1e3a5f">Alice (1)</text>
+  <text x="460" y="184" font-size="10" fill="#1e3a5f">Bob   (2)</text>
+  <text x="460" y="198" font-size="10" fill="#1e3a5f">Carol (3)</text>
+
+  <!-- orders circle (RIGHT table) -->
+  <ellipse cx="580" cy="175" rx="80" ry="95" fill="#dcfce7" stroke="#22c55e" stroke-width="2"/>
+  <text x="585" y="155" font-size="11" fill="#14532d">orders (droite)</text>
+  <text x="582" y="170" font-size="10" fill="#14532d">ord 10 (1)</text>
+  <text x="582" y="184" font-size="10" fill="#14532d">ord 20 (1)</text>
+  <text x="582" y="198" font-size="10" fill="#14532d">ord 30 (3)</text>
+
+  <!-- LEFT highlight = entire left circle -->
+  <ellipse cx="500" cy="175" rx="80" ry="95" fill="#bfdbfe" fill-opacity="0.45" stroke="none"/>
+  <ellipse cx="540" cy="175" rx="40" ry="80" fill="#a7f3d0" fill-opacity="0.45" stroke="none"/>
+
+  <!-- Bob NULL annotation -->
+  <line x1="480" y1="184" x2="420" y2="225" stroke="#dc2626" stroke-width="1" stroke-dasharray="3,2"/>
+  <text x="390" y="230" font-size="10" fill="#dc2626" text-anchor="middle">Bob → orderId = NULL</text>
+  <text x="390" y="243" font-size="10" fill="#dc2626" text-anchor="middle">(conservé)</text>
+
+  <!-- JOIN key label -->
+  <text x="540" y="310" text-anchor="middle" font-size="11" fill="#6b7280">ON o.customer_id = c.customer_id</text>
+
+  <!-- legend left -->
+  <rect x="440" y="328" width="12" height="12" fill="#bfdbfe" stroke="#3b82f6" stroke-width="1" rx="2"/>
+  <text x="456" y="339" font-size="11" fill="#374151">toutes les lignes gauche (+ NULL droite)</text>
+
+</svg>

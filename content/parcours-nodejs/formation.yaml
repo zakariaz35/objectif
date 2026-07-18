@@ -1,0 +1,11 @@
+title: "Node.js — les fondamentaux pour un dev backend"
+slug: parcours-nodejs
+description: >-
+  Le runtime Node.js expliqué à un développeur PHP/Symfony senior : event loop et
+  I/O non bloquant, modules CommonJS/ESM, asynchrone (promesses, async/await),
+  EventEmitter et streams, fichiers/process, serveur HTTP natif, écosystème npm,
+  gestion d'erreurs et debugging. Passerelles Symfony à chaque étape.
+stack: "Node.js"
+track: "Node.js & NestJS"
+order: 1
+tags: ["Node.js", "JavaScript", "backend", "async", "event-loop", "npm"]

@@ -1,0 +1,25 @@
+<svg viewBox="0 0 470 280" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="tn dn">
+  <title id="tn">Coût d'un algorithme : n vs n²</title>
+  <desc id="dn">Quand la taille des données augmente, un coût linéaire (n) monte doucement, un coût quadratique (n²) explose.</desc>
+  <style>
+    .ttl{font-family:system-ui,-apple-system,sans-serif;font-size:14px;font-weight:600;fill:#0f172a}
+    .axis{stroke:#94a3b8;stroke-width:1.5}
+    .lin{stroke:#16a34a;stroke-width:2.5;fill:none}
+    .quad{stroke:#dc2626;stroke-width:2.5;fill:none}
+    .lbl{font-family:system-ui,-apple-system,sans-serif;font-size:12px;fill:#475569}
+    .leg{font-family:system-ui,-apple-system,sans-serif;font-size:13px}
+    .cap{font-family:system-ui,-apple-system,sans-serif;font-size:12px;fill:#64748b}
+  </style>
+  <text class="ttl" x="24" y="26">Coût d'un algorithme : n vs n²</text>
+  <line class="axis" x1="60" y1="50" x2="60" y2="228"/>
+  <line class="axis" x1="60" y1="228" x2="430" y2="228"/>
+  <text class="lbl" x="66" y="46">opérations</text>
+  <text class="lbl" x="360" y="246">taille (n) →</text>
+  <polyline class="lin" points="60,228 430,150"/>
+  <polyline class="quad" points="60,228 130,220 200,198 260,160 300,120 330,80 352,52"/>
+  <circle cx="352" cy="52" r="3" fill="#dc2626"/>
+  <circle cx="430" cy="150" r="3" fill="#16a34a"/>
+  <text class="leg" x="300" y="176" fill="#16a34a">n (linéaire)</text>
+  <text class="leg" x="300" y="44" fill="#dc2626">n² (quadratique)</text>
+  <text class="cap" x="60" y="266">n² explose : doubler la donnée → ×4 le travail.</text>
+</svg>

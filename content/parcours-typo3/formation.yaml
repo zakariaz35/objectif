@@ -1,0 +1,11 @@
+title: "TYPO3 pour développeur PHP/Symfony — Contexte Agence"
+slug: parcours-typo3
+description: >-
+  TYPO3 12.4 LTS de zéro à la production en contexte missions d'agence : architecture
+  core/extensions, SitePackage, TypoScript, Fluid, TCA, Extbase/plugins, gestion backend
+  éditeurs, Composer mode, déploiement et montées de version LTS. Pièges reprises de
+  projets legacy inclus. Taillé pour un développeur PHP/Symfony senior.
+stack: "TYPO3 12.4 / PHP"
+track: "PHP-Agence"
+order: 2
+tags: [typo3, php, cms, agence, sitepackage, fluid, typoscript, extbase, tca, lts]

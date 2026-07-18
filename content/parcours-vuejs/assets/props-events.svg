@@ -1,0 +1,26 @@
+<svg viewBox="0 0 460 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="tpe dpe">
+  <title id="tpe">Props vers le bas, événements vers le haut</title>
+  <desc id="dpe">Le parent passe des données à l'enfant via les props (vers le bas) ; l'enfant remonte des événements au parent via emit (vers le haut).</desc>
+  <style>
+    .ttl{font-family:system-ui,-apple-system,sans-serif;font-size:14px;font-weight:600;fill:#0f172a}
+    .box{fill:#eef2ff;stroke:#6366f1;stroke-width:1.5}
+    .bt{font-family:system-ui,-apple-system,sans-serif;font-size:15px;fill:#0f172a;text-anchor:middle}
+    .down{stroke:#2563eb;stroke-width:2;fill:none}
+    .up{stroke:#f59e0b;stroke-width:2;fill:none}
+    .lp{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;fill:#2563eb}
+    .lu{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;fill:#b45309}
+  </style>
+  <defs>
+    <marker id="mb" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#2563eb"/></marker>
+    <marker id="mo" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#f59e0b"/></marker>
+  </defs>
+  <text class="ttl" x="24" y="26">Props ↓ (parent → enfant) · Events ↑ (enfant → parent)</text>
+  <rect class="box" x="130" y="52" width="200" height="52" rx="8"/>
+  <text class="bt" x="230" y="84">Composant parent</text>
+  <rect class="box" x="130" y="168" width="200" height="52" rx="8"/>
+  <text class="bt" x="230" y="200">Composant enfant</text>
+  <path class="down" marker-end="url(#mb)" d="M180 104 L180 166"/>
+  <text class="lp" x="40" y="140">props ↓</text>
+  <path class="up" marker-end="url(#mo)" d="M285 166 L285 104"/>
+  <text class="lu" x="340" y="140">emit ↑</text>
+</svg>

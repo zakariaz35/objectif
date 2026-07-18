@@ -1,0 +1,5 @@
+title: "Python — le langage (au-delà des bases)"
+slug: python-langage
+description: "POO & dataclasses, exceptions, itérateurs & générateurs, typing : les fondations du langage Python qui complètent le parcours orienté data."
+stack: "Python"
+tags: ["langage", "POO", "avancé", "interactif"]

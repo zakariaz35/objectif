@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 300" width="820" height="300" font-family="system-ui, sans-serif">
+  <rect width="820" height="300" fill="#f8fafc" rx="10"/>
+
+  <text x="410" y="28" text-anchor="middle" font-size="14" font-weight="bold" fill="#0f172a">Dimension · Mesure · Granularité</text>
+
+  <!-- ===== TABLE EXAMPLE ===== -->
+  <text x="20" y="55" font-size="12" font-weight="bold" fill="#334155">Table de ventes (granularité : 1 ligne = 1 ligne de commande)</text>
+
+  <!-- Table header -->
+  <rect x="20" y="62" width="780" height="28" rx="4" fill="#1e293b"/>
+  <text x="70"  y="81" text-anchor="middle" font-size="11" fill="#f1f5f9" font-weight="bold">order_id</text>
+  <text x="185" y="81" text-anchor="middle" font-size="11" fill="#f1f5f9" font-weight="bold">order_date</text>
+  <text x="290" y="81" text-anchor="middle" font-size="11" fill="#bfdbfe" font-weight="bold">region ◀ DIM</text>
+  <text x="405" y="81" text-anchor="middle" font-size="11" fill="#bfdbfe" font-weight="bold">category ◀ DIM</text>
+  <text x="530" y="81" text-anchor="middle" font-size="11" fill="#bbf7d0" font-weight="bold">quantity ◀ MES</text>
+  <text x="665" y="81" text-anchor="middle" font-size="11" fill="#bbf7d0" font-weight="bold">amount ◀ MES</text>
+
+  <!-- Row 1 -->
+  <rect x="20" y="90" width="780" height="26" rx="0" fill="#ffffff" stroke="#e2e8f0"/>
+  <text x="70"  y="108" text-anchor="middle" font-size="11" fill="#64748b">1001</text>
+  <text x="185" y="108" text-anchor="middle" font-size="11" fill="#64748b">2024-01-15</text>
+  <text x="290" y="108" text-anchor="middle" font-size="11" fill="#1d4ed8">Nord</text>
+  <text x="405" y="108" text-anchor="middle" font-size="11" fill="#1d4ed8">Office</text>
+  <text x="530" y="108" text-anchor="middle" font-size="11" fill="#065f46">2</text>
+  <text x="665" y="108" text-anchor="middle" font-size="11" fill="#065f46">120,00 €</text>
+
+  <!-- Row 2 -->
+  <rect x="20" y="116" width="780" height="26" rx="0" fill="#f8fafc" stroke="#e2e8f0"/>
+  <text x="70"  y="134" text-anchor="middle" font-size="11" fill="#64748b">1002</text>
+  <text x="185" y="134" text-anchor="middle" font-size="11" fill="#64748b">2024-01-20</text>
+  <text x="290" y="134" text-anchor="middle" font-size="11" fill="#1d4ed8">Sud</text>
+  <text x="405" y="134" text-anchor="middle" font-size="11" fill="#1d4ed8">Hardware</text>
+  <text x="530" y="134" text-anchor="middle" font-size="11" fill="#065f46">1</text>
+  <text x="665" y="134" text-anchor="middle" font-size="11" fill="#065f46">300,00 €</text>
+
+  <!-- Row 3 -->
+  <rect x="20" y="142" width="780" height="26" rx="0" fill="#ffffff" stroke="#e2e8f0"/>
+  <text x="70"  y="160" text-anchor="middle" font-size="11" fill="#64748b">1003</text>
+  <text x="185" y="160" text-anchor="middle" font-size="11" fill="#64748b">2024-02-05</text>
+  <text x="290" y="160" text-anchor="middle" font-size="11" fill="#1d4ed8">Nord</text>
+  <text x="405" y="160" text-anchor="middle" font-size="11" fill="#1d4ed8">Office</text>
+  <text x="530" y="160" text-anchor="middle" font-size="11" fill="#065f46">5</text>
+  <text x="665" y="160" text-anchor="middle" font-size="11" fill="#065f46">300,00 €</text>
+
+  <!-- ===== LEGEND BOXES ===== -->
+  <!-- Dimension -->
+  <rect x="20" y="185" width="240" height="50" rx="7" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.5"/>
+  <text x="140" y="207" text-anchor="middle" font-size="12" font-weight="bold" fill="#1e3a8a">DIMENSION</text>
+  <text x="140" y="223" text-anchor="middle" font-size="11" fill="#1e40af">Axe de découpage (texte / date)</text>
+  <text x="140" y="237" text-anchor="middle" font-size="10" fill="#3b82f6">region, category, order_date</text>
+
+  <!-- Mesure -->
+  <rect x="290" y="185" width="240" height="50" rx="7" fill="#d1fae5" stroke="#10b981" stroke-width="1.5"/>
+  <text x="410" y="207" text-anchor="middle" font-size="12" font-weight="bold" fill="#064e3b">MESURE</text>
+  <text x="410" y="223" text-anchor="middle" font-size="11" fill="#065f46">Valeur numérique agrégeable</text>
+  <text x="410" y="237" text-anchor="middle" font-size="10" fill="#10b981">quantity, amount → Σ ou AVG</text>
+
+  <!-- Granularité -->
+  <rect x="560" y="185" width="240" height="50" rx="7" fill="#fef9c3" stroke="#eab308" stroke-width="1.5"/>
+  <text x="680" y="207" text-anchor="middle" font-size="12" font-weight="bold" fill="#713f12">GRANULARITÉ</text>
+  <text x="680" y="223" text-anchor="middle" font-size="11" fill="#854d0e">Niveau de détail d'une ligne</text>
+  <text x="680" y="237" text-anchor="middle" font-size="10" fill="#ca8a04">fine → agrège librement ↑ seulement</text>
+
+  <!-- Golden rule -->
+  <rect x="20" y="250" width="780" height="36" rx="7" fill="#1e293b"/>
+  <text x="410" y="266" text-anchor="middle" font-size="11" font-weight="bold" fill="#fbbf24">Règle d'or :</text>
+  <text x="410" y="281" text-anchor="middle" font-size="11" fill="#e2e8f0">on agrège toujours du fin vers le grossier (ligne → mois) — jamais l'inverse. Garde la donnée la plus fine.</text>
+</svg>

@@ -1,0 +1,9 @@
+title: "Next.js — l'essentiel (App Router)"
+slug: parcours-nextjs
+description: >-
+  Next.js pour un dev qui connaît déjà React : le App Router, les Server/Client
+  Components, les stratégies de rendu (SSR/SSG/ISR) et le modèle fullstack (data
+  fetching serveur, Route Handlers, Server Actions). Cours minimaliste, centré sur
+  ce qui est propre à Next. Passerelles Symfony.
+stack: "Next.js 15 / React 19"
+tags: ["Next.js", "React", "fullstack", "App Router", "SSR", "Server Components"]

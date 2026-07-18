@@ -1,0 +1,32 @@
+# Dépendances
+backend/vendor/
+frontend/node_modules/
+frontend/dist/
+
+# Environnement / secrets
+backend/.env
+# .env.docker est versionné (pas de secret réel, dev local)
+
+# Base de données locale (SQLite)
+backend/database/*.sqlite
+
+# Logs & cache
+backend/storage/logs/*
+backend/storage/framework/cache/*
+
+# Archives de contenu : artefacts de build, régénérables à tout moment avec
+# `php content/make-zips.php` — la source de vérité est le Markdown de content/.
+# Copies de secours dans ~/Documents/objectif-zips-backup/.
+content/*.zip
+
+# Captures d'écran / galeries de tests (artefacts générés par Playwright)
+screenshots/
+
+# Override Docker local (ports spécifiques à la machine) — ne pas versionner
+docker-compose.override.yml
+
+# Contenu assemblé par content/_tools/build.mjs (sortie générée, source = content/)
+content/_dist/
+
+# Divers
+.DS_Store

@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 180" width="700" height="180" font-family="'Segoe UI', system-ui, sans-serif">
+  <!-- Background -->
+  <rect width="700" height="180" rx="12" fill="#f8fafc"/>
+
+  <!-- Title -->
+  <text x="350" y="26" text-anchor="middle" font-size="13" font-weight="700" fill="#1e293b">Pipeline d'analyse — du brut au dashboard</text>
+
+  <!-- Step 1: Données brutes -->
+  <rect x="20" y="48" width="120" height="80" rx="10" fill="#fee2e2" stroke="#fca5a5" stroke-width="1.5"/>
+  <text x="80" y="74" text-anchor="middle" font-size="11" font-weight="700" fill="#991b1b">Données</text>
+  <text x="80" y="88" text-anchor="middle" font-size="11" font-weight="700" fill="#991b1b">brutes</text>
+  <text x="80" y="108" text-anchor="middle" font-size="10" fill="#b91c1c">dates mixtes</text>
+  <text x="80" y="120" text-anchor="middle" font-size="10" fill="#b91c1c">doublons</text>
+  <text x="80" y="132" text-anchor="middle" font-size="10" fill="#b91c1c">valeurs nulles</text>
+
+  <!-- Arrow 1 -->
+  <line x1="140" y1="88" x2="168" y2="88" stroke="#94a3b8" stroke-width="2"/>
+  <polygon points="162,83 174,88 162,93" fill="#94a3b8"/>
+  <text x="154" y="80" text-anchor="middle" font-size="9" fill="#64748b">étape 2</text>
+
+  <!-- Step 2: Nettoyé -->
+  <rect x="174" y="48" width="120" height="80" rx="10" fill="#fef9c3" stroke="#fde68a" stroke-width="1.5"/>
+  <text x="234" y="74" text-anchor="middle" font-size="11" font-weight="700" fill="#713f12">Nettoyé</text>
+  <text x="234" y="108" text-anchor="middle" font-size="10" fill="#92400e">6 lignes propres</text>
+  <text x="234" y="120" text-anchor="middle" font-size="10" fill="#92400e">dates ISO</text>
+  <text x="234" y="132" text-anchor="middle" font-size="10" fill="#92400e">régions normalisées</text>
+
+  <!-- Arrow 2 -->
+  <line x1="294" y1="88" x2="322" y2="88" stroke="#94a3b8" stroke-width="2"/>
+  <polygon points="316,83 328,88 316,93" fill="#94a3b8"/>
+  <text x="308" y="80" text-anchor="middle" font-size="9" fill="#64748b">étape 3</text>
+
+  <!-- Step 3: Agrégé -->
+  <rect x="328" y="48" width="130" height="80" rx="10" fill="#dbeafe" stroke="#93c5fd" stroke-width="1.5"/>
+  <text x="393" y="74" text-anchor="middle" font-size="11" font-weight="700" fill="#1e40af">Agrégé</text>
+  <text x="393" y="108" text-anchor="middle" font-size="10" fill="#1d4ed8">CA = 260 €</text>
+  <text x="393" y="120" text-anchor="middle" font-size="10" fill="#1d4ed8">panier moy. = 43 €</text>
+  <text x="393" y="132" text-anchor="middle" font-size="10" fill="#1d4ed8">jointure + marge</text>
+
+  <!-- Arrow 3 -->
+  <line x1="458" y1="88" x2="486" y2="88" stroke="#94a3b8" stroke-width="2"/>
+  <polygon points="480,83 492,88 480,93" fill="#94a3b8"/>
+  <text x="472" y="80" text-anchor="middle" font-size="9" fill="#64748b">étape 5</text>
+
+  <!-- Step 4: Dashboard -->
+  <rect x="492" y="48" width="188" height="80" rx="10" fill="#dcfce7" stroke="#86efac" stroke-width="1.5"/>
+  <text x="586" y="74" text-anchor="middle" font-size="11" font-weight="700" fill="#14532d">Dashboard / Insights</text>
+  <text x="586" y="108" text-anchor="middle" font-size="10" fill="#166534">KPI cards · courbe CA</text>
+  <text x="586" y="120" text-anchor="middle" font-size="10" fill="#166534">barres catégorie/région</text>
+  <text x="586" y="132" text-anchor="middle" font-size="10" fill="#166534">recommandations</text>
+
+  <!-- Bottom tools bar -->
+  <rect x="20" y="148" width="660" height="22" rx="6" fill="#f1f5f9" stroke="#e2e8f0" stroke-width="1"/>
+  <text x="350" y="163" text-anchor="middle" font-size="10" fill="#64748b">
+    Outils : pandas / SQL (nettoyage &amp; agrégation)  ·  TypeScript (exercices)  ·  Power BI (dashboard)
+  </text>
+</svg>

@@ -1,0 +1,35 @@
+<svg viewBox="0 0 560 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="t1 d1">
+  <title id="t1">Une variable : une étiquette posée sur une case mémoire</title>
+  <desc id="d1">Les étiquettes « age » et « nom » pointent chacune vers une case de la mémoire qui contient une valeur.</desc>
+  <style>
+    .ttl{font-family:system-ui,-apple-system,sans-serif;font-size:14px;font-weight:600;fill:#0f172a}
+    .lbl{font-family:system-ui,-apple-system,sans-serif;font-size:15px;fill:#0f172a}
+    .small{font-family:system-ui,-apple-system,sans-serif;font-size:12px;fill:#64748b}
+    .val{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:16px;fill:#0f172a}
+    .cell{fill:#eef2ff;stroke:#6366f1;stroke-width:1.5}
+    .tag{fill:#fff7ed;stroke:#f59e0b;stroke-width:1.5}
+    .arrow{stroke:#475569;stroke-width:1.8;fill:none}
+  </style>
+  <defs>
+    <marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#475569"/>
+    </marker>
+  </defs>
+  <text class="ttl" x="24" y="28">Une variable : une étiquette posée sur une case mémoire</text>
+  <text class="small" x="330" y="66">Mémoire</text>
+  <rect class="cell" x="320" y="78" width="210" height="52" rx="8"/>
+  <text class="small" x="332" y="98">0x01</text>
+  <text class="val" x="332" y="118">42</text>
+  <rect class="cell" x="320" y="146" width="210" height="52" rx="8"/>
+  <text class="small" x="332" y="166">0x02</text>
+  <text class="val" x="332" y="186">"Ada"</text>
+  <rect class="cell" x="320" y="214" width="210" height="52" rx="8"/>
+  <text class="small" x="332" y="234">0x03</text>
+  <text class="small" x="332" y="252">(libre)</text>
+  <rect class="tag" x="36" y="86" width="116" height="36" rx="8"/>
+  <text class="lbl" x="58" y="109">age</text>
+  <path class="arrow" marker-end="url(#ah)" d="M152 104 L318 104"/>
+  <rect class="tag" x="36" y="154" width="116" height="36" rx="8"/>
+  <text class="lbl" x="58" y="177">nom</text>
+  <path class="arrow" marker-end="url(#ah)" d="M152 172 L318 172"/>
+</svg>

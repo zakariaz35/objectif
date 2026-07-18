@@ -1,0 +1,13 @@
+title: Reprise dév web (front-end)
+objectif: >-
+  Se remettre au code puis monter jusqu'à Vue 3 : d'abord les fondations JavaScript
+  + algorithmique, ensuite JavaScript/TypeScript et Vue.js. Cours interactifs, à ton rythme.
+etapes:
+  - titre: "JavaScript — se (re)mettre à coder (fondations + algo)"
+    type: formation
+    ref: js-debutant
+    duree_h: 15
+  - titre: "Parcours Vue.js (JS + TypeScript + Vue 3)"
+    type: formation
+    ref: parcours-vuejs
+    duree_h: 14

@@ -1,0 +1,73 @@
+/*
+ * RTL overrides for Arabic (dir="rtl" on <html>). The app's scoped styles use
+ * physical properties (border-left, margin-left:auto, left:…, text-align:left);
+ * these rules mirror the *chrome/layout* app-wide. Course CONTENT stays LTR
+ * (courses are still FR/EN) — per-block content direction is the translation phase.
+ */
+
+/* --- Header (App.vue) --- */
+[dir='rtl'] .account {
+  margin-left: 0;
+  margin-right: auto;
+}
+
+/* --- Formation sidebar + roadmap (FormationView) --- */
+[dir='rtl'] .toc {
+  border-right: 0;
+  border-left: 1px solid var(--border);
+}
+[dir='rtl'] .mod-head {
+  text-align: right;
+}
+[dir='rtl'] .chev {
+  display: inline-block;
+  transform: scaleX(-1); /* ▸ → ◂ */
+}
+[dir='rtl'] .step:not(:last-child)::after {
+  left: auto;
+  right: 31px;
+}
+/* Roadmap step accent bar → inner (timeline) side in RTL */
+[dir='rtl'] .step.done {
+  border-left: 1px solid var(--border);
+  border-right: 4px solid var(--good);
+}
+[dir='rtl'] .step.current {
+  border-left: 1px solid var(--border);
+  border-right: 4px solid var(--accent);
+}
+
+/* --- Parcours timeline (ParcoursView) --- */
+[dir='rtl'] .timeline {
+  border-left: 0;
+  border-right: 2px solid var(--border);
+}
+[dir='rtl'] .timeline .step {
+  padding-left: 0;
+  padding-right: 26px;
+}
+[dir='rtl'] .timeline .num {
+  left: auto;
+  right: -15px;
+}
+
+/* --- Auto-margins that push an element to one side --- */
+[dir='rtl'] .scoreboard .level,
+[dir='rtl'] .global .gnote {
+  margin-left: 0;
+  margin-right: auto;
+}
+
+/* --- Pager alignment (scoped styles are as specific → !important wins) --- */
+[dir='rtl'] .pager button {
+  text-align: right !important;
+}
+[dir='rtl'] .pager .next {
+  text-align: left !important;
+}
+
+/* --- Course content stays LTR (FR/EN) even under an Arabic UI --- */
+[dir='rtl'] .prose {
+  direction: ltr;
+  text-align: left;
+}

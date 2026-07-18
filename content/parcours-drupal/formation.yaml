@@ -1,0 +1,12 @@
+title: "Drupal 10/11 pour développeur PHP/Symfony"
+slug: parcours-drupal
+stack: "Drupal / PHP / Symfony"
+track: "PHP-Agence"
+order: 3
+description: >-
+  Drupal 10/11 vu par un développeur Symfony senior en contexte missions d'agence :
+  architecture core/modules/thèmes, pont systématique Symfony↔Drupal (container,
+  events vs hooks, routing, Twig), entités et fields, système de plugins, config
+  management dev→prod, modules custom, Drush, workflow Composer, montées de version
+  10→11, et pièges courants en reprise de projets existants.
+tags: [drupal, php, symfony, cms, agence]

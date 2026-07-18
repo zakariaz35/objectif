@@ -1,0 +1,9 @@
+title: "Kafka & l'architecture événementielle"
+slug: parcours-kafka
+description: >-
+  Apache Kafka pour un dev backend qui l'a déjà croisé : le log distribué (topics,
+  partitions, offsets), producteurs/consommateurs et consumer groups, garanties de
+  livraison, patterns événementiels (event-driven, outbox, CQRS/event sourcing),
+  exploitation. Passerelles RabbitMQ / Symfony Messenger.
+stack: "Apache Kafka"
+tags: ["Kafka", "streaming", "event-driven", "architecture", "backend", "messaging"]

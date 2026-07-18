@@ -1,0 +1,9 @@
+title: JavaScript — se (re)mettre à coder, en douceur
+slug: js-debutant
+description: >-
+  Reprendre la programmation après une pause, pour un profil data/BI (SQL, tableur,
+  un peu de Python) qui passe à JavaScript : fondations raffermies, rappels
+  d'algorithmique, beaucoup de schémas et d'exemples concrets, exercices exécutables
+  dans le navigateur.
+stack: JavaScript
+tags: ["débutant", "reprise", "JavaScript", "algorithmique", "data", "interactif"]
